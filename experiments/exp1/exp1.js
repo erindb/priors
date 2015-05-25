@@ -161,7 +161,7 @@ var items = [
 		]
 	},
 	{
-		type: "duration",
+		type: "temperature",
 		similar_to_whose_experiment: "ciyang",
 		tag: "coffee",
 		backstory: "X has just fetched himself a cup of coffee from the office vending machine",
@@ -314,7 +314,9 @@ function make_slides(f) {
 		$("#give_number_sentence").html(repXN(stim.backstory, stim.name) + ".");
 		$("#give_number_question").html(stim.give_number_question);
 		_s.init_slider(stim.min, stim.max, prefix, suffix);
+		$("#number_guess").html("?");
     	_s.current_response_data = null;
+		$("#number_guess").html("?");
 	},
 	binned_histogram: function(stim) {
 		_s.init_sliders();
@@ -350,6 +352,7 @@ function make_slides(f) {
 		}
 	},
     present_handle : function(stim) {
+		$("#number_guess").html("?");
     	_s.this_trial_data = clone(stim);
     	_s.measure = stim.measure;
     	_s.trial_start = Date.now();
