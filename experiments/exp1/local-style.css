@@ -43,6 +43,20 @@
 	margin: 5px;
 }
 
+#final_left_button{
+	float: left;
+	width: 40%;
+	height: 30%;
+	margin-left: 6%;
+}
+
+#final_right_button{
+	float: right;
+	width: 40%;
+	height: 30%;
+	margin-right: 6%;
+}
+
 #left_button{
 	float: left;
 	width: 40%;
