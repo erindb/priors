@@ -77,7 +77,11 @@ lightning$lower_chosen = mapply(function(chosen, unchosen) {
 lightning$higher_chosen = mapply(function(chosen, unchosen) {
   chosen_first_num = as.numeric(str_match(chosen, "\\$?([0-9]+)([^0-9]?-[^0-9]?)?")[[2]])
   unchosen_first_num = as.numeric(str_match(unchosen, "\\$?([0-9]+)([^0-9]?-[^0-9]?)?")[[2]])
-  chosen_first_num > unchosen_first_num
+  if (chosen_first_num == unchosen_first_num) {
+    return(nchar(chosen) > nchar(unchosen))
+  } else {
+    return(chosen_first_num > unchosen_first_num)
+  }
 }, lightning$chosen_tag, lightning$unchosen_tag)
 
 lightning_summary = bootsSummary(lightning, measurevar="higher_chosen", groupvars=c("choice", "tag"))
