@@ -101,13 +101,34 @@ Items were chosen from previous experiments run by Justine, Erin, Michael F., Ci
 
 Results for the three different DVs are shown below.
 
+First, a histogram of the give-a-number task. Decent replication of the wonky worlds results. From talking to Michael & Anthea, this looks like people are going for the mean/median rather than the mode of the binned histogram (see next plot).
+
 ![Give a number](/experiments/exp1/analysis/graphs/number_histogram.png "Give a number task")
 
-![Binned histogram (raw values)](/experiments/exp1/analysis/graphs/binned_histogram_raw_means.png "Binned histogram (raw mean slider values)")
+Here are the (normalized) binned histogram data:
 
 ![Binned histogram (mean values)](/experiments/exp1/analysis/graphs/binned_histogram_norm_means.png "Binned histogram (normed mean slider values)")
 
+This is a decent replication of wonky worlds as well as of Michael and Anthea's results. Also for laptop/watch prices? Interestingly, assuming that what people are doing in the give-a-number task is going for the mean/median looks like it'll serve as a good linking function for all the items except for the wonky worlds items (and there, really, just the sinking marbles item).
+
+Looking more closely at the items by comparing them to the raw (unnormalized) slider means from the binned histogram task:
+
+![Binned histogram (raw values)](/experiments/exp1/analysis/graphs/binned_histogram_raw_means.png "Binned histogram (raw mean slider values)")
+
+All items look very similar again in their general shape, except for sinking marbles. Looks like in this case, different participants are just using the sliders very differently. Anthea remarked that this (and the other wonky item, "joke") is the only case where we need to evaluate for each object (i.e., 14 different ones), whether something happened to it or not. For all the other cases, we just need to say of that one object/event, what it likely cost/how long it took, etc. This relates also to something Uli Sauerland brought up after my MXPrag talk: for things like marbles sinking and ice cubes melting, etc, there will be intermediate stages when not all of the  marbles have sunk yet or not all of the ice cubes have melted yet, even if ultimately they all sink/melt. This may be an additional reason why people want to sometimes put some mass on the less-than-all states (besides not understanidng the sliders...). We may need a different linking function for these event cases.
+
+Finally, here are the results from the lightning round:
+
 ![Lightning round](/experiments/exp1/analysis/graphs/lightning_round.png "Lightning round")
+
+Here it seems that rather than comparing probabilities for each bin (from the binned histogram task) and making a choice based on that, people seem to be judging by how far from the mode/median/mean or from a random sample from the binned histogram distribution each comparison bin is. For example, for commute, the mean is around the fourth bin. For the 0-1 comparison, people are at ceiling for choosing the higher bin. For the 1-5 comparison, they're around 60%, and for all higher comparisons, they basically always choose the lower bin (that's closer to the mean). Here again, marbles is a little different. One would expect people to always choose the higher bin. Instead, there seems to be something special about the lowest comparison: despite one marble sinking being closer to all marbles sinking (the mode), they prefer to say that 0 marbles sinking is more likely than one marble sinking half the time. Presumably, there is some inference there of the form that marbles are typically the same, so if one of them sinks that's weird -- if none of them sink, that's weird, too, but at least they're still all the same.
+
+#### Some ways forward
+
+Michael/Anthea/I were thinking that the next reasonable step would be for the Michaels to start running the Bayesian data analysis. It looks like for most items, there will be a plausible linking assumption that can capture the data, with the exception of the marbles item. But this should show up in the results as the marbles item having a high guessing parameter value (if by-item guessing parameters are included). 
+
+It'll be interesting to think more about the difference between these "repeated event" type cases like sinking marbles, vs the "stative property" type cases like watch prices.
+
 
 
 	
