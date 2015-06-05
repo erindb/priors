@@ -101,7 +101,7 @@ Items were chosen from previous experiments run by Justine, Erin, Michael F., Ci
 
 Results for the three different DVs are shown below.
 
-First, a histogram of the give-a-number task. Decent replication of the wonky worlds results. From talking to Michael & Anthea, this looks like people are going for the mean/median rather than the mode of the binned histogram (see next plot).
+First, a histogram of the give-a-number task. Decent replication of the wonky worlds results. This looks like people are going for the mean/median rather than the mode of the binned histogram (see next plot).
 
 ![Give a number](/experiments/exp1/analysis/graphs/number_histogram.png "Give a number task")
 
