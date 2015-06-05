@@ -14,6 +14,7 @@ ggplot(give_number, aes(x=response)) +
   geom_histogram() +
   facet_wrap(~ tag,scale="free")
 ggsave("graphs/number_histogram.pdf")
+ggsave("graphs/number_histogram.png")
 
 summary(d)
 unique(d[d$comments != "",]$comments)
@@ -59,6 +60,7 @@ ggplot(agr, aes(x=bin_num, y=response)) +
   geom_errorbar(aes(ymin=YMin,ymax=YMax),width=.25) +
   facet_wrap(~ tag, scale="free")
 ggsave("graphs/binned_histogram_raw_means.pdf")
+ggsave("graphs/binned_histogram_raw_means.png")
 
 # normalize responses
 library(dplyr)
@@ -76,6 +78,7 @@ ggplot(agr, aes(x=bin_num, y=normresponse)) +
   geom_errorbar(aes(ymin=YMin,ymax=YMax),width=.25) +
   facet_wrap(~ tag, scale="free")
 ggsave("graphs/binned_histogram_norm_means.pdf")
+ggsave("graphs/binned_histogram_norm_means.png")
 
 
 ### LIGHTNING ROUND
@@ -174,3 +177,5 @@ ggplot(lightning_summary, aes(x=choice_as_bin_number, y=higher_chosen)) +
   facet_wrap(~ tag, scale="free") +
   theme(axis.text.x = element_text(angle = -45, hjust = 0))
 ggsave("graphs/lightning_round.pdf",height=8)
+ggsave("graphs/lightning_round.png",height=8)
+ 

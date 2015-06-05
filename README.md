@@ -102,4 +102,12 @@ Items were chosen from previous experiments run by Justine, Erin, Michael F., Ci
 Results for the three different DVs are shown below.
 
 ![Give a number](/experiments/exp1/analysis/graphs/number_histogram.png "Give a number task")
+
+![Binned histogram (raw values)](/experiments/exp1/analysis/graphs/binned_histogram_raw_means.png "Binned histogram (raw mean slider values)")
+
+![Binned histogram (mean values)](/experiments/exp1/analysis/graphs/binned_histogram_norm_means.png "Binned histogram (normed mean slider values)")
+
+![Lightning round](/experiments/exp1/analysis/graphs/lightning_round.png "Lightning round")
+
+
 	
