@@ -1,6 +1,6 @@
 library(ggplot2)
 library(rjson)
-#setwd("/Users/titlis/cogsci/projects/stanford/projects/priors/experiments/exp1/analysis")
+setwd("/Users/titlis/cogsci/projects/stanford/projects/priors/experiments/exp1/analysis")
 #source("~/opt/r_helper_scripts/bootsSummary.r")
 source("helpers.R")
 
@@ -245,6 +245,18 @@ bh_summary$bh_mode_na = as.numeric(as.character(bh_summary$bh_mode))
 bh_summary$bh_mode_na
 row.names(give_number) = paste(give_number$workerid, give_number$tag)
 bh_summary$number_response = give_number[paste(bh_summary$workerid,bh_summary$tag),]$bin
+
+library(hydroGOF)
+
+# r=.77, mse=8.59, r2=.6
+gof(bh_summary$number_response, bh_summary$bh_mean)
+# r=.83, mse=6.2, r2=.69
+gof(bh_summary$number_response, bh_summary$bh_mode_na)
+
+# by-subject correlations for means
+cor_means = ddply(bh_summary, .(workerid), summarise, r=gof(number_response, bh_mean, na.rm=TRUE)["r",])
+cor_modes = ddply(bh_summary[!is.na(bh_summary$bh_mode_na),], .(workerid), summarise, r=gof(number_response, bh_mode_na,na.rm=TRUE)["r",])
+
 
 # mode vs number response, collapsed across subjects (37 cases where there was more than one mode were excluded)
 ggplot(bh_summary, aes(x=number_response, y=bh_mode_na, color=tag, group=1)) +

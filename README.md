@@ -131,7 +131,7 @@ Let's plot this a little differently. Here are the modes and means of each binne
 
 ![Binned histogram measures vs number task choice](/experiments/exp1/analysis/graphs/bhmeasure_vs_number_response.png "Binned histogram measures (mean and mode) vs. number task by subject and item")
 
-Overall, it looks like the mode is a better predictor of subjects' choices on the number task. Are there individual differences? The next plot splits up the previous plot by subject:
+Overall, it looks like the mode is a better predictor of subjects' choices on the number task (for comparison, the correlation between mode and number task is .83, the correlation between mean and number task is .77). Are there individual differences? The next plot splits up the previous plot by subject:
 
 ![Binned histogram measures vs number task choice by subject](/experiments/exp1/analysis/graphs/bhmeasure_vs_number_response_bysubject.png "Binned histogram measures (mean and mode) vs. number task by subject for each item")
 
