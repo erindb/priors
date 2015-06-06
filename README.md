@@ -125,7 +125,7 @@ Here it seems that rather than comparing probabilities for each bin (from the bi
 
 We can also look at within-subject responses across DVs to see whether individual subjects' response on one DV predicts their response on another DV. Here is the comparison of the binned histogram (plotted in black) and that subject's corresponding number response.
 
-![Binned histogram vs. number task](/experiments/exp1/analysis/graphs/histogram_and_number_bysubject_byitem "Binned histogram vs. number task by subject and item")
+![Binned histogram vs. number task](/experiments/exp1/analysis/graphs/histogram_and_number_bysubject_byitem.png "Binned histogram vs. number task by subject and item")
 
 
 #### Some ways forward
