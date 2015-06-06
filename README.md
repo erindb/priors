@@ -127,6 +127,15 @@ We can also look at within-subject responses across DVs to see whether individua
 
 ![Binned histogram vs. number task](/experiments/exp1/analysis/graphs/histogram_and_number_bysubject_byitem.png "Binned histogram vs. number task by subject and item")
 
+Let's plot this a little differently. Here are the modes and means of each binned histogram (i.e., by subject and item), plotted against number task choice. If the binned histogram measures and the number task measure were perfectly correlated, data points should lie on the gray line. Thirty-seven cases are not included in this plot because those cases had multiple modes, but in the graphs directory there are more plots of means that do contain all cases.
+
+![Binned histogram measures vs number task choice](/experiments/exp1/analysis/graphs/bhmeasure_vs_number_response.png "Binned histogram measures (mean and mode) vs. number task by subject and item")
+
+Overall, it looks like the mode is a much better predictor of subjects' choices on the number task. Are there individual differences? The next plot splits up the previous plot by subject:
+
+![Binned histogram measures vs number task choice by subject](/experiments/exp1/analysis/graphs/bhmeasure_vs_number_response_bysubject.png "Binned histogram measures (mean and mode) vs. number task by subject for each item")
+
+There are definitely differences in how noisy different subjects are, but the mode seems to be a better predictor than the mean for almost everyone. Number 2 is a robot.
 
 #### Some ways forward
 

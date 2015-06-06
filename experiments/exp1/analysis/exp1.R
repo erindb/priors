@@ -204,7 +204,6 @@ give_number$bin = sapply(1:nrow(give_number), function(i) {
   bins[bins$Item == tag & bins$Min <= response & bins$Max >= response,]$Bin
 })
 
-
 ### BINNED HISTOGRAM
 binned_histogram = droplevels(subset(d, measure == "binned_histogram"))
 summary(binned_histogram)
@@ -231,11 +230,95 @@ library(dplyr)
 library(plyr)
 tmp =  ddply(binned_histogram, .(workerid,tag), summarise, bin=bin, bin_num=bin_num,normresponse=response/sum(response))
 
-ggplot(tmp, aes(x=bin_num, y=normresponse)) +
-  geom_bar(stat="identity") +
-  geom_errorbar(aes(ymin=YMin,ymax=YMax),width=.25) +
+ggplot(tmp, aes(x=bin_num, y=normresponse,group=1)) +
+  geom_point() +
+  geom_line() +  
+  geom_vline(inherit_aes=F,data=give_number,aes(xintercept=bin),color="red") +
   facet_grid(workerid ~ tag, scale="free")
-ggsave("graphs/binned_histogram_norm_means.pdf")
-ggsave("graphs/binned_histogram_norm_means.png")
+ggsave("graphs/histogram_and_number_bysubject_byitem.png",height=15)
+
+# summarize binned histogram
+bh_summary = ddply(tmp, .(workerid, tag), summarise, bh_mean=sum(bin_num*normresponse),bh_mode=paste(which(normresponse == max(normresponse)),collapse="_"))
+head(bh_summary)
+bh_summary$bh_mode # there's a few cases with more than one mode 
+bh_summary$bh_mode_na = as.numeric(as.character(bh_summary$bh_mode))
+bh_summary$bh_mode_na
+row.names(give_number) = paste(give_number$workerid, give_number$tag)
+bh_summary$number_response = give_number[paste(bh_summary$workerid,bh_summary$tag),]$bin
+
+# mode vs number response, collapsed across subjects (37 cases where there was more than one mode were excluded)
+ggplot(bh_summary, aes(x=number_response, y=bh_mode_na, color=tag, group=1)) +
+  geom_jitter() +#width=.0000001,height=.0000001) +
+#  geom_point() +
+  geom_smooth() +
+  geom_abline(intercept=0,slope=1) +
+  scale_x_continuous(name="Number response (bin)") +
+  scale_y_continuous(name="Mode of binned histogram (bin)")
+ggsave("graphs/bh_mode_vs_number_response.png")
+
+# mode vs number response, by subject (37 cases where there was more than one mode were excluded)
+ggplot(bh_summary, aes(x=number_response, y=bh_mode_na, color=tag, group=1)) +
+  geom_point() +
+#  geom_smooth() +
+  geom_abline(intercept=0,slope=1,alpha=.5) +
+  scale_x_continuous(name="Number response (bin)") +
+  scale_y_continuous(name="Mode of binned histogram (bin)") +
+  facet_wrap(~workerid)
+ggsave("graphs/bh_mode_vs_number_response_bysubject.png")
+
+# mean vs number response, collapsed across subjects
+ggplot(bh_summary, aes(x=number_response, y=bh_mean, color=tag, group=1)) +
+  #geom_jitter() +#width=.0000001,height=.0000001) +
+    geom_point() +
+  geom_smooth() +
+  geom_abline(intercept=0,slope=1) +
+  scale_x_continuous(name="Number response (bin)") +
+  scale_y_continuous(name="Mean of binned histogram (bin)")
+ggsave("graphs/bh_mean_vs_number_response.png")
+
+# mean vs number response, by subject
+ggplot(bh_summary, aes(x=number_response, y=bh_mean, color=tag, group=1)) +
+  geom_point() +
+  #  geom_smooth() +
+  geom_abline(intercept=0,slope=1,alpha=.5) +
+  scale_x_continuous(name="Number response (bin)") +
+  scale_y_continuous(name="Mean of binned histogram (bin)") +
+  facet_wrap(~workerid)
+ggsave("graphs/bh_mean_vs_number_response_bysubject.png")
+
+# plot both mean and mode against number response by subject to see which one does better overall and whether different subjects behave differently
+gathered = bh_summary %>%
+        select(workerid, tag, number_response, bh_mean, bh_mode_na) %>%
+        gather(measure, value, bh_mean:bh_mode_na)
+head(gathered)
+
+ggplot(gathered, aes(x=number_response, y=value, color=measure, group=measure)) +
+  geom_point() +
+  geom_smooth() +
+  geom_abline(intercept=0,slope=1,alpha=.5) +
+  scale_x_continuous(name="Number response (bin)") +
+  scale_y_continuous(name="Binned histogram summary measure") 
+ggsave("graphs/bhmeasure_vs_number_response.png")
+
+ggplot(gathered, aes(x=number_response, y=value, color=measure, group=measure)) +
+  geom_point() +
+  geom_abline(intercept=0,slope=1,alpha=.5) +
+  scale_x_continuous(name="Number response (bin)") +
+  scale_y_continuous(name="Binned histogram measure") +
+  facet_wrap(~workerid)
+ggsave("graphs/bhmeasure_vs_number_response_bysubject.png")
+
+head(bh_summary)
+m = lmer(number_response ~ bh_mean + (1+bh_mean|workerid), data=bh_summary)
+summary(m)
+
+m = lmer(number_response ~ bh_mode_na + (1+bh_mode_na|workerid), data=bh_summary)
+summary(m)
+
+m.1 = lmer(number_response ~ bh_mode_na + bh_mean + (1+bh_mode_na+ bh_mean|workerid), data=bh_summary)
+summary(m.1)
+
+
+
 
 
