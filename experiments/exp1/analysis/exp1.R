@@ -179,3 +179,63 @@ ggplot(lightning_summary, aes(x=choice_as_bin_number, y=higher_chosen)) +
 ggsave("graphs/lightning_round.pdf",height=8)
 ggsave("graphs/lightning_round.png",height=8)
  
+
+## COMPARISON OF BINNED HISTOGRAM AND NUMBER TASK
+### NUMBER TASK
+give_number = subset(d, measure == "give_number")
+give_number$response = as.numeric(as.character(give_number$response))
+
+max_values = data.frame(Value=c(14,14,235,45,104, 7500, 800, 212))
+row.names(max_values) = c("marbles","joke","movies","tv","commute","laptop","watch","coffee")
+
+summary(give_number)
+give_number = give_number %>% select(workerid, response, tag)
+head(give_number)
+nrow(give_number)
+row.names(give_number) = paste(give_number$workerid, give_number$tag)
+give_number$scaled_response = give_number$response/max_values[as.character(give_number$tag),]
+
+# record what bin each worker's response falls into (counting bins from 1-15 instead of 0-14)
+bins = read.csv("data/bins.txt",header=T)
+bins$Bin = bins$Bin + 1
+give_number$bin = sapply(1:nrow(give_number), function(i) {
+  response = give_number$response[i]
+  tag = as.character(give_number$tag)[i]
+  bins[bins$Item == tag & bins$Min <= response & bins$Max >= response,]$Bin
+})
+
+
+### BINNED HISTOGRAM
+binned_histogram = droplevels(subset(d, measure == "binned_histogram"))
+summary(binned_histogram)
+binned_histogram$response = as.numeric(as.character(binned_histogram$response))
+
+##get bin_num
+all_bins = as.character(unique(binned_histogram$bins))
+all_bins = c(all_bins, all_bins[1])
+all_bins = lapply(all_bins, function(str) {
+  str = gsub("u", "", str)
+  str = gsub("'", "\"", str)
+  str = gsub(".xb0", "°", str)
+  fromJSON(str)
+})
+names(all_bins) = c("joke", "movies", "tv", "coffee", "watch", "commute", "laptop", "marbles")
+binned_histogram$bin_num = sapply(1:nrow(binned_histogram), function(i) {
+  bin = as.character(binned_histogram$bin)[i]
+  tag = as.character(binned_histogram$tag)[i]
+  which(all_bins[[tag]] == bin)
+})
+
+# normalize responses
+library(dplyr)
+library(plyr)
+tmp =  ddply(binned_histogram, .(workerid,tag), summarise, bin=bin, bin_num=bin_num,normresponse=response/sum(response))
+
+ggplot(tmp, aes(x=bin_num, y=normresponse)) +
+  geom_bar(stat="identity") +
+  geom_errorbar(aes(ymin=YMin,ymax=YMax),width=.25) +
+  facet_grid(workerid ~ tag, scale="free")
+ggsave("graphs/binned_histogram_norm_means.pdf")
+ggsave("graphs/binned_histogram_norm_means.png")
+
+

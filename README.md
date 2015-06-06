@@ -123,6 +123,11 @@ Finally, here are the results from the lightning round:
 
 Here it seems that rather than comparing probabilities for each bin (from the binned histogram task) and making a choice based on that, people seem to be judging by how far from the mode/median/mean or from a random sample from the binned histogram distribution each comparison bin is. For example, for commute, the mean is around the fourth bin. For the 0-1 comparison, people are at ceiling for choosing the higher bin. For the 1-5 comparison, they're around 60%, and for all higher comparisons, they basically always choose the lower bin (that's closer to the mean). Here again, marbles is a little different. One would expect people to always choose the higher bin. Instead, there seems to be something special about the lowest comparison: despite one marble sinking being closer to all marbles sinking (the mode), they prefer to say that 0 marbles sinking is more likely than one marble sinking half the time. Presumably, there is some inference there of the form that marbles are typically the same, so if one of them sinks that's weird -- if none of them sink, that's weird, too, but at least they're still all the same.
 
+We can also look at within-subject responses across DVs to see whether individual subjects' response on one DV predicts their response on another DV. Here is the comparison of the binned histogram (plotted in black) and that subject's corresponding number response.
+
+![Binned histogram vs. number task](/experiments/exp1/analysis/graphs/histogram_and_number_bysubject_byitem "Binned histogram vs. number task by subject and item")
+
+
 #### Some ways forward
 
 Michael/Anthea/I were thinking that the next reasonable step would be for the Michaels to start running the Bayesian data analysis. It looks like for most items, there will be a plausible linking assumption that can capture the data, with the exception of the marbles item. But this should show up in the results as the marbles item having a high guessing parameter value (if by-item guessing parameters are included). 
