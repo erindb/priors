@@ -131,11 +131,12 @@ Let's plot this a little differently. Here are the modes and means of each binne
 
 ![Binned histogram measures vs number task choice](/experiments/exp1/analysis/graphs/bhmeasure_vs_number_response.png "Binned histogram measures (mean and mode) vs. number task by subject and item")
 
-Overall, it looks like the mode is a much better predictor of subjects' choices on the number task. Are there individual differences? The next plot splits up the previous plot by subject:
+Overall, it looks like the mode is a better predictor of subjects' choices on the number task. Are there individual differences? The next plot splits up the previous plot by subject:
 
 ![Binned histogram measures vs number task choice by subject](/experiments/exp1/analysis/graphs/bhmeasure_vs_number_response_bysubject.png "Binned histogram measures (mean and mode) vs. number task by subject for each item")
 
-There are definitely differences in how noisy different subjects are, but the mode seems to be a better predictor than the mean for almost everyone. Number 2 is a robot.
+There are differences in how noisy different subjects are, but the mode seems to be a better predictor than the mean for almost everyone. More rigorous analysis to be conducted. Number 2 is a robot.
+
 
 #### Some ways forward
 
