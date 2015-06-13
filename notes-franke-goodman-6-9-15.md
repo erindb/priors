@@ -15,26 +15,26 @@ Contributors
 
 ### general approach
 
-1. Do we wish to model this by subject vs aggregate?
-2. What is the goal?
-    A. Stipulate true population prior?
-        	1. For each item, distribution over the scale known to all people.
-		2. Small perturbations for each subject
-		3. One issue: If you scale prior (raise to power), this can be undone by changing parameters of the linking parameters
-			D. In principle, you can get the shape but not the scale.
-	B. Run each dependent measure jointly & separately, to see how reliable each is in recovering true prior
-3. How would we know we had it right?
-	A. Posterior predictive -- train model on data and have it show back the data it predicts.
-	B. Insights from Behavioral economics -- "Scoring rule", incentive scheme to make people more accurate for reporting various statistics (e.g. means, mode, CIs)
-		1. Train people on distribution
-		2. Run tests
-		3. See if you recover distribution
-		4. **Caveat**: This is only accessable by filtering through an implicit learning model. 
-		5. **Push-back**: Yes. But if it's right, it's unlikely the learning model biased it in exactly the right way. So if it's right, it's probably right.
-	C. More extensive language tasks? (Using explicit models of language understanding.)
-	D. Split data across dependent measures. (Like posterior predictive, but only fit to one dependent measure?)
-6. Nonidentifiability
-	A. Not a problem if you don't care about true underlying prior (i.e. if you only care about posterior predictive.)
+- Do we wish to model this by subject vs aggregate?
+- What is the goal?
+	- Stipulate true population prior?
+		- For each item, distribution over the scale known to all people.
+		- Small perturbations for each subject
+		- One issue: If you scale prior (raise to power), this can be undone by changing parameters of the linking parameters
+			- In principle, you can get the shape but not the scale.
+	- Run each dependent measure jointly & separately, to see how reliable each is in recovering true prior
+- How would we know we had it right?
+	- Posterior predictive -- train model on data and have it show back the data it predicts.
+	- Insights from Behavioral economics -- "Scoring rule", incentive scheme to make people more accurate for reporting various statistics (e.g. means, mode, CIs)
+		- Train people on distribution
+		- Run tests
+		- See if you recover distribution
+		- **Caveat**: This is only accessable by filtering through an implicit learning model. 
+		- **Push-back**: Yes. But if it's right, it's unlikely the learning model biased it in exactly the right way. So if it's right, it's probably right.
+	- More extensive language tasks? (Using explicit models of language understanding.)
+	- Split data across dependent measures. (Like posterior predictive, but only fit to one dependent measure?)
+- Nonidentifiability
+	- Not a problem if you don't care about true underlying prior (i.e. if you only care about posterior predictive.)
 		
 ### our particular approach
 
