@@ -17,8 +17,8 @@ Contributors
 
 1. Do we wish to model this by subject vs aggregate?
 2. What is the goal?
-	A. Stipulate true population prior?
-		1. For each item, distribution over the scale known to all people.
+    A. Stipulate true population prior?
+        	1. For each item, distribution over the scale known to all people.
 		2. Small perturbations for each subject
 		3. One issue: If you scale prior (raise to power), this can be undone by changing parameters of the linking parameters
 			D. In principle, you can get the shape but not the scale.
