@@ -38,22 +38,22 @@ Contributors
 		
 ### our particular approach
 
-1. Item-wise prior over scale 
-2. Doing hierarchically by subject, straightforward
-	A. Does each subject have their own (noisy) copy of the true prior?
-3. Linking function is big question
-4. Dependent measures
-	A. Choose a number -- Categorical (alpha^power)
-		B. Is there a difference between a subject sampling from their subjective prior, and a subject sampling from the true prior (but with linking function paramete e.g. raise-to-power)?
-	C. Sliders -- logit with noise
-		1. Fitting unnormalized (raw) data
-			A. Model each state independently. 
-			B. Is normalizing is like detrending (removing the mean)?
-		2. Do subjects have a trial-wise noisy copy of her own subjective prior? (Double subjective prior)
-			A. Is logit-normal-logistic same thing as double subjective?
-		3. We would want a linking funciton that allows for endpont-avoiding and endpoint-seaking behavior
-5. Coupling parameters with strict criteria (don't deviate too much from one another)
-	A. Is this better or worse for inference?
+- Item-wise prior over scale
+- Doing hierarchically by subject, straightforward
+	- Does each subject have their own (noisy) copy of the true prior?
+- Linking function is big question
+- Dependent measures
+	- Choose a number -- Categorical (alpha^power)
+		- Is there a difference between a subject sampling from their subjective prior, and a subject sampling from the true prior (but with linking function paramete e.g. raise-to-power)?
+	- Sliders -- logit with noise
+		- Fitting unnormalized (raw) data
+			- Model each state independently. 
+			- Is normalizing is like detrending (removing the mean)?
+		- Do subjects have a trial-wise noisy copy of her own subjective prior? (Double subjective prior)
+			- Is logit-normal-logistic same thing as double subjective?
+		- We would want a linking funciton that allows for endpont-avoiding and endpoint-seaking behavior
+- Coupling parameters with strict criteria (don't deviate too much from one another)
+	- Is this better or worse for inference?
 	
 ## concluding remarks
 
