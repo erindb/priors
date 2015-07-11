@@ -1,0 +1,53 @@
+model {
+    ## SLIDER
+    for (i in 1:N.slider) {
+        p[i] <- subj[item.slider[i], worker.slider[i], bin.num[i]]
+        y[i] <- k.skew[worker.slider[i]] * log(p[i] / (1 - p[i]))
+        y.slider[i] ~ dnorm(y[i], tau)
+        y.sliderPPC[i] ~ dnorm(y[i], tau)
+    }
+    
+    ## NUMBERS
+    for (i in 1:N.number) {
+        y.number[i] ~ dcat(pow(subj[item.number[i], worker.number[i], 1:15], a))
+        y.numberPPC[i] ~ dcat(pow(subj[item.number[i], worker.number[i], 1:15], a))
+    }
+
+    ## CHOICE
+    for (i in 1:N.choice) {
+        bin.L[i] ~ dcat(pow(subj[item.choice[i], worker.choice[i], 1:15], b))
+        
+        # difference between (un)chosen bins and latent mode bin
+        d.hi[i] <- abs(bin.L[i] - higher[i])
+        d.lo[i] <- abs(bin.L[i] - lower[i])
+        
+        y.choice[i] ~ dbern(ifelse(d.hi[i] > d.lo[i], .99,
+                            ifelse(d.hi[i] == d.lo[i], .5, 0.01)))
+        
+        y.choicePPC[i] ~ dbern(ifelse(d.hi[i] > d.lo[i], .99,
+                               ifelse(d.hi[i] == d.lo[i], .5, 0.01)))
+                              
+        #1 ~ dbern(0) is inconsistent, thus .99 / .01
+    }
+    
+    # noise parameter
+    w ~ dgamma(.5, 1)
+    a ~ dgamma(2, 1)
+    b ~ dgamma(2, 1)
+    tau ~ dgamma(.001, .001) # Jeffreys prior
+    
+    # priors for logistic skew
+    # for (i in 1:n.subj) { k.skew[i] ~ dgamma(2, 1) }
+    k.skewGlobal ~ dgamma(2,1)
+    for (i in 1:n.subj) { k.skew[i] <- k.skewGlobal }
+    
+    # population item priors
+    for (j in 1:n.items) {
+        item.pop[1:15, j] ~ ddirch(ones[])
+        
+        # subject specific priors
+        for (i in 1:n.subj) {
+            subj[j, i, 1:15] ~ ddirch((item.pop[1:15, j] * w) + 1)
+        }
+    }
+}
