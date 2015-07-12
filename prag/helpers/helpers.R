@@ -111,7 +111,7 @@ plot_ppvMF <- function(ppv, type = 'sliderBins') {
   if (type == 'sliderBins') {
     ggplot(ppv, aes(x = bin, y = mean)) + geom_line() + geom_point() + facet_wrap(~ item, scale = "free") + 
       geom_errorbar(aes(ymin = min, ymax = max), width = .5, position = position_dodge(.1), color = 'gray') +
-      geom_line( aes(x = bin, y = y_emp) , color = "red") + geom_point( aes(x = bin, y = y_emp) , color = "red")
+      geom_line( aes(x = bin, y = y_emp) , color = "red") # + geom_point( aes(x = bin, y = y_emp) , color = "red")
   } else {
     stop("Plotting of PPCs only implemented for task type 'sliderBins'.")
   }

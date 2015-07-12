@@ -8,10 +8,10 @@ model {
     }
     
     ## NUMBERS
-    #for (i in 1:N.number) {
-    #    y.number[i] ~ dcat(pow(subj[item.number[i], worker.number[i], 1:15], a))
-    #    y.numberPPC[i] ~ dcat(pow(subj[item.number[i], worker.number[i], 1:15], a))
-    #}
+    for (i in 1:N.number) {
+        y.number[i] ~ dcat(pow(subj[item.number[i], worker.number[i], 1:15], a))
+        y.numberPPC[i] ~ dcat(pow(subj[item.number[i], worker.number[i], 1:15], a))
+    }
 
     ## CHOICE
     #for (i in 1:N.choice) {
@@ -41,7 +41,8 @@ model {
     w ~ dgamma(2, 0.1)
     a ~ dgamma(2, 1)
     b ~ dgamma(2, 1)
-    tau ~ dgamma(.001, .001) # Jeffreys prior
+    sigma ~ dgamma(.001, .001) # Jeffreys prior
+    tau <- 1/sigma^2
     
     # priors for logistic skew
     # for (i in 1:n.subj) { k.skew[i] ~ dgamma(2, 1) }
