@@ -8,37 +8,44 @@ model {
     }
     
     ## NUMBERS
-    for (i in 1:N.number) {
-        y.number[i] ~ dcat(pow(subj[item.number[i], worker.number[i], 1:15], a))
-        y.numberPPC[i] ~ dcat(pow(subj[item.number[i], worker.number[i], 1:15], a))
-    }
+    #for (i in 1:N.number) {
+    #    y.number[i] ~ dcat(pow(subj[item.number[i], worker.number[i], 1:15], a))
+    #    y.numberPPC[i] ~ dcat(pow(subj[item.number[i], worker.number[i], 1:15], a))
+    #}
 
     ## CHOICE
-    for (i in 1:N.choice) {
-        bin.L[i] ~ dcat(pow(subj[item.choice[i], worker.choice[i], 1:15], b))
+    #for (i in 1:N.choice) {
+    #    # bin.L[i] ~ dcat(pow(subj[item.choice[i], worker.choice[i], 1:15], b))
+    #    for (j in 1:15) {
+    #      pTemp[i,j] <- exp( 1000 * subj[item.choice[i], worker.choice[i],j] )
+    #    }
+    #    for (j in 1:15) {
+    #      pTempNorm[i,j] <- pTemp[i,j] / sum(pTemp[i,1:15])
+    #    }
+    #    mode[i] ~ dcat(pTempNorm[i,1:15])
         
-        # difference between (un)chosen bins and latent mode bin
-        d.hi[i] <- abs(bin.L[i] - higher[i])
-        d.lo[i] <- abs(bin.L[i] - lower[i])
+    #    # difference between choice alternatives and modal bin
+    #    d.lo[i] <- abs(mode[i] - lower[i])
+    #    d.hi[i] <- abs(mode[i] - higher[i])
+                            
+    #   probT[i,1] <- exp(b * (15 - d.lo[i]))
+    #    probT[i,2] <- exp(b * (15 - d.hi[i]))
+    #    prob[i] <- probT[i,2] / sum(probT[i,])
         
-        y.choice[i] ~ dbern(ifelse(d.hi[i] > d.lo[i], .99,
-                            ifelse(d.hi[i] == d.lo[i], .5, 0.01)))
-        
-        y.choicePPC[i] ~ dbern(ifelse(d.hi[i] > d.lo[i], .99,
-                               ifelse(d.hi[i] == d.lo[i], .5, 0.01)))
+    #    y.choice[i] ~ dbern(prob[i])                            
+    #    y.choicePPC[i] ~ dbern(prob[i])
                               
-        #1 ~ dbern(0) is inconsistent, thus .99 / .01
-    }
+    #}
     
     # noise parameter
-    w ~ dgamma(.5, 1)
+    w ~ dgamma(2, 0.1)
     a ~ dgamma(2, 1)
     b ~ dgamma(2, 1)
     tau ~ dgamma(.001, .001) # Jeffreys prior
     
     # priors for logistic skew
     # for (i in 1:n.subj) { k.skew[i] ~ dgamma(2, 1) }
-    k.skewGlobal ~ dgamma(2,1)
+    k.skewGlobal ~ dgamma(5,5)
     for (i in 1:n.subj) { k.skew[i] <- k.skewGlobal }
     
     # population item priors
@@ -48,6 +55,7 @@ model {
         # subject specific priors
         for (i in 1:n.subj) {
             subj[j, i, 1:15] ~ ddirch((item.pop[1:15, j] * w) + 1)
+            # subj[j, i, 1:15] <- item.pop[1:15, j]
         }
     }
 }

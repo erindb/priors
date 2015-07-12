@@ -17,7 +17,7 @@ all_bins <- c(all_bins, all_bins[1])
 all_bins <- lapply(all_bins, function(str) {
   str <- gsub("u", "", str)
   str <- gsub("'", "\"", str)
-  str <- gsub(".xb0", "°", str)
+  str <- gsub(".xb0", "", str)
   fromJSON(str)
 })
 names(all_bins) = c("joke", "movies", "tv", "coffee", "watch", "commute", "laptop", "marbles")
@@ -29,8 +29,8 @@ bin_dat$bin_num = sapply(1:nrow(bin_dat), function(i) {
 })
 
 bin_dat <- select(bin_dat, workerid, tag, bin_num, response)
-bin_dat <- bin_dat %>% group_by(workerid) %>% mutate(nresponse = normalize(response)) %>% data.frame()
-    
+bin_dat <- bin_dat %>% group_by(tag, workerid) %>% mutate(nresponse = normalize(response)) %>% data.frame()
+# write.csv(bin_dat, file = "data/bin_dat.csv", row.names = FALSE )
 
 ###############
 # number data #

@@ -3,10 +3,11 @@ library('ggplot2')
 library('reshape2')
 
 
-logit <- function(x) log(x / (1 - x))
-logistic <- function(x) exp(x) / (1 + exp(x))
+logit = function(x, k = 1) k * log(x / (1-x))
+logistic = function(x, k = 1, zero = 0) 1 / (1 + exp(-1/k*(x - zero)))
 add.margin <- function(x, eps = 0.000001) (1 - 2*eps)*x + eps 
-normalize <- function(x) (x - min(x)) / (max(x) - min(x))
+# calibrate <- function(x) (x - min(x)) / (max(x) - min(x))
+normalize <- function(x) (x / sum(x))
 
 
 # Computes highest density interval from a sample of representative values,
@@ -46,9 +47,14 @@ construct_ppvs <- function(samples, ppv = 'y.sliderPPC') {
   if (ppv == 'y.sliderPPC') {
     bins <- rep(bin_dat$bin_num, each = max(ppv_df$Var1))
     items <- rep(bin_dat$tag, each = max(ppv_df$Var1))
+    workerid = rep(bin_dat$workerid, each = max(ppv_df$Var1))
     ppv_df <- ppv_df %>%
-                mutate(item = items, bin = bins, variable = ppv) %>% select(1, 2, 5, 3, 4, 6)
+                mutate(item = items, bin = bins, variable = ppv, workerid) %>% select(1, 2, 5, 7, 4, 6 ,3)
     ppv_df$value = logistic(ppv_df$value)
+    ppv_df = ppv_df %>%
+                group_by(item, Var1, workerid ) %>%
+                mutate(nvalue = value / sum(value)) # normalise slider PPCs
+      
   } else if (ppv == 'y.numberPPC') {
     ppv_df$variable <- ppv
     items <- rep(number_dat$tag, each = max(ppv_df$Var1))
@@ -70,7 +76,11 @@ construct_ppvs <- function(samples, ppv = 'y.sliderPPC') {
 
 clean_samples <- function(samples, ppv = c('y.sliderPPC', 'y.numberPPC', 'y.choicePPC')) {
   slist <- samples$BUGSoutput$sims.list
-  samplesDF <- tbl_df(melt(slist[-which(names(slist) %in% ppv)]))
+  if (ppv == 'none'){
+    samplesDF <- tbl_df(melt(slist))
+  } else {
+    samplesDF <- tbl_df(melt(slist[-which(names(slist) %in% ppv)]))  
+  }
   colnames(samplesDF) <- c('step', 'bin', 'value', 'item', 'variable')
   samplesDF
 }
@@ -81,12 +91,32 @@ get_ppv <- function(ppv_df, y_emp, sampl = 1) {
 }
 
 
-aggregate_ppv <- function(ppv_df, y_emp) {
-  ppv_df %>% group_by(sample, item) %>%
-    summarize(value = median(value)) %>%
-    tbl_df %>%  mutate(y_emp = y_emp)
+aggregate_ppv <- function(ppv_df, bin_dat) {
+  empData = bin_dat %>% group_by(bin_num, tag) %>% 
+    summarise(mymean = mean(nresponse))
+  out = ppv_df %>% 
+    group_by(bin, item) %>%
+    summarise(
+      mean = mean(nvalue),
+      max = HDIofMCMC(nvalue)[2],
+      min = HDIofMCMC(nvalue)[1]
+    ) %>%
+    tbl_df
+  out$y_emp = empData$mymean
+  out
 }
 
+
+plot_ppvMF <- function(ppv, type = 'sliderBins') {
+  if (type == 'sliderBins') {
+    ggplot(ppv, aes(x = bin, y = mean)) + geom_line() + geom_point() + facet_wrap(~ item, scale = "free") + 
+      geom_errorbar(aes(ymin = min, ymax = max), width = .5, position = position_dodge(.1), color = 'gray') +
+      geom_line( aes(x = bin, y = y_emp) , color = "red") + geom_point( aes(x = bin, y = y_emp) , color = "red")
+  } else {
+    stop("Plotting of PPCs only implemented for task type 'sliderBins'.")
+  }
+  
+}
 
 plot_ppv <- function(ppv, type, items = unique(ppv$item)) {
   pred <- melt(select(ppv, value, y_emp, item))
@@ -121,7 +151,7 @@ plot_ppv <- function(ppv, type, items = unique(ppv$item)) {
 }
 
 
-plot_items <- function() {
+plot_populationPriors <- function() {
   meansIP <- csamples %>% filter(variable == "item.pop") %>%
     group_by(bin, item) %>%
     summarise(
@@ -131,6 +161,22 @@ plot_items <- function() {
     ) %>%
     mutate(item = levels(bin_dat$tag)[item])
   
-  ggplot(meansIP, aes(x = bin, y = mean)) + geom_line() + geom_point() + facet_wrap(~ item) +  
+  ggplot(meansIP, aes(x = bin, y = mean)) + geom_line() + geom_point() + facet_wrap(~ item, scale = "free") +  
     geom_errorbar(aes(ymin = min, ymax = max), width = .5, position = position_dodge(.1), color = 'gray')
+}
+
+plot_parameters <- function(p = c("a", "b", "w", "tau", "k.skewGlobal")) {
+  meansIP <- csamples %>% filter(variable %in% p) %>%
+    group_by(variable) %>%
+    summarise(
+      mean = mean(value),
+      max = HDIofMCMC(value)[2],
+      min = HDIofMCMC(value)[1]
+    )
+  
+  plotData = csamples %>% select(value, variable) %>% filter(variable %in% p)
+  plotData$maxHDI = unlist(sapply(1:nrow(plotData), function(x) meansIP[which(meansIP$variable == plotData$variable[x]), 3]))
+  plotData$minHDI = unlist(sapply(1:nrow(plotData), function(x) meansIP[which(meansIP$variable == plotData$variable[x]), 4]))
+  
+  ggplot(plotData, aes(x = value)) + geom_density() + facet_wrap(~ variable, scales = "free")  
 }
