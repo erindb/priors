@@ -59,8 +59,6 @@ The model assumes that bin choice *n_ij* is just a categorical sample from *P_ij
 
 #### Lightning round
 
-This one is troubling. We only have a preliminary approach, which we didn't include in the analyses so far, because it seems to mess up otherwise tidy results, and we are not sure whether this approach even makes sense. The idea so far is this:
-
 Data to explain are binary decisions *c_ijl* with *l* in {1, ..., 5} the lightning round comparison: (i) bin 1 >?< bin 2, (ii) bin 2 >?< bin 5, ... We assume that *c_ijl* is 1 if subject *i* choose the higher bin for item *j* in bin-comparison *l*.
 
 Following previous discussions (Judith, Anthea, Noah, Michael H.), we here assume that lightning round choices are based on comparisons of distance to the mode. Concretely, if  comparison *l* requires that bin X and bin Y are to be compared for item *j*, subject *i* consults the mode of her *P_ij*: suppose it is *m[i,j]*. Then, we ask how far away bin X and bin Y are from mode *m[i,j]*. Inverse distance is fed into a soft-max choice rule with parameter *b*.
@@ -70,6 +68,7 @@ Following previous discussions (Judith, Anthea, Noah, Michael H.), we here assum
 	...
 	... well, in JAGS, even easy stuff like this can become ugly ... 
 
+We are not sure whether this model is the right one and have not yet fully evaluated it. The results below are all obtained by ignoring data and model for the lightning round. Preliminary runs suggest that nothing much changes, but we need to see ...
 	
 ## Results 
 
@@ -140,5 +139,5 @@ everybody, chime in, if you please:
 * more individual-level or item-level parameter differences?
 * tweak to convergence: initial starting values, priors ...
 * check individual-level probability distributions and their fit to individual-level data?
-* fix a model for lightning round & run combined model
+* explore a model for lightning round & run combined model
 * eventually port main.R to use jrags, which is faster, but less convenient for exploration
