@@ -88,13 +88,13 @@ Estimated posteriors over model parameters are plotted below. Parameter *tau* di
 * *w* values are not too high, suggesting reasonable inter-individual differences
 * *b* is just the prior, because the model was not condition on the lightning round data (see above)
 
-![Posteriors over model parameters](/plots/posterior_parameters.pdf "Posteriors over model parameters")
+![Posteriors over model parameters](/prag/plots/posterior_parameters.pdf "Posteriors over model parameters")
 
 Theoretically more interesting are the posterior estimates of the population priors *Q_j*. They are plotted below. The black dots & lines are means of the posterior estimates; the gray lines are 95% credibility intervals (individually for each bin, so strictly speaking not quite right, because we neglect interdependencies between values for different bins). The red dots and lines are the normalized average binned-slider ratings that we have used before as priors in our pragmatics experiments. Interestingly, the **inferred population priors are more extreme** and some values of the averaged binned-slider rating task are quite far outside of the 95% credible intervals. This would suggest that the latent inferring of priors has something to add.
 
 ![Smaller icon](http://25.io/smaller/favicon.ico "Title here")
 
-![Posteriors over model parameters](/plots/pop_priors.pdf "Posteriors over model parameters")
+![Posteriors over model parameters](/prag/plots/pop_priors.pdf "Posteriors over model parameters")
 
 
 	
