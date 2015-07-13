@@ -69,7 +69,7 @@ construct_ppvs <- function(samples, ppv = 'y.sliderPPC') {
                 select(1, 2, 4, 5, 3)
   }
   
-  names(ppv_df) <- c('step', 'sample', names(ppv_df)[3:ncol(ppv_df)])
+  names(ppv_df) <- c('sample', 'step', names(ppv_df)[3:ncol(ppv_df)])
   ppv_df
 }
 
@@ -91,7 +91,7 @@ get_ppv <- function(ppv_df, y_emp, sampl = 1) {
 }
 
 
-aggregate_ppv <- function(ppv_df, bin_dat) {
+aggregate_ppv_slider <- function(ppv_df, bin_dat) {
   empData = bin_dat %>% group_by(bin_num, tag) %>% 
     summarise(mymean = mean(nresponse))
   out = ppv_df %>% 
@@ -106,14 +106,31 @@ aggregate_ppv <- function(ppv_df, bin_dat) {
   out
 }
 
+aggregate_ppv_number <- function(ppv_df, data_number) {
+  DN = as.data.frame(data_number)
+  DNm = melt(table(DN$item.number, DN$y.number))
+  colnames(DNm) = c("item", "bin", "count")
+  DNm$item = levels(number_dat$tag)[DNm$item]
+  
+  ppcM = melt(table(ppv_df$item, ppv_df$value))
+  ppcM = ppcM %>% mutate(proportion = value / (20* nrow(ppv_df) / 160)) %>%
+    rename(item = Var1, bin = Var2) %>% mutate(propEmp = DNm$count/20)
+  
+  ppcM
+}
+
 
 plot_ppvMF <- function(ppv, type = 'sliderBins') {
   if (type == 'sliderBins') {
     ggplot(ppv, aes(x = bin, y = mean)) + geom_line() + geom_point() + facet_wrap(~ item, scale = "free") + 
       geom_errorbar(aes(ymin = min, ymax = max), width = .5, position = position_dodge(.1), color = 'gray') +
       geom_line( aes(x = bin, y = y_emp) , color = "red") # + geom_point( aes(x = bin, y = y_emp) , color = "red")
+  } else if (type == 'numberChoice') {
+    ggplot(ppv, aes(x = bin, y = proportion)) + geom_bar(color = "black", fill = "gray", stat = 'identity') + 
+      facet_wrap(~ item, scale = "free") + 
+      geom_line( aes(x = bin, y = propEmp) , color = "red") # + geom_point( aes(x = bin, y = y_emp) , color = "red")
   } else {
-    stop("Plotting of PPCs only implemented for task type 'sliderBins'.")
+    stop("Plotting of PPCs only implemented for task type 'sliderBins' and 'numberChoice'.")
   }
   
 }
@@ -151,7 +168,7 @@ plot_ppv <- function(ppv, type, items = unique(ppv$item)) {
 }
 
 
-plot_populationPriors <- function() {
+plot_populationPriors <- function(slider_ppv, aggr_slider) {
   meansIP <- csamples %>% filter(variable == "item.pop") %>%
     group_by(bin, item) %>%
     summarise(
@@ -160,9 +177,11 @@ plot_populationPriors <- function() {
       min = HDIofMCMC(value)[1]
     ) %>%
     mutate(item = levels(bin_dat$tag)[item])
+  meansIP$y_emp = aggr_slider$y_emp
   
   ggplot(meansIP, aes(x = bin, y = mean)) + geom_line() + geom_point() + facet_wrap(~ item, scale = "free") +  
-    geom_errorbar(aes(ymin = min, ymax = max), width = .5, position = position_dodge(.1), color = 'gray')
+    geom_errorbar(aes(ymin = min, ymax = max), width = .5, position = position_dodge(.1), color = 'gray') +
+    geom_line(aes(x = bin, y = y_emp) , color = "red")  + geom_point(aes(x = bin, y = y_emp ), color = "red")
 }
 
 plot_parameters <- function(p = c("a", "b", "w", "tau", "k.skewGlobal")) {
@@ -178,5 +197,29 @@ plot_parameters <- function(p = c("a", "b", "w", "tau", "k.skewGlobal")) {
   plotData$maxHDI = unlist(sapply(1:nrow(plotData), function(x) meansIP[which(meansIP$variable == plotData$variable[x]), 3]))
   plotData$minHDI = unlist(sapply(1:nrow(plotData), function(x) meansIP[which(meansIP$variable == plotData$variable[x]), 4]))
   
-  ggplot(plotData, aes(x = value)) + geom_density() + facet_wrap(~ variable, scales = "free")  
+  ggplot(plotData, aes(x = value)) + geom_density() + facet_wrap(~ variable, scales = "free")
 }
+
+KL = function(x,y) {
+  # calculate Kullback-Leibler divergence
+  if ( length(setdiff(which(y==0), which(x==0))) !=0){
+    # if y=0 does not imply x=0
+    return(NaN)
+  }
+  t = (x*log(x/y))
+  t[is.nan(t)] = 0   # override harmless NaN-values
+  return(sum(t))
+}
+
+mean_KL_divergence = function(){
+  out <- csamples %>% filter(variable == "item.pop")
+  out$item = levels(bin_dat$tag)[out$item]
+  out = out %>%
+    group_by(item, step) %>%
+    summarise(
+      KL = KL(value, subset(aggr_slider, aggr_slider$item == item)$y_emp)
+    )
+  out = out %>% group_by(item) %>%
+    summarize(meanKL = mean(KL))
+  return(out)
+} 

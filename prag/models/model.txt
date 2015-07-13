@@ -14,28 +14,28 @@ model {
     }
 
     ## CHOICE
-    #for (i in 1:N.choice) {
-    #    # bin.L[i] ~ dcat(pow(subj[item.choice[i], worker.choice[i], 1:15], b))
-    #    for (j in 1:15) {
-    #      pTemp[i,j] <- exp( 1000 * subj[item.choice[i], worker.choice[i],j] )
-    #    }
-    #    for (j in 1:15) {
-    #      pTempNorm[i,j] <- pTemp[i,j] / sum(pTemp[i,1:15])
-    #    }
-    #    mode[i] ~ dcat(pTempNorm[i,1:15])
-        
-    #    # difference between choice alternatives and modal bin
-    #    d.lo[i] <- abs(mode[i] - lower[i])
-    #    d.hi[i] <- abs(mode[i] - higher[i])
+    for (i in 1:N.choice) {
+        # bin.L[i] ~ dcat(pow(subj[item.choice[i], worker.choice[i], 1:15], b))
+        for (j in 1:15) {
+          pTemp[i,j] <- exp( 1000 * subj[item.choice[i], worker.choice[i],j] )
+        }
+        for (j in 1:15) {
+          pTempNorm[i,j] <- pTemp[i,j] / sum(pTemp[i,1:15])
+        }
+        mode[i] ~ dcat(pTempNorm[i,1:15])
+      
+        # difference between choice alternatives and modal bin
+        d.lo[i] <- abs(mode[i] - lower[i])
+        d.hi[i] <- abs(mode[i] - higher[i])
                             
-    #   probT[i,1] <- exp(b * (15 - d.lo[i]))
-    #    probT[i,2] <- exp(b * (15 - d.hi[i]))
-    #    prob[i] <- probT[i,2] / sum(probT[i,])
+       probT[i,1] <- exp(b * (15 - d.lo[i]))
+        probT[i,2] <- exp(b * (15 - d.hi[i]))
+        prob[i] <- probT[i,2] / sum(probT[i,])
         
-    #    y.choice[i] ~ dbern(prob[i])                            
-    #    y.choicePPC[i] ~ dbern(prob[i])
+        y.choice[i] ~ dbern(prob[i])                            
+        y.choicePPC[i] ~ dbern(prob[i])
                               
-    #}
+    }
     
     # noise parameter
     w ~ dgamma(2, 0.1)

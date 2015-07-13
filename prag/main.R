@@ -15,14 +15,15 @@ data_gen <- with(dat,
 # data specific for the slider measure
 data_slider <- with(bin_dat, # use normalized response
                list('y.slider' = logit(add.margin(nresponse)),
-                    'raw' = nresponse,
                     'bin.num' = bin_num,
-                    'item.slider' = as.numeric(tag), 'worker.slider' = workerid + 1,
+                    'item.slider' = as.numeric(tag), 
+                    'worker.slider' = workerid + 1,
                     'N.slider' = nrow(bin_dat)))
 
 # data specific for the number measure
 data_number <- with(number_dat,
-               list('y.number' = chosen_bin, 'item.number' = as.numeric(tag),
+               list('y.number' = chosen_bin, 
+                    'item.number' = as.numeric(tag),
                     'worker.number' = workerid + 1,
                     'N.number' = nrow(number_dat)))
 
@@ -41,14 +42,14 @@ params <- c('w',
              'item.pop', 
             'k.skewGlobal', 
             'b',
-            'y.sliderPPC')
-            # 'y.numberPPC', 
+            'y.sliderPPC',
+            'y.numberPPC') 
             # 'y.choicePPC')
             
 
 samples <- jags(data_aggr, parameters.to.save = params,
                 model.file = 'models/model.txt', n.chains = 2, n.iter = 50000, 
-                n.burnin = 25000, n.thin = 2, DIC = FALSE)
+                n.burnin = 30000, n.thin = 2, DIC = FALSE)
 
 mys = samples$BUGSoutput$sims.list
 mysDF = as.data.frame(mys)
@@ -57,7 +58,7 @@ csamples <- clean_samples(samples, ppv = 'none')
 
 # construct all the posterior predictive samples; needs to be adjusted! (esp. slider ...)
 slider_ppv <- construct_ppvs(samples)
-#number_ppv <- construct_ppvs(samples, ppv = 'y.numberPPC')
+number_ppv <- construct_ppvs(samples, ppv = 'y.numberPPC')
 #choice_ppv <- construct_ppvs(samples, ppv = 'y.choicePPC')
 # 
 # # get a specific posterior predictive sample across with the empirical response
@@ -71,17 +72,26 @@ slider_ppv <- construct_ppvs(samples)
 # plot_ppv(cppv, type = 'sliderPPC') # need to plot this differently ...
 # 
 # # average over all posterior predictive samples
-aggr_slider <- aggregate_ppv(slider_ppv, bin_dat)
-# aggr_number <- aggregate_ppv(number_ppv, number_dat$chosen_bin)
+aggr_slider <- aggregate_ppv_slider(slider_ppv, bin_dat)
+aggr_number <- aggregate_ppv_number(number_ppv, data_number)
 # aggr_choice <- aggregate_ppv(choice_ppv, as.numeric(choice_dat$lower_chosen))
 # plot_ppv(aggr_slider, type = 'sliderBins')
 # plot_ppv(aggr_number, type = 'numberPPC')
 # plot_ppv(aggr_choice, type = 'sliderPPC')
 
 # unconverged = rownames(samples$BUGSoutput$summary)[which(samples$BUGSoutput$summary[,"Rhat"] > 1.1)]
-plot_populationPriors()
-plot_parameters()
-plot_ppvMF(aggr_slider)
 
+pop_priors = plot_populationPriors(slider_ppv, aggr_slider)
+ggsave('plots/pop_priors.pdf', pop_priors, width=10, height = 8)
 
+posterior_parameters = plot_parameters()
+ggsave('plots/posterior_parameters.pdf', posterior_parameters, width=10, height = 8)
+
+ppc_slider = plot_ppvMF(aggr_slider)
+ggsave('plots/ppc_slider.pdf', ppc_slider, width=10, height = 8)
+
+ppc_number = plot_ppvMF(aggr_number, 'numberChoice')
+ggsave('plots/ppc_number.pdf', ppc_number, width=10, height = 8)
+
+mean_KL_divergence()
 
