@@ -96,5 +96,8 @@ Theoretically more interesting are the posterior estimates of the population pri
 
 ![Posterior inferred population priors](/prag/plots/pop_priors.png "Posterior inferred population priors")
 
+#### Posterior predictive checks
 
+![Posterior predictive checks for binned-slider ratings](/prag/plots/ppc_slider.png "Posterior predictive checks for number choice")
 	
+![Posterior predictive checks for binned-slider ratings](/prag/plots/ppc_number.png "Posterior predictive checks for number choice")
