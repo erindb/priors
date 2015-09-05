@@ -1,0 +1,19 @@
+// webppl model.wppl --require priorUtils
+
+var data_numberChoice = dataFrame(priorUtils.readCSV('../prag/data/number_dat.csv'))
+
+var items = _.uniq(_.pluck(data_numberChoice, "tag"))
+var subjects = _.uniq(_.pluck(data_numberChoice, "workerid"))
+
+// var model = function(){
+
+// 	foreach(items,function(i){
+// 		var priors = dirichlet([1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1])	
+	
+
+// 	})
+
+// }
+
+// items
+subjects
