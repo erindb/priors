@@ -1,19 +1,61 @@
 // webppl model.wppl --require priorUtils
 
 var data_numberChoice = dataFrame(priorUtils.readCSV('../prag/data/number_dat.csv'))
+var data_sliderBins = dataFrame(priorUtils.readCSV('../prag/data/bin_dat.csv'))
+var data_lightning = dataFrame(priorUtils.readCSV('../prag/data/choice_dat.csv'))
 
 var items = _.uniq(_.pluck(data_numberChoice, "tag"))
 var subjects = _.uniq(_.pluck(data_numberChoice, "workerid"))
 
-// var model = function(){
+var model = function(){
 
-// 	foreach(items,function(i){
-// 		var priors = dirichlet([1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1])	
+	foreach(items,function(i){
+
+		var priors = dirichlet([1,1,1,1,1,1,1,1,1,1,1,1,1,1,1])
+
+		foreach(subjects,function(s){
+
+			var numberDatum = _.pluck(
+								subset(
+									subset(data_numberChoice, 
+										"tag", i), 
+									"workerid", s), 
+								"chosen_bin")
+
+			var numberScr = discreteERP.score([priors], numberDatum)
+
+			var sliderData = _.pluck(
+								// add sort by bin_number
+								subset(
+									subset(data_sliderBins, 
+										"tag", i), 
+									"workerid", s), 
+								"nresponse")
+
+			var sliderScr = dirichletERP(lstMultiply(priors,15), sliderData)
+
+
+		})
 	
 
-// 	})
+	})
 
-// }
+}
 
 // items
-subjects
+// var y = map(function(i){
+// 	return priorUtils.wpParseFloat(i)
+// 	}, 
+// var y = _.pluck(subset(subset(data_sliderBins, "tag", "coffee"), "workerid", 3),"nresponse")
+
+// var x = dirichlet([1,1,1,1,1,1,1,1,1,1,1,1,1,1,1])
+
+// // y.length
+// // subset(subset(data_sliderBins, "tag", "coffee"), "workerid", 3)
+// // y
+// dirichletERP.score(lstMultiply(x, 16), y)
+
+// discreteERP.score([x], 3)
+
+// data_sliderBins
+// data_lightning
