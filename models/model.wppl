@@ -5,6 +5,10 @@
 // - for slider data, add sort by bin_number
 // - how do log probabilities compare between the dependent measures?
 
+// to do
+// - add subject-wise variables
+// - write out posteriors
+
 var data_numberChoice = dataFrame(priorUtils.readCSV('../prag/data/number_dat.csv'))
 var data_sliderBins = dataFrame(priorUtils.readCSV('../prag/data/bin_dat.csv'))
 var data_lightning = dataFrame(priorUtils.readCSV('../prag/data/choice_dat.csv'))
