@@ -9,9 +9,12 @@
 // - add subject-wise variables
 // - write out posteriors
 
-var data_numberChoice = dataFrame(priorUtils.readCSV('../prag/data/number_dat.csv'))
-var data_sliderBins = dataFrame(priorUtils.readCSV('../prag/data/bin_dat.csv'))
-var data_lightning = dataFrame(priorUtils.readCSV('../prag/data/choice_dat.csv'))
+var data_numberChoice = dataFrame(priorUtils.readCSV('../prag/data/number_dat.csv'),
+	["workerid","response","max","chosen_bin","chosen_min","chosen_max","steps"])
+var data_sliderBins = dataFrame(priorUtils.readCSV('../prag/data/bin_dat.csv'),
+	["workerid","bin_num","response","nresponse"])
+var data_lightning = dataFrame(priorUtils.readCSV('../prag/data/choice_dat.csv'),
+	["workerid", "chosen_tag", "unchosen_tag", "chosen_bin", "unchosen_bin", "chosen_higher"])
 
 var items = _.uniq(_.pluck(data_numberChoice, "tag"))
 var subjects = _.uniq(_.pluck(data_numberChoice, "workerid"))
@@ -22,48 +25,85 @@ var model = function(){
 
 		var priors = dirichlet([1,1,1,1,1,1,1,1,1,1,1,1,1,1,1])
 
+		var itemNumberData = subset(data_numberChoice, "tag", i)
+		var itemSliderData = subset(data_sliderBins, "tag", i)
+		var itemLightningData = subset(data_lightning, "tag", i)
+
 		foreach(subjects,function(s){
 
-			var numberDatum = _.pluck(
-								subset(
-									subset(data_numberChoice, 
-										"tag", i), 
-									"workerid", s), 
-								"chosen_bin")
+			var numberDatum = subset(itemNumberData, 
+									"workerid", s)[0]["chosen_bin"]
+			// console.log(numberDatum)
 
 			var numberScr = discreteERP.score([priors], numberDatum)
+			// console.log("number score " + numberScr)
 
 			var sliderData = _.pluck(
-								// add sort by bin_number
-								subset(
-									subset(data_sliderBins, 
-										"tag", i), 
-									"workerid", s), 
-								"nresponse")
+				_.sortBy(subset(itemSliderData, "workerid", s), "bin_num"),
+				"nresponse")
 
-			var sliderScr = dirichletERP(lstMultiply(priors,15), sliderData)
+			var sliderScr = dirichletERP.score(priors, sliderData)
+			console.log("slider score " + sliderScr)
+			console.log(sliderData)
+			// sliderScr==-Infinity ? console.log(sliderData) : null
+
 			
-			var lightningData = subset(
-									subset(data_lightning, 
-									"tag", i), 
-								"workerid", s)
-
+			var lightningData = subset(itemLightningData, "workerid", s)
+			// console.log(lightningData)
 			var lightningScr = reduce(function(d, memo){
-				var coinWeight = (1 + priors[d["chosen_bin"]] - priors[d["unchosen_bin"]])/2
+				// bins range from 1 - 15 (so to index: -1)
+				var chosenWeight = priors[d["chosen_bin"] - 1]
+				var unchosenWeight = priors[d["unchosen_bin"] - 1]
+				var normalizedWeights = [chosenWeight/(chosenWeight+unchosenWeight),
+										unchosenWeight/(chosenWeight+unchosenWeight)]
+				var coinWeight = (1 + normalizedWeights[0] - normalizedWeights[1])/2
+				// console.log(coinWeight)
+				// console.log(bernoulliERP.score([coinWeight],true))
 				return memo + bernoulliERP.score([coinWeight],true)
 			}, 0, lightningData)
+			// console.log(lightningScr)
 
 			factor(lightningScr+sliderScr+numberScr)
 
-
 		})
 	
+		query.add(["posterior", "priorVector", i], priors)
 
 	})
+
+	return query
 
 }
 
 
+// data_sliderBins
+// data_lightning
+IncrementalMH(model, 10)
+// data_numberChoice
+// var s = 19
+// var itemSliderData = subset(data_sliderBins, "tag", "laptop")
+
+// var workerBins = subset(itemSliderData, "workerid", s)
+
+// 			var sliderData = _.pluck(
+// 				_.sortBy(subset(itemSliderData, "workerid", s), "bin_num"),
+// 				"nresponse")
+
+// 			sliderData
+// var d = priorUtils.getOrderedBinData(workerBins)
+// d
+// dirichletERP.score([1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+// 	d)
+
+// orderBins(workerBins, bins)
+// _.sortBy(workerBins, 
+// 	function(o){return priorUtils.wpParseFloat(o[bin_num])})
+// workerBins.sort(function(a){
+// 	return priorUtils.wpParseFloat(a[bin_num])
+// })
+
+
+// itemSliderData
 
 // var priors = dirichlet([1,1,1,1,1,1,1,1,1,1,1,1,1,1,1])
 
