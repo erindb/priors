@@ -1,8 +1,6 @@
-// webppl model.wppl --require priorUtils
-
+// time webppl model.wppl --require priorUtils
 
 // notes
-// - for slider data, add sort by bin_number
 // - how do log probabilities compare between the dependent measures?
 
 // to do
@@ -11,7 +9,7 @@
 
 var data_numberChoice = dataFrame(priorUtils.readCSV('../prag/data/number_dat.csv'),
 	["workerid","response","max","chosen_bin","chosen_min","chosen_max","steps"])
-var data_sliderBins = dataFrame(priorUtils.readCSV('../prag/data/bin_dat.csv'),
+var data_sliderBins = dataFrame(priorUtils.readCSV('../prag/data/bin_dat_noZeros.csv'),
 	["workerid","bin_num","response","nresponse"])
 var data_lightning = dataFrame(priorUtils.readCSV('../prag/data/choice_dat.csv'),
 	["workerid", "chosen_tag", "unchosen_tag", "chosen_bin", "unchosen_bin", "chosen_higher"])
@@ -23,6 +21,7 @@ var model = function(){
 
 	foreach(items,function(i){
 
+		// var t0 = priorUtils.getTime()
 		var priors = dirichlet([1,1,1,1,1,1,1,1,1,1,1,1,1,1,1])
 
 		var itemNumberData = subset(data_numberChoice, "tag", i)
@@ -34,8 +33,7 @@ var model = function(){
 			var numberDatum = subset(itemNumberData, 
 									"workerid", s)[0]["chosen_bin"]
 			// console.log(numberDatum)
-
-			var numberScr = discreteERP.score([priors], numberDatum)
+			var numberScr = discreteERP.score([priors], numberDatum-1)
 			// console.log("number score " + numberScr)
 
 			var sliderData = _.pluck(
@@ -43,8 +41,8 @@ var model = function(){
 				"nresponse")
 
 			var sliderScr = dirichletERP.score(priors, sliderData)
-			console.log("slider score " + sliderScr)
-			console.log(sliderData)
+			// console.log("slider score " + sliderScr)
+			// console.log(sliderData)
 			// sliderScr==-Infinity ? console.log(sliderData) : null
 
 			
@@ -62,11 +60,14 @@ var model = function(){
 				return memo + bernoulliERP.score([coinWeight],true)
 			}, 0, lightningData)
 			// console.log(lightningScr)
-
+			// console.log(lightningScr+sliderScr+numberScr)
 			factor(lightningScr+sliderScr+numberScr)
+
 
 		})
 	
+		// var t1 = priorUtils.getTime()
+		// console.log(t1-t0)
 		query.add(["posterior", "priorVector", i], priors)
 
 	})
@@ -78,7 +79,7 @@ var model = function(){
 
 // data_sliderBins
 // data_lightning
-IncrementalMH(model, 10)
+IncrementalMH(model, 1000, {verbose:true, verboseLag: 100})
 // data_numberChoice
 // var s = 19
 // var itemSliderData = subset(data_sliderBins, "tag", "laptop")
