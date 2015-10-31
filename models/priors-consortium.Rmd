@@ -1,0 +1,108 @@
+---
+title: "priors-consortium"
+author: "mht"
+date: "October 31, 2015"
+output: html_document
+---
+
+
+```{r helpers}
+
+library(coda)
+library(hydroGOF)
+estimate_mode <- function(s) {
+  d <- density(s)
+  return(d$x[which.max(d$y)])
+}
+HPDhi<- function(s){
+  m <- HPDinterval(mcmc(s))
+  return(m["var1","upper"])
+}
+HPDlo<- function(s){
+  m <- HPDinterval(mcmc(s))
+  return(m["var1","lower"])
+}
+options("scipen"=10)   
+```
+
+
+# Human data
+
+```{r data.load}
+d.number <- read.csv("~/Documents/research/priors/prag/data/number_dat.csv")
+d.binned <- read.csv("~/Documents/research/priors/prag/data/bin_dat_noZeros.csv")
+d.choice <- read.csv("~/Documents/research/priors/prag/data/choice_dat.csv")
+```
+
+```{r data.number}
+qplot(data=d.number, x = chosen_bin, geom='histogram')+
+  facet_wrap(~tag)
+
+```
+
+
+```{r data.binned}
+d.bin.tidy<- d.binned %>%
+  group_by(tag, bin_num) %>%
+  multi_boot_standard(column="nresponse")
+
+ggplot(d.bin.tidy, aes(x=bin_num, y = mean))+
+  geom_bar(stat='identity', position=position_dodge())+
+  geom_errorbar(aes(ymin=ci_lower, ymax = ci_upper))+
+  facet_wrap(~tag)
+```
+
+
+```{r data.choice}
+
+
+```
+
+
+
+# Model
+
+```{r model.load}
+fpath<- "~/Documents/research/priors/models/results/"
+prefix<- "priors-base-IncrMH"
+samples = 50000
+burn = samples /2
+m<-read.csv(paste(fpath, prefix, samples, "burn", burn,".csv", sep=''))
+m.samples <- m[rep(row.names(m), m$Probability*samples), 1:18]
+```
+
+
+# Posterior over parameters
+
+## Data analysis parameters
+
+```{r posterior.parameters}
+
+m.params <- m.samples %>%
+  filter(Type=='parameter')
+
+ggplot(m.params, aes(x=Value))+
+  geom_histogram()+
+  facet_wrap(~Parameter, scales='free')
+
+```
+
+## Parameters governing the big prior in the sky
+
+```{r}
+m.pp <- m.samples %>%
+  filter(Type == 'posterior' & Parameter=='priorVector') %>%
+  gather(Bin, Value, starts_with("X")) %>%
+  group_by(Parameter, Item, Bin) %>%
+  summarize(MAP = estimate_mode(Value),
+            credHigh = HPDhi(Value),
+            credLow = HPDlo(Value)) %>%
+  mutate(Bin = as.numeric(as.character(gsub("X","",Bin))))
+
+
+ggplot(m.pp, aes(x=Bin, y=MAP))+
+  geom_bar(stat='identity', position=position_dodge())+
+  geom_errorbar(aes(ymin=credLow, ymax=credHigh))+
+  facet_wrap(~Item)
+
+```

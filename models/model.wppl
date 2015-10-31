@@ -1,3 +1,4 @@
+
 // time webppl model.wppl --require priorUtils
 
 // notes
@@ -5,14 +6,19 @@
 
 // to do
 // - add subject-wise variables
-// - write out posteriors
+// - posteriors predictives
 
-var data_numberChoice = dataFrame(priorUtils.readCSV('../prag/data/number_dat.csv'),
-	["workerid","response","max","chosen_bin","chosen_min","chosen_max","steps"])
-var data_sliderBins = dataFrame(priorUtils.readCSV('../prag/data/bin_dat_noZeros.csv'),
+var data_numberChoice = dataFrame(
+			priorUtils.readCSV('../prag/data/number_dat.csv'),
+	["workerid","response","max","chosen_bin","chosen_min",
+			"chosen_max","steps"])
+var data_sliderBins = dataFrame(
+			priorUtils.readCSV('../prag/data/bin_dat_noZeros.csv'),
 	["workerid","bin_num","response","nresponse"])
-var data_lightning = dataFrame(priorUtils.readCSV('../prag/data/choice_dat.csv'),
-	["workerid", "chosen_tag", "unchosen_tag", "chosen_bin", "unchosen_bin", "chosen_higher"])
+var data_lightning = dataFrame(
+			priorUtils.readCSV('../prag/data/choice_dat.csv'),
+	["workerid", "chosen_tag", "unchosen_tag", "chosen_bin", 
+						"unchosen_bin", "chosen_higher"])
 
 var items = _.uniq(_.pluck(data_numberChoice, "tag"))
 var subjects = _.uniq(_.pluck(data_numberChoice, "workerid"))
@@ -30,56 +36,73 @@ var model = function(){
 
 		foreach(subjects,function(s){
 
+			var subjectivePriors = priors
+
+			// give a number task data
 			var numberDatum = subset(itemNumberData, 
 									"workerid", s)[0]["chosen_bin"]
-			// console.log(numberDatum)
-			var numberScr = discreteERP.score([priors], numberDatum-1)
-			// console.log("number score " + numberScr)
+			var numberScr = discreteERP.score([subjectivePriors], 
+												numberDatum-1)
 
+			// binned histogram task data
 			var sliderData = _.pluck(
 				_.sortBy(subset(itemSliderData, "workerid", s), "bin_num"),
 				"nresponse")
+			var sliderScr = dirichletERP.score(subjectivePriors, sliderData)
 
-			var sliderScr = dirichletERP.score(priors, sliderData)
-			// console.log("slider score " + sliderScr)
-			// console.log(sliderData)
-			// sliderScr==-Infinity ? console.log(sliderData) : null
-
-			
+			// lightning round task data
 			var lightningData = subset(itemLightningData, "workerid", s)
-			// console.log(lightningData)
 			var lightningScr = reduce(function(d, memo){
-				// bins range from 1 - 15 (so to index: -1)
-				var chosenWeight = priors[d["chosen_bin"] - 1]
-				var unchosenWeight = priors[d["unchosen_bin"] - 1]
-				var normalizedWeights = [chosenWeight/(chosenWeight+unchosenWeight),
-										unchosenWeight/(chosenWeight+unchosenWeight)]
-				var coinWeight = (1 + normalizedWeights[0] - normalizedWeights[1])/2
-				// console.log(coinWeight)
-				// console.log(bernoulliERP.score([coinWeight],true))
+				var chosenWeight = subjectivePriors[d["chosen_bin"] - 1]
+				var unchosenWeight = subjectivePriors[d["unchosen_bin"] - 1]
+				var normalizedWeights = [chosenWeight/
+											(chosenWeight+unchosenWeight),
+										unchosenWeight/
+											(chosenWeight+unchosenWeight)]
+				var coinWeight = (1 + normalizedWeights[0] - 
+									  normalizedWeights[1] ) / 2
+
 				return memo + bernoulliERP.score([coinWeight],true)
 			}, 0, lightningData)
-			// console.log(lightningScr)
-			// console.log(lightningScr+sliderScr+numberScr)
+
+
 			factor(lightningScr+sliderScr+numberScr)
 
+			// posterior predictives
+
+			// foreach(_.range(1,16), function(n){
+			// 	query.add(["predictive", "number",s,i], subjectivePriors)
+			// })
 
 		})
 	
-		// var t1 = priorUtils.getTime()
 		// console.log(t1-t0)
-		query.add(["posterior", "priorVector", i], priors)
+		query.add(["posterior","priorVector", i], priors)
 
 	})
 
 	return query
-
 }
 
 
 // data_sliderBins
 // data_lightning
-IncrementalMH(model, 1000, {verbose:true, verboseLag: 100})
+var inference = "IncrMH"
+var samples = 50000
+var burn = samples/2
+
+var resultsERP = IncrementalMH(model, samples, 
+	{verbose:true, verboseLag: samples/20, burn:burn})
+
+console.log('inference complete. writing results to file...')
+
+var outputFile = "results/priors-base-" + inference + samples + "burn" + burn + ".csv"
+
+priorUtils.erpWriter(resultsERP, outputFile)
+console.log('output written to ' + outputFile)
+
+
+
 // data_numberChoice
 // var s = 19
 // var itemSliderData = subset(data_sliderBins, "tag", "laptop")
