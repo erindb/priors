@@ -39,10 +39,10 @@ var model = function(){
 			var subjectivePriors = priors
 
 			// give a number task data
-			var numberDatum = subset(itemNumberData, 
-									"workerid", s)[0]["chosen_bin"]
-			var numberScr = discreteERP.score([subjectivePriors], 
-												numberDatum-1)
+			// var numberDatum = subset(itemNumberData, 
+			// 						"workerid", s)[0]["chosen_bin"]
+			// var numberScr = discreteERP.score([subjectivePriors], 
+			// 									numberDatum-1)
 
 			// binned histogram task data
 			var sliderData = _.pluck(
@@ -50,34 +50,54 @@ var model = function(){
 				"nresponse")
 			var sliderScr = dirichletERP.score(subjectivePriors, sliderData)
 
+			var lightningScr = 0
+			var numberScr = 0
 			// lightning round task data
-			var lightningData = subset(itemLightningData, "workerid", s)
-			var lightningScr = reduce(function(d, memo){
-				var chosenWeight = subjectivePriors[d["chosen_bin"] - 1]
-				var unchosenWeight = subjectivePriors[d["unchosen_bin"] - 1]
-				var normalizedWeights = [chosenWeight/
-											(chosenWeight+unchosenWeight),
-										unchosenWeight/
-											(chosenWeight+unchosenWeight)]
-				var coinWeight = (1 + normalizedWeights[0] - 
-									  normalizedWeights[1] ) / 2
+			// var lightningData = subset(itemLightningData, "workerid", s)
+			// var lightningScr = reduce(function(d, memo){
+			// 	var chosenWeight = subjectivePriors[d["chosen_bin"] - 1]
+			// 	var unchosenWeight = subjectivePriors[d["unchosen_bin"] - 1]
+			// 	var normalizedWeights = [chosenWeight/
+			// 								(chosenWeight+unchosenWeight),
+			// 							unchosenWeight/
+			// 								(chosenWeight+unchosenWeight)]
+			// 	var coinWeight = (1 + normalizedWeights[0] - 
+			// 						  normalizedWeights[1] ) / 2
 
-				return memo + bernoulliERP.score([coinWeight],true)
-			}, 0, lightningData)
+			// 	return memo + bernoulliERP.score([coinWeight],true)
+			// }, 0, lightningData)
 
-
+			console.log(lightningScr+sliderScr+numberScr)
 			factor(lightningScr+sliderScr+numberScr)
+
 
 			// posterior predictives
 
-			// foreach(_.range(1,16), function(n){
-			// 	query.add(["predictive", "number",s,i], subjectivePriors)
+			// var ppNumber = discrete(subjectivePriors)
+			var ppBins = dirichlet(subjectivePriors)
+			console.log(ppBins)
+
+			// query.add(["predictive", "number",s,i, "NA", "NA"], ppNumber)
+			// query.add(["predictive", "binned",s,i, "NA", "NA"], ppBins)
+			// foreach(lightningData, function(d){
+			// 	var chosenWeight = subjectivePriors[d["chosen_bin"] - 1]
+			// 	var unchosenWeight = subjectivePriors[d["unchosen_bin"] - 1]
+			// 	var normalizedWeights = [chosenWeight/
+			// 								(chosenWeight+unchosenWeight),
+			// 							unchosenWeight/
+			// 								(chosenWeight+unchosenWeight)]
+			// 	var coinWeight = (1 + normalizedWeights[0] - 
+			// 						  normalizedWeights[1] ) / 2
+			// 	query.add(["predictive", "lightning",s,i, d["chosen_bin"], d["unchosen_bin"]], 
+			// 					flip(coinWeight))
 			// })
 
 		})
 	
 		// console.log(t1-t0)
-		query.add(["posterior","priorVector", i], priors)
+		// foreach(_.zip(_.range(0,15), priors), function(p){
+		// 	query.add(["posterior","priorVector","NA", i, "NA", p[0]], p[1])
+		// })
 
 	})
 
@@ -88,70 +108,19 @@ var model = function(){
 // data_sliderBins
 // data_lightning
 var inference = "IncrMH"
-var samples = 50000
+var samples = 10000
 var burn = samples/2
 
-var resultsERP = IncrementalMH(model, samples, 
-	{verbose:true, verboseLag: samples/20, burn:burn})
+// var resultsERP = IncrementalMH(model, samples, 
+// 	{verbose:true, verboseLag: samples/20, burn:burn})
+
+var resultsERP = MCMC(model,  
+	{samples: samples, verbose:true, burn:burn})
 
 console.log('inference complete. writing results to file...')
 
 var outputFile = "results/priors-base-" + inference + samples + "burn" + burn + ".csv"
 
-priorUtils.erpWriter(resultsERP, outputFile)
+var header = 'Type,Parameter,Subject,Item,chosenBin, unchosenBin'
+priorUtils.erpWriter(resultsERP, outputFile, header)
 console.log('output written to ' + outputFile)
-
-
-
-// data_numberChoice
-// var s = 19
-// var itemSliderData = subset(data_sliderBins, "tag", "laptop")
-
-// var workerBins = subset(itemSliderData, "workerid", s)
-
-// 			var sliderData = _.pluck(
-// 				_.sortBy(subset(itemSliderData, "workerid", s), "bin_num"),
-// 				"nresponse")
-
-// 			sliderData
-// var d = priorUtils.getOrderedBinData(workerBins)
-// d
-// dirichletERP.score([1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-// 	d)
-
-// orderBins(workerBins, bins)
-// _.sortBy(workerBins, 
-// 	function(o){return priorUtils.wpParseFloat(o[bin_num])})
-// workerBins.sort(function(a){
-// 	return priorUtils.wpParseFloat(a[bin_num])
-// })
-
-
-// itemSliderData
-
-// var priors = dirichlet([1,1,1,1,1,1,1,1,1,1,1,1,1,1,1])
-
-// var d = subset(
-// 	subset(data_lightning, 
-// 		"tag", 
-// 		"coffee"), 
-// "workerid", 5)[0]
-
-// var coinWeight = (1 + priors[d["chosen_bin"]] - priors[d["unchosen_bin"]])/2
-// bernoulliERP.score([coinWeight], true)
-// items
-// var y = map(function(i){
-// 	return priorUtils.wpParseFloat(i)
-// 	}, 
-// var y = _.pluck(subset(subset(data_sliderBins, "tag", "coffee"), "workerid", 3),"nresponse")
-
-
-// // y.length
-// // subset(subset(data_sliderBins, "tag", "coffee"), "workerid", 3)
-// // y
-// dirichletERP.score(lstMultiply(x, 16), y)
-
-// discreteERP.score([x], 3)
-
-// data_sliderBins
-// data_lightning
