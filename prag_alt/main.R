@@ -1,7 +1,4 @@
 library('R2jags')
-library('rjags')
-library('runjags')
-library('ggmcmc')
 source('helpers/helpers.R')
 
 
@@ -41,17 +38,21 @@ data_choice <- with(choice_dat,
 data_aggr <- c(data_gen, data_slider, data_number, data_choice)
 params <- c('w', 
             'a', 
-            'sigma', 
-            'item.pop', 
+            'tau', 
+             'item.pop', 
             'k.skewGlobal', 
             'b',
-            "y.choicePPC", "y.numberPPC", "y.sliderPPC")
+            'y.sliderPPC',
+            'y.numberPPC') 
+            # 'y.choicePPC')
+            
 
 samples <- jags(data_aggr, parameters.to.save = params,
-                model.file = 'models/model.txt', n.chains = 2, n.iter = 500, 
-                n.burnin = 300, n.thin = 2, DIC = FALSE)
+                model.file = 'models/model.txt', n.chains = 2, n.iter = 50000, 
+                n.burnin = 30000, n.thin = 2, DIC = FALSE)
 
-stop()
+mys = samples$BUGSoutput$sims.list
+mysDF = as.data.frame(mys)
 
 csamples <- clean_samples(samples, ppv = 'none')
 

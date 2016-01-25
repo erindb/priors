@@ -1,14 +1,22 @@
-library('R2jags')
-library('rjags')
-library('runjags')
-library('ggmcmc')
+# library('R2jags')
+library(jagsUI) # for parallel computing
+library(ggmcmc)
+library(coda)
+library(BEST)
 source('helpers/helpers.R')
+source('~/Desktop/data/svn/ProComPrag/dev_tmp/typicality_quantifiers/model/helpers.r')
 
 
 dat <- read.csv('data/exp1.csv')
 bin_dat <- read.csv('data/bin_dat.csv')
 choice_dat <- read.csv('data/choice_dat.csv')
 number_dat <- read.csv('data/number_dat.csv')
+
+# focus = "coffee"
+# dat = droplevels(filter(dat, tag == focus))
+# bin_dat = droplevels(filter(bin_dat, tag == focus))
+# choice_dat = droplevels(filter(choice_dat, tag == focus))
+# number_dat = droplevels(filter(number_dat, tag == focus))
 
 # data useful for all dependent measures
 data_gen <- with(dat,
@@ -17,7 +25,7 @@ data_gen <- with(dat,
 
 # data specific for the slider measure
 data_slider <- with(bin_dat, # use normalized response
-               list('y.slider' = logit(add.margin(nresponse)),
+               list('y.slider' = response,
                     'bin.num' = bin_num,
                     'item.slider' = as.numeric(tag), 
                     'worker.slider' = workerid + 1,
@@ -43,15 +51,43 @@ params <- c('w',
             'a', 
             'sigma', 
             'item.pop', 
-            'k.skewGlobal', 
-            'b',
-            "y.choicePPC", "y.numberPPC", "y.sliderPPC")
+            'k.skewGlobal',
+            'threshold',
+            'b'
+            #'y.sliderPPC',
+            #'y.numberPPC'
+            # 'y.choicePPC'
+            )
+burnin = 5000
+iter = 5000
+out <- jags(data = data_aggr,
+            inits = NULL,
+            parameters.to.save = params,
+            codaOnly = c('y.sliderPPC', 'y.numberPPC', 'y.choicePPC'),
+            model.file = 'models/model.jags.R',
+            n.chains = 2,
+            n.adapt = 1000,
+            n.iter = iter + burnin,
+            n.burnin = burnin,
+            n.thin = 2, 
+            DIC = TRUE,
+            verbose = TRUE,
+            parallel = TRUE)
 
-samples <- jags(data_aggr, parameters.to.save = params,
-                model.file = 'models/model.txt', n.chains = 2, n.iter = 500, 
-                n.burnin = 300, n.thin = 2, DIC = FALSE)
+ms = ggs(out$samples)
+
+mcmcPlot(ms, "item.pop")
 
 stop()
+
+
+mcmcPlot(ms, "k.skewGlobal")
+mcmcPlot(ms, "tau")
+
+
+
+mys = out$sims.list
+mysDF = as.data.frame(mys)
 
 csamples <- clean_samples(samples, ppv = 'none')
 

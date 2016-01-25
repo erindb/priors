@@ -1,44 +1,20 @@
-library('R2jags')
-library('rjags')
-library('runjags')
+library('coda')
 library('ggmcmc')
+library('jagsUI') # for parallel computing
 source('helpers/helpers.R')
+source('~/Desktop/data/svn/ProComPrag/dev_tmp/typicality_quantifiers/model/helpers.r')
+source('process_data.R')
 
 
-dat <- read.csv('data/exp1.csv')
-bin_dat <- read.csv('data/bin_dat.csv')
-choice_dat <- read.csv('data/choice_dat.csv')
-number_dat <- read.csv('data/number_dat.csv')
+saveFlag = FALSE
 
-# data useful for all dependent measures
-data_gen <- with(dat,
-            list('n.items' = nlevels(tag), 'ones' = rep(1, 15),
-                 'n.subj' = length(unique(workerid))))
 
-# data specific for the slider measure
-data_slider <- with(bin_dat, # use normalized response
-               list('y.slider' = logit(add.margin(nresponse)),
-                    'bin.num' = bin_num,
-                    'item.slider' = as.numeric(tag), 
-                    'worker.slider' = workerid + 1,
-                    'N.slider' = nrow(bin_dat)))
 
-# data specific for the number measure
-data_number <- with(number_dat,
-               list('y.number' = chosen_bin, 
-                    'item.number' = as.numeric(tag),
-                    'worker.number' = workerid + 1,
-                    'N.number' = nrow(number_dat)))
 
-# data specific for the choice measure
-data_choice <- with(choice_dat,
-               list('y.choice' = as.numeric(higher_chosen),
-                    'item.choice' = as.numeric(as.factor(tag)),
-                    'N.choice' = nrow(choice_dat), 'worker.choice' = workerid + 1,
-                    'higher' = sapply(1:nrow(choice_dat), function(i) max(chosen_bin[i], unchosen_bin[i])),
-                    'lower' = sapply(1:nrow(choice_dat), function(i) min(chosen_bin[i], unchosen_bin[i]))))
-
-data_aggr <- c(data_gen, data_slider, data_number, data_choice)
+data_aggr <- list(y.slider = y.slider, y.numer = y.number, y.choice = y.choice, 
+                  higher = higher, lower = lower,
+                  nSubjs = 20, nItems = 8, nBins = 15, nLightConds = 5,
+                  ones = rep(1,15))
 params <- c('w', 
             'a', 
             'sigma', 
@@ -47,13 +23,28 @@ params <- c('w',
             'b',
             "y.choicePPC", "y.numberPPC", "y.sliderPPC")
 
-samples <- jags(data_aggr, parameters.to.save = params,
-                model.file = 'models/model.txt', n.chains = 2, n.iter = 500, 
-                n.burnin = 300, n.thin = 2, DIC = FALSE)
+model = "models/model.jags.R"
+burnin = 2000
+iter = 2500
+out = jags(data = data_aggr,
+            inits = NULL,
+            parameters.to.save = params,
+            codaOnly = c("y.choicePPC", "y.numberPPC", "y.sliderPPC"),
+            model.file = model,
+            n.chains = 2,
+            n.adapt = 500,
+            n.iter = iter + burnin,
+            n.burnin = burnin,
+            n.thin = 2, 
+            DIC = TRUE,
+            verbose = TRUE,
+            parallel = TRUE)
+
+if (saveFlag) { save(out, file = "~/Desktop/Dropbox/priors_data/out_25.Rdat") }
+
 
 stop()
 
-csamples <- clean_samples(samples, ppv = 'none')
 
 # construct all the posterior predictive samples; needs to be adjusted! (esp. slider ...)
 slider_ppv <- construct_ppvs(samples)
