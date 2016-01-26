@@ -1,7 +1,16 @@
+library(bootstrap)
+
 dat <- read.csv('data/exp1.csv')
 bin_dat <- read.csv('data/bin_dat.csv')
 choice_dat <- read.csv('data/choice_dat.csv')
 number_dat <- read.csv('data/number_dat.csv')
+
+## for bootstrapping 95% confidence intervals
+theta <- function(x,xdata,na.rm=T) {mean(xdata[x],na.rm=na.rm)}
+ci.low <- function(x,na.rm=T) {
+  mean(x,na.rm=na.rm) - quantile(bootstrap(1:length(x),1000,theta,x,na.rm=na.rm)$thetastar,.025,na.rm=na.rm)}
+ci.high <- function(x,na.rm=T) {
+  quantile(bootstrap(1:length(x),1000,theta,x,na.rm=na.rm)$thetastar,.975,na.rm=na.rm) - mean(x,na.rm=na.rm)}
 
 ## slider rating data
 y.slider = array(0, dim = c(20,8,15))
@@ -12,7 +21,9 @@ for (i in 1:nrow(bin_dat)){
 }
 y.slider = logit(add.margin(y.slider))
 y.slider_means = bin_dat %>% group_by(bin_num, tag) %>% 
-  summarise(mymean = mean(nresponse)) %>% rename(bin = bin_num, item = tag)
+  summarise(mymean = mean(nresponse),
+            cilow  = mean(nresponse) - ci.low(nresponse),
+            cihigh = mean(nresponse) + ci.high(nresponse)) %>% rename(bin = bin_num, item = tag)
 y.slider_means = y.slider_means[order(y.slider_means$item,y.slider_means$bin),]
 
 # number choice data

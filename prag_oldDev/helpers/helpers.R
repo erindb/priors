@@ -175,7 +175,7 @@ plot_populationPriors <- function(slider_ppv, aggr_slider) {
     geom_line(aes(x = bin, y = y_emp) , color = "red")  + geom_point(aes(x = bin, y = y_emp ), color = "red")
 }
 
-plot_parameters <- function(p = c("a", "b", "w", "tau", "k.skewGlobal")) {
+plot_parameters <- function(p = c("a", "b", "w", "sigma", "k.skewGlobal")) {
   meansIP <- csamples %>% filter(variable %in% p) %>%
     group_by(variable) %>%
     summarise(

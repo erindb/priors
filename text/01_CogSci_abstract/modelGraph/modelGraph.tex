@@ -1,0 +1,200 @@
+\documentclass[fleqn,reqno,10pt]{article}
+
+\usepackage[]{mypackages}
+
+\usepackage{mycommands}
+
+\usepackage{verbatim}
+\usepackage[active,tightpage]{preview}
+\PreviewEnvironment{tikzpicture}
+\setlength\PreviewBorder{5pt}
+
+\usetikzlibrary{calc,trees,positioning,arrows,chains,shapes.geometric,%
+    decorations.pathreplacing,decorations.pathmorphing,shapes,%
+    matrix,shapes.symbols}
+
+\usepackage{pgfplots}
+
+\begin{document}
+
+\begin{tikzpicture}[node distance = 2.5cm, 
+    double distance = 2pt,
+    minimum size=1.25cm,
+    thick]
+
+    \node[circle, draw=black] (Qj)
+    {$Q_{jk}$};
+
+    \node[circle, draw=black, right of = Qj] (w)
+    {$w$};
+
+    \node[circle, draw=black, below of = Qj] (Pij)
+    {$P_{ijk}$};
+
+    \node[circle, draw=black, right of = Pij] (kSigma)
+    {$\kappa, \sigma$};
+
+    \node[circle, draw=black, right of = kSigma, node distance = 1.3cm] (a)
+    {$a$};
+
+    \node[circle, draw=black, right of = a, node distance = 1.3cm] (b)
+    {$b$};
+
+    \node[circle, draw=black, fill = lightgray, below of = Pij] (sijk)
+    {$s_{ijk}$};
+
+    \node[rectangle, draw=black, fill = lightgray, right of = sijk] (nij)
+    {$n_{ij}$};
+
+    \node[rectangle, draw=black, fill = lightgray, right of = nij] (cijl)
+    {$c_{ijl}$};   
+
+    %%%%%%%%%%%
+    % arrows
+    %%%%%%%%%%% 
+
+    \draw[->] (Qj)--(Pij);
+    \draw[->] (w)--(Pij);
+
+    \draw[->] (Pij)--(sijk);
+    \draw[->] (kSigma)--(sijk);
+
+    \draw[->] (Pij)--(nij);
+    \draw[->] (a)--(nij);
+
+    \draw[->] (Pij)--(cijl);
+    \draw[->] (b)--(cijl);
+
+
+    %%%%%%%%%%%%%
+    % bin box
+    %%%%%%%%%%%%%
+
+    \begin{pgfonlayer}{background}
+       \node [thick, dotted,
+              draw=black!90,fit={($(sijk.south)+(0,-17pt)$) 
+                                 ($(sijk.west)+(-35pt,-5pt)$) 
+                                 ($(Qj.north)+(0,+5pt)$) 
+                                 ($(sijk.east)+(+0pt,0)$)}] {};
+    \end{pgfonlayer}
+
+    \node[below of = sijk, node distance = 1cm+3pt] (KlabelAnchor) {};
+
+    \node[left of = KlabelAnchor, node distance = 0.25cm+10pt] (Klabel)
+    {bin $k \in \set{0, \dots, 15}$};
+
+
+
+    %%%%%%%%%%%%%
+    % item box
+    %%%%%%%%%%%%%
+
+    \begin{pgfonlayer}{background}
+
+      \path[draw = lightgray, thick, dashed] ($(nij.south)+(0,-25pt)$) --
+                        ($(sijk.south)+(-25pt,-25pt)$) --
+                        ($(Qj.north)+(-25pt,+5pt)$) -- 
+                        ($(Qj.north)+(+25pt,+5pt)$) --
+                        ($(Qj.north)+(+25pt,-136pt)$) --
+                        ($(cijl.north)+(+25pt,+5pt)$) -- 
+                        ($(cijl.south)+(+25pt,-25pt)$) --
+                        ($(nij.south)+(0,-25pt)$);
+      
+    \end{pgfonlayer}
+
+    \node[below of = cijl, node distance = 1cm+7pt] (IlabelAnchor) {};
+
+    \node[left of = IlabelAnchor, node distance = 0.4cm+5pt] (Ilabel)
+    {items $j \in \set{0, \dots, 8}$};
+
+    %%%%%%%%%%%%%
+    % subject box
+    %%%%%%%%%%%%%
+
+    \begin{pgfonlayer}{background}
+
+      \path[draw = gray, thick] ($(nij.south)+(0,-50pt)$) --
+                        ($(sijk.south)+(-35pt,-50pt)$) --
+                        ($(Pij.north)+(-35pt,+5pt)$) -- 
+                        ($(Pij.north)+(+30pt,+5pt)$) --
+                        ($(Pij.north)+(+30pt,-60pt)$) --
+                        ($(cijl.north)+(+35pt,+10pt)$) -- 
+                        ($(cijl.south)+(+35pt,-50pt)$) --
+                        ($(nij.south)+(0,-50pt)$);
+
+    \end{pgfonlayer}
+
+    \node[below of = cijl, node distance = 1cm+30pt] (SlabelAnchor) {};
+
+    \node[left of = SlabelAnchor, node distance = 0.3cm+5pt] (Slabel)
+    {subjects $i \in \set{0, \dots, 20}$};
+
+
+
+    %%%%%%%%%%%%%
+    % MATHEMATICS
+    %%%%%%%%%%%%%
+
+    \begin{scope}[xshift = 9.75cm, node distance = 1cm]
+
+      \node[] at(0,1) (wPrior) {$w \sim \text{Gamma}(2,0.1)$};
+
+      \node[below of = wPrior] (Qj) {$Q_j \sim \text{Dirichlet}(1, \dots, 1)$};
+
+      \node[below of = Qj] (Pij) {$P_{ij} \sim \text{Dirichlet}( w Q_j)$};
+
+      \node[below of = Pij] (k) {$\kappa \sim \text{Gamma}(5,5)$};
+
+      \node[below of = k] (sigma) {$\sigma \sim \text{Gamma}(0.0001,0.0001)$};
+
+      \node[below of = sigma] (sijk) {$s_{ijk} \sim
+        \text{logistic}(\text{Norm}(\text{logit}(P_{ijk}), \sigma), \kappa)$};
+
+      \node[below of = sijk] (ab) {$a,b \sim \text{Gamma}(2,1)$};
+
+      \node[below of = ab] (nij) {$n_{ij} \sim
+        \text{Categorical}(\expo(a P_{ij}))$};
+
+      \node[below of = nij] (cijl) {$c_{ijl} \sim
+        \text{Bern}(\expo(b \ pc_{ijl}))$, where};
+
+      \node[below of = cijl, node distance = 1.35cm] (pcijl) {$pc_{ijk} = \begin{cases} 2 &
+          \text{if $mode(P_{ij})$ is closer to higher} \\
+& \text{ bin of $l$ than to lower bin }  \\ 1 & \text{if equal
+            distance} \\ 0 & \text{otherwise}  \end{cases}$};
+
+      % \node[below of = pi] (F) {$F^{+/-}_c = \text{F}(c \ ; \ \vec{s} \  ^{+/-}, \pi)$};
+
+      % \node[below of = F] (sigma) {$\sigma \sim \text{Uniform}(0,0.4)$};
+
+      % \node[below of = sigma] (delta) {$\delta_{d \in \set{1,\dots, 6}} \sim
+      %   \text{Normal}(d/7,14)$};
+
+      % \node[below of = delta, node distance = 0.5cm] (delta2) {$\delta_{0} = - \infty; \ \
+      %   \delta_7 = \infty$};
+
+      % \node[below of = delta2] (theta) {$\theta \sim \text{Normal}(0.5, 0.2)$};
+
+      % \node[below of = theta] (gamma) {$\frac{1}{\gamma} \sim \text{Gamma}(1, 1)$};
+
+      % \node[below of = gamma] (pab) {$p^{A/B}_{cd} = \int_{\delta_{cd}-1}^{\delta_{cd}} \text{Normal}(x, F^{+/-}_c,
+      %   \sigma) \text{ d}x$};
+
+      % \node[below of = pab] (pcd) {$p^{C/D}_{c} = (1 + \expo(- \gamma ( F^{+/-}_c -
+      %   \theta)))^{-1}$};
+
+      % \node[below of = pcd] (multinom) {$k^{A/B}_{cd} \sim \text{Multinomial}(p^{A/B}_{cd},
+      %   n^{A/B}_c)$};
+
+      % \node[below of = multinom] (binom) {$k^{C/D}_{c} \sim \text{Binomial}(p^{C/D}_{c}, n^{C/D}_c)$};
+
+    \end{scope}
+
+  \end{tikzpicture}
+
+
+
+
+\printbibliography[heading=bibintoc]
+
+\end{document}

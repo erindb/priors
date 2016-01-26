@@ -12,11 +12,15 @@ model {
   ## NUMBERS
   for (i in 1:nSubjs) {
     for (j in 1:nItems) {
-        y.number[i,j,1]    ~ dcat(pow(subj[i,j, 1:15], a))
-        y.numberPPC[i,j,1] ~ dcat(pow(subj[i,j, 1:15], a))
+      for (k in 1:nBins){
+        cp[i,j,k] = exp(a * subj[i,j,k])
+      }
+      y.number[i,j,1]    ~ dcat(cp[i,j,1:15])
+      y.numberPPC[i,j,1] ~ dcat(cp[i,j,1:15])
     }
   }
-
+  x[1:15] = cp[1,1,1:15]
+  
   ## CHOICE
   for (i in 1:nSubjs) {
     for (j in 1:nItems) {
@@ -27,13 +31,20 @@ model {
       mode[i,j] ~ dcat(pTempNorm[i,j,1:15])
       for (k in 1:nLightConds) {
         # difference between choice alternatives and modal bin
-        d.lo[i,j,k] <- abs(mode[i,j] - lower[i,j,k])
-        d.hi[i,j,k] <- abs(mode[i,j] - higher[i,j,k])
-        probT[i,j,k,1] <- exp(b * (15 - d.lo[i,j,k]))
-        probT[i,j,k,2] <- exp(b * (15 - d.hi[i,j,k]))
+        hi[i,j,k] = ifelse(abs(mode[i,j] - lower[i,j,k]) > abs(mode[i,j] - higher[i,j,k]), 1, 0) 
+        lo[i,j,k] = ifelse(abs(mode[i,j] - lower[i,j,k]) < abs(mode[i,j] - higher[i,j,k]), 1, 0)
+        probT[i,j,k,1] <- exp(b * (1 + lo[i,j,k] - hi[i,j,k]))
+        probT[i,j,k,2] <- exp(b * (1 + hi[i,j,k] - lo[i,j,k]))
         prob[i,j,k] <- probT[i,j,k,2] / sum(probT[i,j,k,1:2])
         y.choice[i,j,k] ~ dbern(prob[i,j,k])                            
         y.choicePPC[i,j,k] ~ dbern(prob[i,j,k])
+#         d.lo[i,j,k] <- abs(mode[i,j] - lower[i,j,k])
+#         d.hi[i,j,k] <- abs(mode[i,j] - higher[i,j,k])
+#         probT[i,j,k,1] <- exp(b * (15 - d.lo[i,j,k]))
+#         probT[i,j,k,2] <- exp(b * (15 - d.hi[i,j,k]))
+#         prob[i,j,k] <- probT[i,j,k,2] / sum(probT[i,j,k,1:2])
+#         y.choice[i,j,k] ~ dbern(prob[i,j,k])                            
+#         y.choicePPC[i,j,k] ~ dbern(prob[i,j,k])
       }
     }
   }
@@ -46,15 +57,15 @@ model {
     
     # priors for logistic skew
     # for (i in 1:n.subj) { k.skew[i] ~ dgamma(2, 1) }
-    k.skewGlobal ~ dgamma(5,5)
-    for (i in 1:nSubjs) { k.skew[i] <- k.skewGlobal }
+    k ~ dgamma(5,5)
+    for (i in 1:nSubjs) { k.skew[i] <- k }
     
     # population item priors
     for (j in 1:nItems) {
         item.pop[j, 1:15] ~ ddirch(ones[])
         # subject specific priors
         for (i in 1:nSubjs) {
-            subj[i, j, 1:15] ~ ddirch((item.pop[j, 1:15] * w) + 1)
+            subj[i, j, 1:15] ~ ddirch((item.pop[j, 1:15] * w) )
         }
     }
 }

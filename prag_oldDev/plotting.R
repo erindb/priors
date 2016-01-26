@@ -5,20 +5,76 @@ source('helpers/helpers.R')
 source('~/Desktop/data/svn/ProComPrag/dev_tmp/typicality_quantifiers/model/helpers.r')
 source('process_data.R')
 
+theme_set(theme_bw() + theme(plot.background=element_blank()) )
+
 readFlag = TRUE
-savePlots = FALSE
+savePlots = TRUE
 
 if (readFlag){
   # load(file = "/Users/micha/Desktop/Dropbox/priors_data/out_25.Rdat")
   load(file = "/Users/micha/Desktop/Dropbox/priors_data/out.Rdat")
 } else {
-  source('main.R')
+  # source('main.R')
 }
 
 # prepare samples
 csamples = tbl_df(melt(out$sims.list))
 colnames(csamples) = c("value", "step", "subject", "item", "bin", "variable")
 csamples$item = levels(factor(bin_dat$tag))[csamples$item]
+
+#######################
+# posteriors
+#######################
+
+# item pop
+meansIP = tbl_df(melt(out$sims.list$item.pop)) %>%
+  rename(step = Var1, item = Var2, bin = Var3) %>%
+  mutate(item = levels(factor(bin_dat$tag))[item] ) %>%
+  group_by(item, bin) %>%
+  summarise(
+    mean = mean(value),
+    max = HDIofMCMC(value)[2],
+    min = HDIofMCMC(value)[1]
+  )
+meansIP$y_emp = y.slider_means$mymean
+pop_priors = ggplot(meansIP, aes(x = bin, y = mean)) + geom_line() + geom_point() + facet_wrap(~ item, scale = "free") +
+  geom_ribbon(aes(ymin=min, ymax=max), fill="gray", alpha="0.5") +
+  geom_line(aes(x = bin, y = y_emp) , color = "red")  + geom_point(aes(x = bin, y = y_emp ), color = "red")
+show(pop_priors)
+
+# subjective priors
+# meansIPSubj = tbl_df(melt(out$sims.list$subj)) %>%
+#   rename(step = Var1, subject = Var2, item = Var3, bin = Var4) %>%
+#   mutate(item = levels(factor(bin_dat$tag))[item] ) %>%
+#   filter(subject <= 8) %>%
+#   group_by(subject, item, bin) %>%
+#   summarise(
+#     mean = mean(value),
+#     max = HDIofMCMC(value)[2],
+#     min = HDIofMCMC(value)[1]
+#   )
+# meansIPSubj$y_emp = y.slider_means$mymean
+# meansIPSubj$subject = factor(meansIPSubj$subject)
+# pop_priorsSubj = ggplot(meansIPSubj, aes(x = bin, y = mean, group = subject)) + geom_line(color="lightgray") + geom_point(color="lightgray", size = 1.5) + facet_wrap(~ item, scale = "free") +
+#   geom_line(aes(x = bin, y = y_emp) , color = "black")  + geom_point(aes(x = bin, y = y_emp ), color = "black")
+# show(pop_priorsSubj)
+
+# parameters
+p = c("a", "b", "w", "sigma", "k.skewGlobal")
+meansIP <- csamples %>% filter(variable %in% p) %>%
+  group_by(variable) %>%
+  summarise(
+    mean = mean(value),
+    max = HDIofMCMC(value)[2],
+    min = HDIofMCMC(value)[1]
+  )
+plotData = csamples %>% select(value, variable) %>% filter(variable %in% p)
+plotData$maxHDI = unlist(sapply(1:nrow(plotData), function(x) meansIP[which(meansIP$variable == plotData$variable[x]), 3]))
+plotData$minHDI = unlist(sapply(1:nrow(plotData), function(x) meansIP[which(meansIP$variable == plotData$variable[x]), 4]))
+posterior_parameters = ggplot(plotData, aes(x = value)) + geom_density() + facet_wrap(~ variable, scales = "free")
+show(posterior_parameters)
+
+
 
 #######################
 # posterior predictives
@@ -37,10 +93,16 @@ slider_aggr = slider_ppv %>% group_by(item, bin, step) %>%
             max = HDIofMCMC(y.rep.mean)[2])
 slider_aggr = slider_aggr[order(slider_aggr$item,slider_aggr$bin),]
 slider_aggr$y_means = y.slider_means$mymean
+slider_aggr$cilow = y.slider_means$cilow
+slider_aggr$cihigh = y.slider_means$cihigh
 plotSliderPPC = ggplot(slider_aggr, aes(x = bin, y = mean)) + geom_line() + geom_point() + facet_wrap(~ item, scale = "free") + 
-  geom_errorbar(aes(ymin = min, ymax = max), width = .5, position = position_dodge(.1), color = 'gray') +
+  geom_ribbon(aes(ymin=min, ymax=max), fill="gray", alpha="0.5") +
+  # geom_errorbar(aes(ymin = min, ymax = max), width = .5, position = position_dodge(.1), color = 'gray') +
   geom_line(aes(x = bin, y = y_means) , color = "red") + geom_point( aes(x = bin, y = y_means) , color = "red")
 show(plotSliderPPC)
+plotSliderData = ggplot(slider_aggr, aes(x = bin, y = y_means)) + geom_line() + geom_point() + facet_wrap(~ item, scale = "free") + 
+  geom_errorbar(aes(ymin = cilow, ymax = cihigh), width = .5, position = position_dodge(.1), color = 'gray') 
+show(plotSliderData)
 
 # numbers
 number_dat$chosen_bin = factor(number_dat$chosen_bin, levels = 1:15)
@@ -58,14 +120,62 @@ number_aggr = ppcM %>%
             high = HDIofMCMC(value)[2])
 number_aggr = number_aggr[order(number_aggr$item, number_aggr$bin),]
 number_aggr$value = DNm$value
-plotNumbersPPC = ggplot(number_aggr, aes(x = bin, y = mean)) + geom_bar(color = "black", fill = "gray", stat = 'identity') + 
+plotNumbersPPC = ggplot(number_aggr, aes(x = bin, y = mean)) + geom_point() + geom_line() +
   facet_wrap(~ item, scale = "free") + 
-  geom_errorbar(aes(ymin = low, ymax = high), width = .5, position = position_dodge(.1), color = 'gray') +
+  geom_ribbon(aes(ymin=low,ymax=high), fill="gray", alpha="0.5") +
   geom_line( aes(x = bin, y = value) , color = "red") + geom_point( aes(x = bin, y = value) , color = "red")
 show(plotNumbersPPC)
+plotNumbersData = ggplot(number_aggr, aes(x = bin, y = value)) + geom_bar(stat = "identity") +
+  facet_wrap(~ item, scale = "free")
+show(plotNumbersData)
+
+# lightning choices
+choice_emp = choice_dat %>% group_by(condition, tag) %>%
+  summarise(yemp = mean(chosen_higher),
+            cilow = mean(chosen_higher) - ci.low(chosen_higher),
+            cihigh = mean(chosen_higher) + ci.high(chosen_higher)) %>% 
+  rename(bin = condition, item = tag)
+choice_emp = choice_emp[order(choice_emp$item, choice_emp$bin),]
+choice_ppc = filter(csamples, variable == "y.choicePPC") %>%
+  group_by(bin, item, step) %>% summarise(yrep = mean(value)) %>%
+  group_by(bin, item) %>% summarise(mean = mean(yrep),
+                                    low = HDIofMCMC(yrep)[1],
+                                    high = HDIofMCMC(yrep)[2])
+choice_ppc = choice_ppc[order(choice_ppc$item, choice_ppc$bin),]
+choice_ppc$yemp = choice_emp$yemp
+choice_ppc$cilow = choice_emp$cilow
+choice_ppc$cihigh = choice_emp$cihigh
+plotChoicesPPC = ggplot(choice_ppc, aes(x = bin, y = mean)) + geom_point() + geom_line() +
+  facet_wrap(~ item, scale = "free") + 
+  geom_ribbon(aes(ymin=low,ymax=high), fill="gray", alpha="0.5") +
+  geom_line( aes(x = bin, y = yemp) , color = "red") + geom_point( aes(x = bin, y = yemp) , color = "red")
+show(plotChoicesPPC)
+plotChoicesData = ggplot(choice_ppc, aes(x = bin, y = yemp)) + geom_bar(stat = "identity", fill = "lightgray") +
+  facet_wrap(~ item, scale = "free") +
+  geom_errorbar(aes(ymin = cilow, ymax = cihigh), color = "darkgray", width = .5) + ylab("prop. choice of higher interval")
+show(plotChoicesData)
+
 
 # save plots  
 if (savePlots){
+  # pdfs
+  ggsave('plots/pop_priors.pdf', pop_priors, width=10, height = 8)
+  ggsave('plots/pop_priorsSubj.pdf', pop_priorsSubj, width=10, height = 8)
+  ggsave('plots/posterior_parameters.pdf', posterior_parameters, width=10, height = 8)
   ggsave('plots/ppc_slider.pdf', plotSliderPPC,  width=10, height = 8)
   ggsave('plots/ppc_number.pdf', plotNumbersPPC, width=10, height = 8)
+  ggsave('plots/ppc_choice.pdf', plotChoicesPPC, width=10, height = 8)
+  ggsave('plots/data_slider.pdf', plotSliderData,  width=10, height = 8)
+  ggsave('plots/data_number.pdf', plotNumbersData,  width=10, height = 8)
+  ggsave('plots/data_choice.pdf', plotChoicesData, width=10, height = 8)
+  # pngs
+  ggsave('plots/pop_priors.png', pop_priors, width=10, height = 8)
+  ggsave('plots/pop_priorsSubj.png', pop_priorsSubj, width=10, height = 8)
+  ggsave('plots/posterior_parameters.png', posterior_parameters, width=10, height = 8)
+  ggsave('plots/ppc_slider.png', plotSliderPPC,  width=10, height = 8)
+  ggsave('plots/ppc_number.png', plotNumbersPPC, width=10, height = 8)
+  ggsave('plots/ppc_choice.png', plotChoicesPPC, width=10, height = 8)
+  ggsave('plots/data_slider.png', plotSliderData,  width=10, height = 8)
+  ggsave('plots/data_number.png', plotNumbersData,  width=10, height = 8)
+  ggsave('plots/data_choice.png', plotChoicesData, width=10, height = 8)
 }
