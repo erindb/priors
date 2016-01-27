@@ -72,16 +72,16 @@
 
     \begin{pgfonlayer}{background}
        \node [thick, dotted,
-              draw=black!90,fit={($(sijk.south)+(0,-17pt)$) 
+              draw=black!90,fit={($(sijk.south)+(0,-5pt)$) 
                                  ($(sijk.west)+(-35pt,-5pt)$) 
-                                 ($(Qj.north)+(0,+5pt)$) 
+                                 ($(Qj.north)+(0,+17pt)$) 
                                  ($(sijk.east)+(+0pt,0)$)}] {};
     \end{pgfonlayer}
 
-    \node[below of = sijk, node distance = 1cm+3pt] (KlabelAnchor) {};
+    \node[above of = Qj, node distance = 1cm+3pt] (KlabelAnchor) {};
 
     \node[left of = KlabelAnchor, node distance = 0.25cm+10pt] (Klabel)
-    {bin $k \in \set{0, \dots, 15}$};
+    {bin $k \in \set{1, \dots, 15}$};
 
 
 
@@ -105,7 +105,7 @@
     \node[below of = cijl, node distance = 1cm+7pt] (IlabelAnchor) {};
 
     \node[left of = IlabelAnchor, node distance = 0.4cm+5pt] (Ilabel)
-    {items $j \in \set{0, \dots, 8}$};
+    {items $j \in \set{1, \dots, 8}$};
 
     %%%%%%%%%%%%%
     % subject box
@@ -127,7 +127,7 @@
     \node[below of = cijl, node distance = 1cm+30pt] (SlabelAnchor) {};
 
     \node[left of = SlabelAnchor, node distance = 0.3cm+5pt] (Slabel)
-    {subjects $i \in \set{0, \dots, 20}$};
+    {subjects $i \in \set{1, \dots, 20}$};
 
 
 
@@ -155,13 +155,13 @@
       \node[below of = ab] (nij) {$n_{ij} \sim
         \text{Categorical}(\expo(a P_{ij}))$};
 
-      \node[below of = nij] (cijl) {$c_{ijl} \sim
-        \text{Bern}(\expo(b \ pc_{ijl}))$, where};
+      \node[below of = nij] (cijl) {$c_{ijl} \sim \text{Bern}(\text{exp}(b \ (p^{\text{high}}_{ijl}, p^{\text{low}}_{ijl}))$, where};
 
-      \node[below of = cijl, node distance = 1.35cm] (pcijl) {$pc_{ijk} = \begin{cases} 2 &
-          \text{if $mode(P_{ij})$ is closer to higher} \\
+      \node[below of = cijl, node distance = 1.35cm] (pcijl) {$p^\text{high}_{ijl} = \begin{cases} 2 & \text{if $mode(P_{ij})$ is closer to higher} \\
 & \text{ bin of $l$ than to lower bin }  \\ 1 & \text{if equal
             distance} \\ 0 & \text{otherwise}  \end{cases}$};
+
+      \node[below of = pcijl, node distance = 1.35cm] (pcijl1) {$p^\text{low}_{ijl} = 2 - p^\text{high}_{ijl}$};
 
       % \node[below of = pi] (F) {$F^{+/-}_c = \text{F}(c \ ; \ \vec{s} \  ^{+/-}, \pi)$};
 

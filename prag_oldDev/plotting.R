@@ -39,28 +39,35 @@ meansIP = tbl_df(melt(out$sims.list$item.pop)) %>%
 meansIP$y_emp = y.slider_means$mymean
 pop_priors = ggplot(meansIP, aes(x = bin, y = mean)) + geom_line() + geom_point() + facet_wrap(~ item, scale = "free") +
   geom_ribbon(aes(ymin=min, ymax=max), fill="gray", alpha="0.5") +
-  geom_line(aes(x = bin, y = y_emp) , color = "red")  + geom_point(aes(x = bin, y = y_emp ), color = "red")
+  geom_line(aes(x = bin, y = y_emp) , color = "firebrick")  + geom_point(aes(x = bin, y = y_emp ), color = "firebrick")
 show(pop_priors)
 
 # subjective priors
-# meansIPSubj = tbl_df(melt(out$sims.list$subj)) %>%
-#   rename(step = Var1, subject = Var2, item = Var3, bin = Var4) %>%
-#   mutate(item = levels(factor(bin_dat$tag))[item] ) %>%
-#   filter(subject <= 8) %>%
-#   group_by(subject, item, bin) %>%
-#   summarise(
-#     mean = mean(value),
-#     max = HDIofMCMC(value)[2],
-#     min = HDIofMCMC(value)[1]
-#   )
-# meansIPSubj$y_emp = y.slider_means$mymean
-# meansIPSubj$subject = factor(meansIPSubj$subject)
-# pop_priorsSubj = ggplot(meansIPSubj, aes(x = bin, y = mean, group = subject)) + geom_line(color="lightgray") + geom_point(color="lightgray", size = 1.5) + facet_wrap(~ item, scale = "free") +
-#   geom_line(aes(x = bin, y = y_emp) , color = "black")  + geom_point(aes(x = bin, y = y_emp ), color = "black")
-# show(pop_priorsSubj)
+meansIPSubj = tbl_df(melt(out$sims.list$subj)) %>%
+  rename(step = Var1, subject = Var2, item = Var3, bin = Var4) %>%
+  mutate(item = levels(factor(bin_dat$tag))[item] ) %>%
+  filter(subject <= 20) %>%
+  group_by(subject, item, bin) %>%
+  summarise(
+    mean = mean(value),
+    max = HDIofMCMC(value)[2],
+    min = HDIofMCMC(value)[1]
+  )
+meansIPSubj$y_emp = y.slider_means$mymean
+meansIPSubj$subject = factor(meansIPSubj$subject)
+meansIPSubj$meanPop = meansIP$mean
+meansIPSubj$minPop = meansIP$min
+meansIPSubj$maxPop = meansIP$max
+pop_priorsSubj = ggplot(meansIPSubj, aes(x = bin, y = mean, group = subject)) + 
+  geom_ribbon(aes(ymin=minPop, ymax=maxPop), fill="lightgray", alpha=0.5) +
+  geom_line(color="darkgray", size = 0.5, alpha = 0.7)  +
+  facet_wrap(~ item, scale = "free") +
+  # geom_line(aes(x = bin, y = y_emp) , color = "firebrick")  + geom_point(aes(x = bin, y = y_emp ), color = "firebrick") +
+  geom_line(aes(x = bin, y = meanPop) , color = "black", alpha = 0.7)
+show(pop_priorsSubj)
 
 # parameters
-p = c("a", "b", "w", "sigma", "k.skewGlobal")
+p = c("a", "b", "w", "sigma", "k")
 meansIP <- csamples %>% filter(variable %in% p) %>%
   group_by(variable) %>%
   summarise(
@@ -98,7 +105,7 @@ slider_aggr$cihigh = y.slider_means$cihigh
 plotSliderPPC = ggplot(slider_aggr, aes(x = bin, y = mean)) + geom_line() + geom_point() + facet_wrap(~ item, scale = "free") + 
   geom_ribbon(aes(ymin=min, ymax=max), fill="gray", alpha="0.5") +
   # geom_errorbar(aes(ymin = min, ymax = max), width = .5, position = position_dodge(.1), color = 'gray') +
-  geom_line(aes(x = bin, y = y_means) , color = "red") + geom_point( aes(x = bin, y = y_means) , color = "red")
+  geom_line(aes(x = bin, y = y_means) , color = "firebrick") + geom_point( aes(x = bin, y = y_means) , color = "firebrick")
 show(plotSliderPPC)
 plotSliderData = ggplot(slider_aggr, aes(x = bin, y = y_means)) + geom_line() + geom_point() + facet_wrap(~ item, scale = "free") + 
   geom_errorbar(aes(ymin = cilow, ymax = cihigh), width = .5, position = position_dodge(.1), color = 'gray') 
@@ -123,7 +130,7 @@ number_aggr$value = DNm$value
 plotNumbersPPC = ggplot(number_aggr, aes(x = bin, y = mean)) + geom_point() + geom_line() +
   facet_wrap(~ item, scale = "free") + 
   geom_ribbon(aes(ymin=low,ymax=high), fill="gray", alpha="0.5") +
-  geom_line( aes(x = bin, y = value) , color = "red") + geom_point( aes(x = bin, y = value) , color = "red")
+  geom_line( aes(x = bin, y = value) , color = "firebrick") + geom_point( aes(x = bin, y = value) , color = "firebrick")
 show(plotNumbersPPC)
 plotNumbersData = ggplot(number_aggr, aes(x = bin, y = value)) + geom_bar(stat = "identity") +
   facet_wrap(~ item, scale = "free")
@@ -148,7 +155,7 @@ choice_ppc$cihigh = choice_emp$cihigh
 plotChoicesPPC = ggplot(choice_ppc, aes(x = bin, y = mean)) + geom_point() + geom_line() +
   facet_wrap(~ item, scale = "free") + 
   geom_ribbon(aes(ymin=low,ymax=high), fill="gray", alpha="0.5") +
-  geom_line( aes(x = bin, y = yemp) , color = "red") + geom_point( aes(x = bin, y = yemp) , color = "red")
+  geom_line( aes(x = bin, y = yemp) , color = "firebrick") + geom_point( aes(x = bin, y = yemp) , color = "firebrick")
 show(plotChoicesPPC)
 plotChoicesData = ggplot(choice_ppc, aes(x = bin, y = yemp)) + geom_bar(stat = "identity", fill = "lightgray") +
   facet_wrap(~ item, scale = "free") +
