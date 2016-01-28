@@ -12,6 +12,7 @@ savePlots = TRUE
 
 if (readFlag){
   # load(file = "/Users/micha/Desktop/Dropbox/priors_data/out_25.Rdat")
+  # load(file = "/Users/micha/Desktop/Dropbox/priors_data/outTMP.Rdat")
   load(file = "/Users/micha/Desktop/Dropbox/priors_data/out.Rdat")
 } else {
   # source('main.R')
@@ -39,11 +40,13 @@ meansIP = tbl_df(melt(out$sims.list$item.pop)) %>%
 meansIP$y_emp = y.slider_means$mymean
 pop_priors = ggplot(meansIP, aes(x = bin, y = mean)) + geom_line() + geom_point() + facet_wrap(~ item, scale = "free") +
   geom_ribbon(aes(ymin=min, ymax=max), fill="gray", alpha="0.5") +
-  geom_line(aes(x = bin, y = y_emp) , color = "firebrick")  + geom_point(aes(x = bin, y = y_emp ), color = "firebrick")
+  geom_line(aes(x = bin, y = y_emp) , color = "firebrick")  + geom_point(aes(x = bin, y = y_emp ), color = "firebrick") +
+  ylab(" mean posterior Q_{ijk} / average slider rating")
 
 pop_priorsPaper = ggplot(meansIP, aes(x = bin, y = mean)) + geom_line() + geom_point() + facet_wrap(~ item, scales = "free_y", ncol=2) +
   geom_ribbon(aes(ymin=min, ymax=max), fill="gray", alpha="0.5") +
-  geom_line(aes(x = bin, y = y_emp) , color = "firebrick")  + geom_point(aes(x = bin, y = y_emp ), color = "firebrick")
+  geom_line(aes(x = bin, y = y_emp) , color = "firebrick")  + geom_point(aes(x = bin, y = y_emp ), color = "firebrick") +
+  ylab(" mean posterior Q_{ijk} / average slider rating")
 
 
 # subjective priors
@@ -109,11 +112,13 @@ slider_aggr$cihigh = y.slider_means$cihigh
 plotSliderPPC = ggplot(slider_aggr, aes(x = bin, y = mean)) + geom_line() + geom_point() + facet_wrap(~ item, scale = "free") + 
   geom_ribbon(aes(ymin=min, ymax=max), fill="gray", alpha="0.5") +
   # geom_errorbar(aes(ymin = min, ymax = max), width = .5, position = position_dodge(.1), color = 'gray') +
-  geom_line(aes(x = bin, y = y_means) , color = "firebrick") + geom_point( aes(x = bin, y = y_means) , color = "firebrick")
+  geom_line(aes(x = bin, y = y_means) , color = "firebrick") + geom_point( aes(x = bin, y = y_means) , color = "firebrick") +
+  ylab("slider rating")
 plotSliderPPCPaper = ggplot(slider_aggr, aes(x = bin, y = mean)) + geom_line() + geom_point() + facet_wrap(~ item, scale = "free_y", ncol=2) + 
   geom_ribbon(aes(ymin=min, ymax=max), fill="gray", alpha="0.5") +
   # geom_errorbar(aes(ymin = min, ymax = max), width = .5, position = position_dodge(.1), color = 'gray') +
-  geom_line(aes(x = bin, y = y_means) , color = "firebrick") + geom_point( aes(x = bin, y = y_means) , color = "firebrick")
+  geom_line(aes(x = bin, y = y_means) , color = "firebrick") + geom_point( aes(x = bin, y = y_means) , color = "firebrick") +
+  ylab("slider rating")
 plotSliderData = ggplot(slider_aggr, aes(x = bin, y = y_means)) + geom_line() + geom_point() + facet_wrap(~ item, scale = "free") + 
   geom_errorbar(aes(ymin = cilow, ymax = cihigh), width = .5, position = position_dodge(.1), color = 'gray') 
 
@@ -137,11 +142,13 @@ number_aggr$value = DNm$value
 plotNumbersPPC = ggplot(number_aggr, aes(x = bin, y = mean)) + geom_point() + geom_line() +
   facet_wrap(~ item, scale = "free") + 
   geom_ribbon(aes(ymin=low,ymax=high), fill="gray", alpha="0.5") +
-  geom_line( aes(x = bin, y = value) , color = "firebrick") + geom_point( aes(x = bin, y = value) , color = "firebrick")
+  geom_line( aes(x = bin, y = value) , color = "firebrick") + geom_point( aes(x = bin, y = value) , color = "firebrick") +
+  ylab("frequency")
 plotNumbersPPCPaper = ggplot(number_aggr, aes(x = bin, y = mean)) + geom_point() + geom_line() +
   facet_wrap(~ item, scale = "free_y", ncol = 2) + 
   geom_ribbon(aes(ymin=low,ymax=high), fill="gray", alpha="0.5") +
-  geom_line( aes(x = bin, y = value) , color = "firebrick") + geom_point( aes(x = bin, y = value) , color = "firebrick")
+  geom_line( aes(x = bin, y = value) , color = "firebrick") + geom_point( aes(x = bin, y = value) , color = "firebrick") +
+  ylab("frequency")
 plotNumbersData = ggplot(number_aggr, aes(x = bin, y = value)) + geom_bar(stat = "identity") +
   facet_wrap(~ item, scale = "free")
 show(plotNumbersData)
@@ -165,14 +172,17 @@ choice_ppc$cihigh = choice_emp$cihigh
 plotChoicesPPC = ggplot(choice_ppc, aes(x = bin, y = mean)) + geom_point() + geom_line() +
   facet_wrap(~ item, scale = "free") + 
   geom_ribbon(aes(ymin=low,ymax=high), fill="gray", alpha="0.5") +
-  geom_line( aes(x = bin, y = yemp) , color = "firebrick") + geom_point( aes(x = bin, y = yemp) , color = "firebrick")
+  geom_line( aes(x = bin, y = yemp) , color = "firebrick") + geom_point( aes(x = bin, y = yemp) , color = "firebrick") +
+  xlab("condition") + ylab("choice prop. higher bin")
 plotChoicesPPCPaper = ggplot(choice_ppc, aes(x = bin, y = mean)) + geom_point() + geom_line() +
   facet_wrap(~ item, scale = "fixed", ncol = 4) + 
   geom_ribbon(aes(ymin=low,ymax=high), fill="gray", alpha="0.5") +
-  geom_line( aes(x = bin, y = yemp) , color = "firebrick") + geom_point( aes(x = bin, y = yemp) , color = "firebrick")
+  geom_line( aes(x = bin, y = yemp) , color = "firebrick") + geom_point( aes(x = bin, y = yemp) , color = "firebrick") +
+  xlab("condition") + ylab("choice prop. higher bin")
 plotChoicesData = ggplot(choice_ppc, aes(x = bin, y = yemp)) + geom_bar(stat = "identity", fill = "lightgray") +
   facet_wrap(~ item, scale = "free") +
-  geom_errorbar(aes(ymin = cilow, ymax = cihigh), color = "darkgray", width = .5) + ylab("prop. choice of higher interval")
+  geom_errorbar(aes(ymin = cilow, ymax = cihigh), color = "darkgray", width = .5) +
+  xlab("condition") + ylab("choce prop. higher bin")
 show(plotChoicesData)
 
 

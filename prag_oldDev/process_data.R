@@ -40,6 +40,8 @@ choice_dat$condition = as.numeric(choice_dat$condition)
 y.choice = array(0, dim = c(20,8,5))
 higher   = array(0, dim = c(20,8,5))
 lower    = array(0, dim = c(20,8,5))
+chosenBin      = array(0, dim = c(20,8,5))
+unchosenBin    = array(0, dim = c(20,8,5))
 for (i in 1:nrow(choice_dat)){
   y.choice[choice_dat$workerid[i] + 1, 
            as.numeric(choice_dat$tag)[i],
@@ -50,4 +52,10 @@ for (i in 1:nrow(choice_dat)){
   lower[choice_dat$workerid[i] + 1, 
         as.numeric(choice_dat$tag)[i],
         choice_dat$condition[i]] = min(choice_dat$chosen_bin[i], choice_dat$unchosen_bin[i])
+  chosenBin[choice_dat$workerid[i] + 1, 
+        as.numeric(choice_dat$tag)[i],
+        choice_dat$condition[i]] = choice_dat$chosen_bin[i]
+  unchosenBin[choice_dat$workerid[i] + 1, 
+             as.numeric(choice_dat$tag)[i],
+             choice_dat$condition[i]] = choice_dat$unchosen_bin[i]
 }

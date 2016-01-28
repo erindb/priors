@@ -135,60 +135,60 @@
     % MATHEMATICS
     %%%%%%%%%%%%%
 
-    \begin{scope}[xshift = 9.75cm, node distance = 1cm]
+    % \begin{scope}[xshift = 9.75cm, node distance = 1cm]
 
-      \node[] at(0,1) (wPrior) {$w \sim \text{Gamma}(2,0.1)$};
+%       \node[] at(0,1) (wPrior) {$w \sim \text{Gamma}(2,0.1)$};
 
-      \node[below of = wPrior] (Qj) {$Q_j \sim \text{Dirichlet}(1, \dots, 1)$};
+%       \node[below of = wPrior] (Qj) {$Q_j \sim \text{Dirichlet}(1, \dots, 1)$};
 
-      \node[below of = Qj] (Pij) {$P_{ij} \sim \text{Dirichlet}( w Q_j)$};
+%       \node[below of = Qj] (Pij) {$P_{ij} \sim \text{Dirichlet}( w Q_j)$};
 
-      \node[below of = Pij] (k) {$\kappa \sim \text{Gamma}(5,5)$};
+%       \node[below of = Pij] (k) {$\kappa \sim \text{Gamma}(5,5)$};
 
-      \node[below of = k] (sigma) {$\sigma \sim \text{Gamma}(0.0001,0.0001)$};
+%       \node[below of = k] (sigma) {$\sigma \sim \text{Gamma}(0.0001,0.0001)$};
 
-      \node[below of = sigma] (sijk) {$\text{logit}(s_{ijk}) \sim
-        \text{Norm}(\text{logit}(P_{ijk}, \kappa), \sigma)$};
+%       \node[below of = sigma] (sijk) {$s_{ijk} \sim
+%         \text{logistic}(\text{Norm}(\text{logit}(P_{ijk}), \sigma), \kappa)$};
 
-      \node[below of = sijk] (ab) {$a,b \sim \text{Gamma}(2,1)$};
+%       \node[below of = sijk] (ab) {$a,b \sim \text{Gamma}(2,1)$};
 
-      \node[below of = ab] (nij) {$n_{ij} \sim
-        \text{Categorical}(\expo(a P_{ij}))$};
+%       \node[below of = ab] (nij) {$n_{ij} \sim
+%         \text{Categorical}(\expo(a P_{ij}))$};
 
-      \node[below of = nij] (cijl) {$c_{ijl} \sim \text{Bern}(\text{exp}(b \ (p^{\text{high}}_{ijl}, p^{\text{low}}_{ijl}))$, where};
+%       \node[below of = nij] (cijl) {$c_{ijl} \sim \text{Bern}(\text{exp}(b \ (p^{\text{high}}_{ijl}, p^{\text{low}}_{ijl}))$, where};
 
-      \node[below of = cijl, node distance = 1.35cm] (pcijl) {$p^\text{high}_{ijl} = \begin{cases} 2 & \text{if $mode(P_{ij})$ is closer to higher} \\
-& \text{ bin of $l$ than to lower bin }  \\ 1 & \text{if equal
-            distance} \\ 0 & \text{otherwise}  \end{cases}$};
+%       \node[below of = cijl, node distance = 1.35cm] (pcijl) {$p^\text{high}_{ijl} = \begin{cases} 2 & \text{if $mode(P_{ij})$ is closer to higher} \\
+% & \text{ bin of $l$ than to lower bin }  \\ 1 & \text{if equal
+%             distance} \\ 0 & \text{otherwise}  \end{cases}$};
 
-      \node[below of = pcijl, node distance = 1.35cm] (pcijl1) {$p^\text{low}_{ijl} = 2 - p^\text{high}_{ijl}$};
+%       \node[below of = pcijl, node distance = 1.35cm] (pcijl1) {$p^\text{low}_{ijl} = 2 - p^\text{high}_{ijl}$};
 
-      % \node[below of = pi] (F) {$F^{+/-}_c = \text{F}(c \ ; \ \vec{s} \  ^{+/-}, \pi)$};
+%       % \node[below of = pi] (F) {$F^{+/-}_c = \text{F}(c \ ; \ \vec{s} \  ^{+/-}, \pi)$};
 
-      % \node[below of = F] (sigma) {$\sigma \sim \text{Uniform}(0,0.4)$};
+%       % \node[below of = F] (sigma) {$\sigma \sim \text{Uniform}(0,0.4)$};
 
-      % \node[below of = sigma] (delta) {$\delta_{d \in \set{1,\dots, 6}} \sim
-      %   \text{Normal}(d/7,14)$};
+%       % \node[below of = sigma] (delta) {$\delta_{d \in \set{1,\dots, 6}} \sim
+%       %   \text{Normal}(d/7,14)$};
 
-      % \node[below of = delta, node distance = 0.5cm] (delta2) {$\delta_{0} = - \infty; \ \
-      %   \delta_7 = \infty$};
+%       % \node[below of = delta, node distance = 0.5cm] (delta2) {$\delta_{0} = - \infty; \ \
+%       %   \delta_7 = \infty$};
 
-      % \node[below of = delta2] (theta) {$\theta \sim \text{Normal}(0.5, 0.2)$};
+%       % \node[below of = delta2] (theta) {$\theta \sim \text{Normal}(0.5, 0.2)$};
 
-      % \node[below of = theta] (gamma) {$\frac{1}{\gamma} \sim \text{Gamma}(1, 1)$};
+%       % \node[below of = theta] (gamma) {$\frac{1}{\gamma} \sim \text{Gamma}(1, 1)$};
 
-      % \node[below of = gamma] (pab) {$p^{A/B}_{cd} = \int_{\delta_{cd}-1}^{\delta_{cd}} \text{Normal}(x, F^{+/-}_c,
-      %   \sigma) \text{ d}x$};
+%       % \node[below of = gamma] (pab) {$p^{A/B}_{cd} = \int_{\delta_{cd}-1}^{\delta_{cd}} \text{Normal}(x, F^{+/-}_c,
+%       %   \sigma) \text{ d}x$};
 
-      % \node[below of = pab] (pcd) {$p^{C/D}_{c} = (1 + \expo(- \gamma ( F^{+/-}_c -
-      %   \theta)))^{-1}$};
+%       % \node[below of = pab] (pcd) {$p^{C/D}_{c} = (1 + \expo(- \gamma ( F^{+/-}_c -
+%       %   \theta)))^{-1}$};
 
-      % \node[below of = pcd] (multinom) {$k^{A/B}_{cd} \sim \text{Multinomial}(p^{A/B}_{cd},
-      %   n^{A/B}_c)$};
+%       % \node[below of = pcd] (multinom) {$k^{A/B}_{cd} \sim \text{Multinomial}(p^{A/B}_{cd},
+%       %   n^{A/B}_c)$};
 
-      % \node[below of = multinom] (binom) {$k^{C/D}_{c} \sim \text{Binomial}(p^{C/D}_{c}, n^{C/D}_c)$};
+%       % \node[below of = multinom] (binom) {$k^{C/D}_{c} \sim \text{Binomial}(p^{C/D}_{c}, n^{C/D}_c)$};
 
-    \end{scope}
+%     \end{scope}
 
   \end{tikzpicture}
 

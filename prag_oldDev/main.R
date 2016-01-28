@@ -25,15 +25,15 @@ params <- c('w',
             )
 
 model = "models/model.jags.R"
-burnin = 100000
-iter = 25000
+burnin = 10000
+iter = 10000
 out = jags(data = data_aggr,
             inits = NULL,
             parameters.to.save = params,
             codaOnly = c("y.choicePPC", "y.numberPPC", "y.sliderPPC", "subj"),
             model.file = model,
             n.chains = 2,
-            n.adapt = 50000,
+            n.adapt = 5000,
             n.iter = iter + burnin,
             n.burnin = burnin,
             n.thin = 2, 
@@ -41,7 +41,7 @@ out = jags(data = data_aggr,
             verbose = TRUE,
             parallel = TRUE)
 
-if (saveFlag) { save(out, file = "~/Desktop/Dropbox/priors_data/out.Rdat") }
+if (saveFlag) { save(out, file = "~/Desktop/Dropbox/priors_data/outTMP.Rdat") }
 
 stop()
 
