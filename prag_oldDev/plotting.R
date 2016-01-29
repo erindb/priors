@@ -120,7 +120,12 @@ plotSliderPPCPaper = ggplot(slider_aggr, aes(x = bin, y = mean)) + geom_line() +
   geom_line(aes(x = bin, y = y_means) , color = "firebrick") + geom_point( aes(x = bin, y = y_means) , color = "firebrick") +
   ylab("slider rating")
 plotSliderData = ggplot(slider_aggr, aes(x = bin, y = y_means)) + geom_line() + geom_point() + facet_wrap(~ item, scale = "free") + 
-  geom_errorbar(aes(ymin = cilow, ymax = cihigh), width = .5, position = position_dodge(.1), color = 'gray') 
+  geom_errorbar(aes(ymin = cilow, ymax = cihigh), width = .5, position = position_dodge(.1), color = 'gray') +
+  ylab("mean slider rating")
+plotSliderDataPaper = ggplot(slider_aggr, aes(x = bin, y = y_means)) + geom_line() + geom_point() + facet_wrap(~ item, scale = "free_y", ncol = 2) + 
+  geom_errorbar(aes(ymin = cilow, ymax = cihigh), width = .5, position = position_dodge(.1), color = 'gray') +
+  ylab("mean slider rating")
+
 
 
 # numbers
@@ -150,8 +155,13 @@ plotNumbersPPCPaper = ggplot(number_aggr, aes(x = bin, y = mean)) + geom_point()
   geom_line( aes(x = bin, y = value) , color = "firebrick") + geom_point( aes(x = bin, y = value) , color = "firebrick") +
   ylab("frequency")
 plotNumbersData = ggplot(number_aggr, aes(x = bin, y = value)) + geom_bar(stat = "identity") +
-  facet_wrap(~ item, scale = "free")
-show(plotNumbersData)
+  facet_wrap(~ item, scale = "free") + ylab("frequency number choice")
+plotNumbersDataPaper = ggplot(number_aggr, aes(x = bin, y = value)) + geom_bar(stat = "identity") +
+  facet_wrap(~ item, scale = "free_y", ncol = 2) + ylab("frequency number choice")
+plotSliderNumberDataPaper = ggplot(slider_aggr, aes(x = bin, y = y_means)) + geom_line() + geom_point() + facet_wrap(~ item, scale = "free_y", ncol = 2) + 
+  geom_errorbar(aes(ymin = cilow, ymax = cihigh), width = .5, position = position_dodge(.1), color = 'gray') +
+  ylab("mean slider rating / bin proportion of number choice") + geom_bar(data = number_aggr, aes(x = bin, y = value/20), stat = "identity", fill = "firebrick", alpha = 0.5)
+
 
 # lightning choices
 choice_emp = choice_dat %>% group_by(condition, tag) %>%
@@ -183,7 +193,11 @@ plotChoicesData = ggplot(choice_ppc, aes(x = bin, y = yemp)) + geom_bar(stat = "
   facet_wrap(~ item, scale = "free") +
   geom_errorbar(aes(ymin = cilow, ymax = cihigh), color = "darkgray", width = .5) +
   xlab("condition") + ylab("choce prop. higher bin")
-show(plotChoicesData)
+plotChoicesDataPaper = ggplot(choice_ppc, aes(x = bin, y = yemp)) + geom_bar(stat = "identity", fill = "lightgray") +
+  facet_wrap(~ item, scale = "free_y", ncol = 2) +
+  geom_errorbar(aes(ymin = cilow, ymax = cihigh), color = "darkgray", width = .5) +
+  xlab("condition") + ylab("choce prop. higher bin")
+
 
 
 # save plots for presentations
@@ -220,7 +234,8 @@ if (savePlots){
   ggsave('../text/01_CogSci_abstract/plots/ppc_slider.pdf', plotSliderPPCPaper,  width=10*factor, height = 8*factor)
   ggsave('../text/01_CogSci_abstract/plots/ppc_number.pdf', plotNumbersPPCPaper, width=10*factor, height = 8*factor)
   ggsave('../text/01_CogSci_abstract/plots/ppc_choice.pdf', plotChoicesPPCPaper, width=10*factor, height = 6*factor)
-#   ggsave('../text/01_CogSci_abstract/plots/data_slider.pdf', plotSliderData,  width=10*factor, height = 8*factor)
-#   ggsave('../text/01_CogSci_abstract/plots/data_number.pdf', plotNumbersData,  width=10*factor, height = 8*factor)
-#   ggsave('../text/01_CogSci_abstract/plots/data_choice.pdf', plotChoicesData, width=10*factor, height = 8*factor)
+  ggsave('../text/01_CogSci_abstract/plots/data_slider.pdf', plotSliderDataPaper,  width=10*factor, height = 8*factor)
+  ggsave('../text/01_CogSci_abstract/plots/data_sliderNumber.pdf', plotSliderNumberDataPaper,  width=10*factor, height = 10*factor)
+  ggsave('../text/01_CogSci_abstract/plots/data_number.pdf', plotNumbersDataPaper,  width=10*factor, height = 8*factor)
+  ggsave('../text/01_CogSci_abstract/plots/data_choice.pdf', plotChoicesDataPaper, width=10*factor, height = 8*factor)
 }
