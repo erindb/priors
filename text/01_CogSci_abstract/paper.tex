@@ -26,6 +26,11 @@
 \usepackage{subcaption}
 \usepackage{todonotes}
 \usepackage{amsmath}
+\usepackage{color}
+
+\definecolor{Green}{RGB}{10,200,100}
+\newcommand{\ndg}[1]{\textcolor{Green}{[ndg: #1]}}  
+
 
 %% commands
 \newcommand{\set}[1]{\left\{#1\right\}}
@@ -61,15 +66,17 @@ author's affiliation and postal address in ordinary 10~point type.}
 
 \begin{abstract}
   Subjects' beliefs about everyday events are of theoretical interest on their own and also an
-  important ingredient in especially Bayesian models of such diverse phenomena as logical
-  reasoning, future predictions or language use and interpretation. Here, we scrutinize one
-  recently popular method for measuring subjective beliefs experimentally. We present a
-  hierarchical Bayesian model for inferring likely ``population-level beliefs'' as the central
-  tendency of subjects' individual-level beliefs. Individual-level beliefs define likelihood
-  functions for three types of task measures. Our results suggest that the previous practice of
+  important ingredient for model building---especially in Bayesian models of phenomena such as logical
+  reasoning, future predictions, and language use. Here, we explore several recently used 
+  methods for measuring subjective beliefs about unidimensional properties. \ndg{say what kind of subjective beliefs /distributions we look at more clearly.} 
+  We a hierarchical Bayesian data analysis model for inferring likely ``population-level beliefs'' as the central
+  tendency of subjects' individual-level beliefs. 
+  Three different dependent measures---\ndg{name them?}---are related to individual-level beliefs through likelihood ``linking functions.''
+%  functions for three types of task measures. 
+  Our results suggest that the practice of
   using averaged normalized slider ratings for binned quantities is a practical and fairly good
-  approximator of latently inferred population-level beliefs.
-
+  approximator of inferred population-level beliefs.
+  Other dependent measures yield less reliable results.
 \textbf{Keywords:} subjective beliefs, hierarchical modeling, Bayesian data analysis, Bayesian
 cognitive models 
 \end{abstract}
@@ -81,19 +88,20 @@ cognitive models
 
 We cannot look into a person's head. But in making sense of observed behavior we readily
 ascribe beliefs and desires to fellow agents. This happens intuitively, in folk psychology, but
-also in science. Ascriptions of latent mental states play an important role as well in many
-explanations of especially higher-order cognition, like decision making, planning, reasoning,
-or language use. Naturally, then, it becomes important how to validate any putative ascription
-of mental states for explanatory purposes.
+also in science. Scientific ascription of latent mental states plays an important role in many
+explanations of higher-order cognition: decision making, planning, reasoning,
+and language use. Naturally, then, it becomes important to validate any method for eliciting mental states, 
+to be used for explanatory purposes.
 
 A family of models where this is particularly pressing are Bayesian models of cognition which
 seek to explain task behavior in a variety of domains as partially informed by what subjects
-believe about mundane events. Take interpretation of language. Empirical data on whether a
+believe about mundane events---their \emph{prior beliefs}. Take interpretation of language. Empirical data on whether a
 statement like ``That watch cost $n$ dollars'' is understood to convey speaker affect, rather
 than literal meaning, can be explained well by a Bayesian model of utterance interpretation
-\citep{KaoWu2014:Nonliteral-Unde} in which a crucial role is played, as is quite intuitive, by
+\citep{KaoWu2014:Nonliteral-Unde}. In this model a crucial role is played by
 an empirical measure of subjects' expectations about the likely or normal price of a
-watch. Other examples of domains in which empirically successful models have included some
+watch. 
+Other examples of domains in which empirically successful models have included some
 measure of subjects' belief include making future predictions
 \citep{GriffithsTenenbaum2006:Optimal-Predict}, the strength of pragmatic enrichments
 \citep{DegenTessler2015:Wonky-worlds:-L}, the interpretation of vague quantifiers
@@ -102,13 +110,14 @@ measure of subjects' belief include making future predictions
 \todo[inline]{fill me}
 
 Many methods of assessing subjective beliefs exist. One approach is to take actual frequencies
-as an approximation \citep{GriffithsTenenbaum2006:Optimal-Predict}. This, however, does not
-work for beliefs about one-shot or imaginary events. Moreover, even where available, real-world
+as an approximation \citep{GriffithsTenenbaum2006:Optimal-Predict}. This will not
+work when sufficient real-world data is unavailable---for instance, for beliefs about imaginary events. 
+Even where available, real-world
 frequencies may deviate systematically from subjects' beliefs, and this can be problematic for
-the predictions of a model that relies on subjective beliefs
-\citep{MarcusDavis2013:How-Robust-Are-}.
+the predictions of a model that relies on subjective beliefs.
+%\citep{MarcusDavis2013:How-Robust-Are-}.
 
-Another approach is to try to experimentally measure relevant beliefs. Many techniques for this
+Another approach is to experimentally elicit relevant beliefs. Many techniques for this
 exist, especially in the economics literature
 \citep{MorganHenrion1990:Uncertainty:-A-,Manski2004:Measuring-Expec,SchlagTremewan2014:A-penny-for-you,AndersenFountain2014:Estimating-Subj}. The
 perhaps most prominent method uses so-called \emph{scoring rules}
@@ -142,6 +151,10 @@ give their estimate, they are asked to adjust sliders, whose ends are labelled a
 likely'' and ``extremely unlikely,'' for a number of bins that partition the range of plausible
 values (established by a pre-test). E.g., for the price of a watch bins could be
 \textcolor{red}{ FILL ME }
+
+\ndg{should we also talk about the other dependent measures? i think part of what's interesting is comparing the different dependent measures to each other?}
+
+\ndg{say more clearly that we focus on unidimensional distributions and why.}
 
 \begin{itemize}
 \item explain slider rating task
@@ -415,7 +428,7 @@ Forschungsgemeinschaft, ZUK 63) and the Priority Program XPrag.de (DFG Schwerpun
 \setlength{\bibleftmargin}{.125in}
 \setlength{\bibindent}{-\bibleftmargin}
 
-\bibliography{MyRefGlobal}
+\bibliography{references}
 
 
 \end{document}
