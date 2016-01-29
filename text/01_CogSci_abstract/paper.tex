@@ -330,6 +330,8 @@ prototype.\footnote{Notice that
   \end{cases}
 \end{align*}
 
+\ndg{wow, this is weird! you tried softmax ratio of bin probs?}
+
 
 \section{Inference}
 
@@ -346,6 +348,10 @@ harnessing the individual $P_{ij}$s under a population-level central tendency is
 approximated by simply averaging over slider ratings. Although the match is clearly not
 perfect, it is good enough to maintain that the latter are a reasonable (enough) and practical
 way of assessing what the crowd believes despite individual differences.
+
+\ndg{it'd be nice to see some posteriors for some of the (more meaningful) parameters. eg w, kappa, ...}
+
+\ndg{what about the success of the other DMs? looks like give-n is not so hot. worth saying that if so.}
 
 \begin{figure}
   \centering
@@ -399,7 +405,7 @@ while holding on to an assumption that all marbles behave the same
 
 Posterior predictive checks indicate that the trained model captures patterns of answers at the
 aggregate population level well. To have a more fine-grained measure of model fit, we also
-looked at posterior predictive $p$-values at the level of subjects and items. Unfortunately,
+looked at posterior predictive $p$-values at the level of subjects and items. \ndg{need to say what this means -- i'm not even sure that i know!} Unfortunately,
 only the slider rating task, provides enough data for such a fine-grained analysis. For the
 slider rating task, fixing a subject and an item, observations and replicates are probability
 vectors of length 15. In a first analysis, we used the mean of these probability vectors as a
@@ -411,6 +417,7 @@ very extreme slider rating for the ``marbles'' item, basically assigning all ``m
 last bin. What this suggests is that the model can cope reasonably well also with
 individual-level data, but has problems accounting for ``extreme'' choices, given that the
 population-level hyper-prior on $P_{ij}$ will lead to shrinkage.
+\ndg{can say that one possibility (future work) would be to switch to a fatter-tailed distribution relating Q to P, in order to deal with outliers.}
 
 \section{Conclusions}
 
