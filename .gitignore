@@ -1,2 +1,8 @@
+text/01_CogSci_abstract/paper.pdf
+*.bbl
+*.blg
+*.log
+*.synctex.gz
+*.aux
 *.Rhistory
 .Rproj.user
