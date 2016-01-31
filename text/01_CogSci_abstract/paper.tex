@@ -35,6 +35,9 @@
 \newcommand{\jd}[1]{\textcolor{Blue}{[jd: #1]}} 
 \definecolor{Red}{RGB}{178,34,34}
 \newcommand{\mf}[1]{\textcolor{Red}{[mf: #1]}} 
+\definecolor{DarkOrange}{RGB}{255,100,50}
+\newcommand{\mht}[1]{\textcolor{DarkOrange}{[mht: #1]}}  
+
 
 %% commands
 \newcommand{\set}[1]{\left\{#1\right\}}
@@ -91,7 +94,7 @@ We cannot look into a person's head. But in making sense of observed behavior we
 ascribe beliefs and desires to fellow agents. This happens intuitively, in folk psychology, but
 also in science. Scientific ascription of latent mental states plays an important role in many
 explanations of higher-order cognition: decision making, planning, reasoning, and language
-use. It is therefore vital to have methods for validating explanatory mental states
+use. It is therefore vital to have methods for validating explanatory mental state
 ascriptions.
 
 A family of models where this is particularly pressing are Bayesian models of cognition which
@@ -162,7 +165,7 @@ payoff scheme. Another insightful, but also complex approach is to use a cleverl
   \label{tab:Items}
 \end{table*}
 
-In sum, there is tradeoff between simplicity of paradigms and their informativity. Ideally, we
+In sum, there is tradeoff between simplicity of paradigms and their information content. Ideally, we
 would like to have an experimental method for measuring subjective beliefs that (i) provides
 sufficient and reliable-enough information about subjective beliefs to derive testable
 predictions from cognitive models that rely on such information, (ii) is easy to understand by
@@ -180,7 +183,7 @@ another for whatever other task is of interest.
 A simple technique that seems to fit this bill is the \emph{binned histogram} task that has
 recently been used with apparent success
 \citep{KaoWu2014:Nonliteral-Unde,SchollerFranke2015:Semantic-values}. \mf{someone please add
-  references: where did you use binned sliders?} Participants adjust sliders in order to
+  references: where did you use binned sliders?} \mht{I used ``categorical'' sliders for discrete priors in my syllogistic reasoning / belief bias stuff; and so did justine in her metaphor work...}Participants adjust sliders in order to
 express their (relative) subjective beliefs about how likely it is that the value of an
 uncertain contiguous quantity lies in some interval of possible values (a bin). E.g.,
 participants read that John bought a watch.  To report their beliefs about the watch's price,
@@ -198,7 +201,7 @@ for instance.
 Explanatory success notwithstanding, the question remains whether mean slider ratings measure
 what we would like them to. Are these good approximations of a central tendency of participants'
 individual beliefs? Are these measures consistent with participants' behavior in other tasks, such
-as \emph{give-a-number}, as well? To address this issue we collected data in a within-subject
+as \emph{give-a-number}, as well? To address this issue we collected data in a within-subject paradigm 
 from three task types: (i) \emph{binned histograms}, (ii) \emph{give-a-number} and (iii)
 \emph{paired comparisons}, i.e., a direct comparison of two bins from the \emph{binned
   histograms} task. Using a Bayesian hierarchical model, we used the data from all three
