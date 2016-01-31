@@ -1,6 +1,7 @@
 library('coda')
 library('ggmcmc')
 library('jagsUI') # for parallel computing
+library('xtable')
 source('helpers/helpers.R')
 # source('~/Desktop/data/svn/ProComPrag/dev_tmp/typicality_quantifiers/model/helpers.r')
 source('process_data.R')
@@ -15,6 +16,31 @@ if (readFlag){
 } else {
   # source('main.R')
 }
+
+## get summary data
+statsSum = data.frame(
+  parameter = c("w", "kappa", "sigma", "a", "b"),
+  hdiMean = c(mean(out$sims.list$w), 
+              mean(out$sims.list$k), 
+              mean(out$sims.list$sigma),
+              mean(out$sims.list$a),
+              mean(out$sims.list$b)),
+  hdiLow = c(HDIofMCMC(out$sims.list$w)[1], 
+             HDIofMCMC(out$sims.list$k)[1], 
+             HDIofMCMC(out$sims.list$sigma)[1],
+             HDIofMCMC(out$sims.list$a)[1],
+             HDIofMCMC(out$sims.list$b)[1]),
+  hdiHigh = c(HDIofMCMC(out$sims.list$w)[2], 
+              HDIofMCMC(out$sims.list$k)[2], 
+              HDIofMCMC(out$sims.list$sigma)[2],
+              HDIofMCMC(out$sims.list$a)[2],
+              HDIofMCMC(out$sims.list$b)[2]))
+
+show(xtable(t(statsSum)))
+  
+
+
+
 
 entropy = function(p){
   - sum(p*log(p))

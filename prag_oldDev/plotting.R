@@ -183,20 +183,44 @@ plotChoicesPPC = ggplot(choice_ppc, aes(x = bin, y = mean)) + geom_point() + geo
   facet_wrap(~ item, scale = "free") + 
   geom_ribbon(aes(ymin=low,ymax=high), fill="gray", alpha="0.5") +
   geom_line( aes(x = bin, y = yemp) , color = "firebrick") + geom_point( aes(x = bin, y = yemp) , color = "firebrick") +
-  xlab("condition") + ylab("choice prop. higher bin")
+  xlab("condition") + ylab("choice prop. higher bin") + 
+  scale_x_discrete(labels=c("1" = "1 vs 2", 
+                            "2" = "2 vs 6",
+                            "3" = "6 vs 11",
+                            "4" = "11 vs 14",
+                            "5" = "14 vs 15"
+  ))
 plotChoicesPPCPaper = ggplot(choice_ppc, aes(x = bin, y = mean)) + geom_point() + geom_line() +
   facet_wrap(~ item, scale = "fixed", ncol = 4) + 
   geom_ribbon(aes(ymin=low,ymax=high), fill="gray", alpha="0.5") +
   geom_line( aes(x = bin, y = yemp) , color = "firebrick") + geom_point( aes(x = bin, y = yemp) , color = "firebrick") +
-  xlab("condition") + ylab("choice prop. higher bin")
-plotChoicesData = ggplot(choice_ppc, aes(x = bin, y = yemp)) + geom_bar(stat = "identity", fill = "lightgray") +
+  xlab("condition") + ylab("choice prop. higher bin") + 
+  scale_x_discrete(labels=c("1" = "1&2", 
+                            "2" = "2&6",
+                            "3" = "6&11",
+                            "4" = "11&14",
+                            "5" = "14&15"
+  )) + theme(axis.text.x = element_text( angle=-25))
+plotChoicesData = ggplot(choice_ppc, aes(x = factor(bin), y = yemp)) + geom_bar(stat = "identity", fill = "lightgray") +
   facet_wrap(~ item, scale = "free") +
   geom_errorbar(aes(ymin = cilow, ymax = cihigh), color = "darkgray", width = .5) +
-  xlab("condition") + ylab("choce prop. higher bin")
-plotChoicesDataPaper = ggplot(choice_ppc, aes(x = bin, y = yemp)) + geom_bar(stat = "identity", fill = "lightgray") +
+  xlab("condition") + ylab("choce prop. higher bin") + 
+  scale_x_discrete(labels=c("1" = "1 vs 2", 
+                            "2" = "2 vs 6",
+                            "3" = "6 vs 11",
+                            "4" = "11 vs 14",
+                            "5" = "14 vs 15"
+  )) + theme(axis.text.x = element_text( angle=-25))
+plotChoicesDataPaper = ggplot(choice_ppc, aes(x = factor(bin), y = yemp)) + geom_bar(stat = "identity", fill = "lightgray") +
   facet_wrap(~ item, scale = "free_y", ncol = 2) +
   geom_errorbar(aes(ymin = cilow, ymax = cihigh), color = "darkgray", width = .5) +
-  xlab("condition") + ylab("choce prop. higher bin")
+  xlab("condition") + ylab("choce prop. higher bin") + 
+  scale_x_discrete(labels=c("1" = "1 vs 2", 
+                            "2" = "2 vs 6",
+                            "3" = "6 vs 11",
+                            "4" = "11 vs 14",
+                            "5" = "14 vs 15"
+                            )) + theme(axis.text.x = element_text( angle=-25))
 
 
 
