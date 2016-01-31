@@ -142,23 +142,23 @@ payoff scheme. Another insightful, but also complex approach is to use a cleverl
   \centering
   \begin{tabular}{l p{2.2cm} p{2.5cm} p{3.5cm} p{3cm} p{2.5cm}}
 	\toprule
-	\textbf{Item} & \textbf{Bins (units, min, max, step)} & \textbf{Context sentence} & \textbf{GAN question} & \textbf{BH frame} & \textbf{PC frame} \\
+	\textbf{Item} & \textbf{Bins} (\{min, max\} step; units)& \textbf{Context sentence} & \textbf{GAN question} & \textbf{BH frame} & \textbf{PC frame} \\
 	\midrule
-    coffee & degrees, $<$44, $>200$, 12& X has just fetched himself a cup of coffee from the office vending machine. & What do you think the temperature of his coffee is?  & His coffee was the following temperatures & The temperature of his coffee is N degrees.\\
+    coffee &  \{$<$44, $>$200\} 2; degrees  & X has just fetched himself a cup of coffee from the office vending machine. & What do you think the temperature of his coffee is?  & His coffee was the following temperatures & The temperature of his coffee is N degrees.\\
     	\midrule
-	commute & minutes, 0, $>$98, 7 & X commuted to work yesterday. & How many minutes do you think she spent commuting yesterday? & She commuted for the following numbers of minutes yesterday & She spent N minutes commuting.\\
+	commute &  \{0, $>$98\} 7; minutes & X commuted to work yesterday. & How many minutes do you think she spent commuting yesterday? & She commuted for the following numbers of minutes yesterday & She spent N minutes commuting.\\
 		\midrule
-	joke & children, 0, 14, 1  & X told a joke to 14 kids. & How many of the kids do you think laughed? & the following number of kids laughed & N of the children laughed.\\
+	joke &  \{0, 14\} 1; children  & X told a joke to 14 kids. & How many of the kids do you think laughed? & the following number of kids laughed & N of the children laughed.\\
     	\midrule
-	laptop & dollars, 0, $>$7500, 500& X bought a laptop. & How much do you think it cost? & The laptop cost the following numbers of dollars & The laptop cost \$N.\\
+	laptop &  \{0, $>$7500\} 500; dollars& X bought a laptop. & How much do you think it cost? & The laptop cost the following numbers of dollars & The laptop cost \$N.\\
 	\midrule
-    marbles & marbles, 0, 14, 1 & X threw 14 marbles into a pool. & How many of the marbles do you think sank? & The following number of marbles sank & N of the marbles sank.\\
+    marbles &  \{0, 14\} 1; marbles & X threw 14 marbles into a pool. & How many of the marbles do you think sank? & The following number of marbles sank & N of the marbles sank.\\
 	\midrule
-	movies & minutes, 0, $>210$, 16& X just went to the movies to see a blockbuster. & How many minutes long do you think the movie was? & The movie was the following numbers of minutes long & The movie was N minutes long.\\
+	movies &  \{0, $>210$\} 16; minutes& X just went to the movies to see a blockbuster. & How many minutes long do you think the movie was? & The movie was the following numbers of minutes long & The movie was N minutes long.\\
 	\midrule
-	TV & hours, 0, $>$43, 3& X watched TV last week. & How many hours do you think he spent watching TV last week? & He watched TV for the following numbers of hours last week & He spent N hours watching TV.\\
+	TV &  \{0, $>$43\} 3; hours & X watched TV last week. & How many hours do you think he spent watching TV last week? & He watched TV for the following numbers of hours last week & He spent N hours watching TV.\\
 	\midrule
-	watch & dollars, 0, $>$750, 50 & X bought a watch.& How much do you think it cost? & It cost the following numbers of dollars & The watch cost \$N.\\
+	watch &  \{0, $>$750\} 50; dollars& X bought a watch.& How much do you think it cost? & It cost the following numbers of dollars & The watch cost \$N.\\
     \bottomrule
   \end{tabular}
   \caption{Experimental items. \emph{X} was a randomly generated name (different on each trial). \emph{N} was one of the bins.}
