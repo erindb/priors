@@ -33,6 +33,8 @@
 \newcommand{\ndg}[1]{\textcolor{Green}{[ndg: #1]}}  
 \definecolor{Blue}{RGB}{10,100,200}
 \newcommand{\jd}[1]{\textcolor{Blue}{[jd: #1]}} 
+\definecolor{Red}{RGB}{178,34,34}
+\newcommand{\mf}[1]{\textcolor{Red}{[mf: #1]}} 
 
 %% commands
 \newcommand{\set}[1]{\left\{#1\right\}}
@@ -63,29 +65,22 @@
 
 \maketitle
 
-\todo[inline]{Each author's name should appear
-on a separate line, 11~point bold, and centered, with the author's
-email address in parentheses. Under each author's name list the
-author's affiliation and postal address in ordinary 10~point type.}
-
-\todo[inline]{who is an author? which order?}
-
-
 \begin{abstract}
-  Experimental participants' beliefs about everyday events are of theoretical interest on their own and also an
-  important ingredient for model building---especially in Bayesian models of phenomena such as logical
-  reasoning, future predictions, and language use. Here, we explore several recently used 
-  methods for measuring subjective beliefs about unidimensional properties. \ndg{say what kind of subjective beliefs /distributions we look at more clearly.} 
-  We a hierarchical Bayesian data analysis model for inferring likely ``population-level beliefs'' as the central
-  tendency of participants' individual-level beliefs. 
-  Three different dependent measures---\ndg{name them?}---are related to individual-level beliefs through likelihood ``linking functions.''
-%  functions for three types of task measures. 
-  Our results suggest that the practice of
-  using averaged normalized slider ratings for binned quantities is a practical and fairly good
-  approximator of inferred population-level beliefs.
-  Other dependent measures yield less reliable results.
-\textbf{Keywords:} subjective beliefs, hierarchical modeling, Bayesian data analysis, Bayesian
-cognitive models 
+  Experimental participants' beliefs about everyday events are of theoretical interest on their
+  own and also an important ingredient for model building---especially in Bayesian models of
+  phenomena such as logical reasoning, future predictions, and language use. Here, we explore
+  several recently used methods for measuring subjective beliefs about unidimensional
+  contiguous properties, such as the likely price of a new watch. We use a hierarchical
+  Bayesian model for inferring likely ``population-level beliefs'' as the central tendency of
+  participants' individual-level beliefs.  Three different dependent measures are related to
+  individual-level beliefs through likelihood ``linking functions:'' (i) judgements of
+  (relative) likelihood of intervals of values via continuous sliders, (ii) a give-a-number
+  task, and (iii) choice of the more likely of two intervals of values. Our results suggest
+  that using averaged normalized slider ratings for binned quantities is a practical and fairly
+  good approximator of inferred population-level beliefs.
+
+  \textbf{Keywords:} subjective beliefs, hierarchical modeling, Bayesian data analysis,
+  Bayesian cognitive models
 \end{abstract}
 
 
@@ -96,72 +91,78 @@ cognitive models
 We cannot look into a person's head. But in making sense of observed behavior we readily
 ascribe beliefs and desires to fellow agents. This happens intuitively, in folk psychology, but
 also in science. Scientific ascription of latent mental states plays an important role in many
-explanations of higher-order cognition: decision making, planning, reasoning,
-and language use. Naturally, then, it becomes important to validate any method for eliciting mental states, 
-to be used for explanatory purposes.
+explanations of higher-order cognition: decision making, planning, reasoning, and language
+use. It is therefore vital to have methods for validating explanatory mental states
+ascriptions.
 
 A family of models where this is particularly pressing are Bayesian models of cognition which
-seek to explain task behavior in a variety of domains as partially informed by what participants
-believe about mundane events---their \emph{prior beliefs}. Take interpretation of language. Empirical data on whether a
-statement like ``That watch cost $n$ dollars'' is understood to convey speaker affect, rather
-than literal meaning, can be explained well by a Bayesian model of utterance interpretation
-\citep{KaoWu2014:Nonliteral-Unde}. In this model a crucial role is played by
-an empirical measure of participants' expectations about the likely or normal price of a
-watch. 
-Other examples of domains in which empirically successful models have included some
-measure of participants' belief include making predictions about everyday events 
-\citep{GriffithsTenenbaum2006:Optimal-Predict}, the strength of pragmatic enrichments
-\citep{DegenTessler2015:Wonky-worlds:-L}, the interpretation of vague quantifiers
-\citep{SchollerFranke2015:Semantic-values}, \textcolor{red}{ \dots }
-
-\todo[inline]{fill me}
+seek to explain task behavior in a variety of domains as partially informed by what
+participants believe about mundane events---their \emph{prior beliefs}. Take interpretation of
+language. Empirical data on whether a statement like ``That watch cost $n$ dollars'' is
+understood to convey speaker affect, rather than literal meaning, can be explained well by a
+Bayesian model of utterance interpretation \citep{KaoWu2014:Nonliteral-Unde}. In this model a
+crucial role is played by an empirical measure of participants' expectations about the likely
+or normal price of a watch.  Other examples of domains in which empirically successful models
+have included a measure of participants' prior beliefs include making predictions about
+everyday events \citep{GriffithsTenenbaum2006:Optimal-Predict}, referential communication
+\citep{FrankGoodman2012:Predicting-Prag}, the strength of pragmatic enrichments
+\citep{DegenTessler2015:Wonky-worlds:-L}, or the interpretation of vague quantifiers
+\citep{SchollerFranke2015:Semantic-values}. \mf{anyone wants any other references here?}
 
 Many methods of assessing subjective beliefs exist. One approach is to take actual frequencies
-as an approximation \citep{GriffithsTenenbaum2006:Optimal-Predict}. This will not
-work when sufficient real-world data is unavailable---for instance, for beliefs about imaginary events. 
-Even where available, real-world
-frequencies may deviate systematically from participants' beliefs, and this can be problematic for
-the predictions of a model that relies on subjective beliefs.
-%\citep{MarcusDavis2013:How-Robust-Are-}.
+as an approximation to subjective beliefs
+\citep{GriffithsTenenbaum2006:Optimal-Predict}. Unfortunately, the relevant data may not be
+available (e.g., for one-shot or imaginary events) and real-world frequencies may deviate from
+participants' subjective beliefs for many reasons.
 
-Another approach is to experimentally elicit relevant beliefs. Many techniques for this
-exist, especially in the economics literature
-\citep{MorganHenrion1990:Uncertainty:-A-,Manski2004:Measuring-Expec,SchlagTremewan2014:A-penny-for-you,AndersenFountain2014:Estimating-Subj}. The
-perhaps most prominent method uses so-called \emph{scoring rules}
-\citep{Savage1971:Elicitation-of-,SchlagTremewan2014:A-penny-for-you}. Roughly speaking,
-scoring rules are particular schemes of rewarding participants' answers in such a way as to
-make sure that responses are what the experimenter wants them to be: the actual subjective probability of an
-event, the mean of a distribution, a credible interval etc. Scoring rules are highly faithful
-but require participants to become sufficiently familiar with the (usually probabilistic)
-payoff scheme. Scoring rules also must make assumptions about how much participants value
-certain probabilistic gambles and may therefore require elaborate means of data analysis
-\citep{AndersenFountain2014:Estimating-Subj}. Similar practical concerns apply to other methods
-as well, such as the use of \emph{iterated learning} for prior estimation
-\citep{LewandowskyGriffiths2009:The-Wisdom-of-I}.
+Another possibility is to empirically measure subjective beliefs by ``give-a-number''
+tasks. The simplest version would be this: being told that John just bought a new watch,
+subjects are asked for a single numerical estimate of its price. This task is easy to
+comprehend and implement, but a single number does not provide much information about the
+subjective belief that it is (arguably) a manifestation of. One solution is to infer which
+parameterized distribution best explains the observed number choices, either at the individual
+level \citep{Manski2004:Measuring-Expec} or on the population level
+\citep{TauberSteyvers2013:Inferring-Subje}.
 
-For common applications, many of these procedures may be excessively complex or too demanding
-on both researcher and participant. It would be beneficial if there was an easily applicable
-technique of eliciting subjective beliefs that is good enough for testing the general
-predictions of models that rely on these measures for their predictions. A further complication
-is that it may be impractical to obtain, from the same participant, data on subjective beliefs
-and data on the task of interest, especially if exposure to one of these measures is likely to
-affect the other. This suggests that, for practical reasons, there is a demand for
-reliable-enough measures of what we will  call ``population-level beliefs'': estimates
-of the central tendency or average of subjective beliefs in a given population.
+More sophisticated ``give-a-number'' tasks give more information, but can be rather complex and
+more difficult to implement. A prominent method in economics uses \emph{scoring rules}
+\citep{Savage1971:Elicitation-of-,AndersenFountain2014:Estimating-Subj,SchlagTremewan2014:A-penny-for-you}. Roughly
+put, scoring rules are schemes of rewarding participants' answers that make sure that responses
+(by rational subjects) faithfully reflect a measure of interest: the actual subjective
+probability of an event, the mean of a distribution, a credible interval etc. Scoring-rule
+tasks require participants to become sufficiently familiar with the (usually probabilistic)
+payoff scheme. Another insightful, but also complex approach is to use a cleverly designed
+\emph{iterated learning paradigm} \citep{LewandowskyGriffiths2009:The-Wisdom-of-I}.
 
-A very simple technique that has been used with apparent success is to have participants adjust
-sliders in order to express their (relative) levels of support for values of uncertain
-contiguous quantities
-\citep{KaoWu2014:Nonliteral-Unde,SchollerFranke2015:Semantic-values}. \textcolor{red}{ MORE REFERENCES } Participants are confronted with a short and simple description of a situation or an
-event, such as ``John bought a watch,'' and asked for their estimates of the watch's price. To
-give their estimate, they are asked to adjust sliders whose endpoints are labelled as ``extremely
-likely'' and ``extremely unlikely,'' for a number of bins that partition the range of plausible
-values (established by a pre-test). E.g., for the price of a watch bins could be \jd{erin: fill in}
-\textcolor{red}{ FILL ME }
+In sum, there is tradeoff between simplicity of paradigms and their informativity. Ideally, we
+would like to have an experimental method for measuring subjective beliefs that (i) gives us
+sufficient and reliable-enough information about subjective beliefs to derive testable
+predictions from cognitive models that rely on such information, (ii) is easy to understand by
+the participants, (iii) is easy to implement by researchers whose focus and expertise is not
+belief-elicitation as such, and that (iv) does not rely on sophisticated methods of extracting
+the relevant information from the observed data. Moreover, the ideal method would be (v)
+flexible enough to allow inferred subjective belief distributions beyond standard parameterized
+distributions and (vi) would provide us with a reasonable approximation of a ``population-level
+belief,'' i.e., an estimate of the central tendency or average of subjective beliefs in a given
+population. The latter allows to use one set of subjects for measuring prior beliefs and
+another for whatever other task is of interest.
+
+A simple technique that seems to fit this bill is the \emph{binned histograms} task that has
+recently been used with apparent success
+\citep{KaoWu2014:Nonliteral-Unde,SchollerFranke2015:Semantic-values}. \mf{someone please add
+  references: where did you use binned sliders?} Participants adjust sliders in order to
+express their (relative) subjective beliefs about how likely it is that the value of an
+uncertain contiguous quantity lies in some interval of possible values (a bin). E.g.,
+participants read that John bought a watch.  To report their beliefs about the watch's price,
+they adjust sliders whose endpoints are labelled as ``extremely likely'' and ``extremely
+unlikely.'' Each slider corresponds to on out of 15 bins that partition the range of plausible
+values (established by a pre-test), such as 0--50\$, 50--100\$, \dots 700--750\$. Each
+subject's slider ratings are normalized within each item, and the results are averaged across
+subjects to obtain an estimate of the population's average belief about each item. 
+
+
 
 \ndg{should we also talk about the other dependent measures? i think part of what's interesting is comparing the different dependent measures to each other?}
-
-\ndg{say more clearly that we focus on unidimensional distributions and why.}
 
 \begin{itemize}
 \item explain slider rating task
@@ -184,24 +185,6 @@ values (established by a pre-test). E.g., for the price of a watch bins could be
 \paragraph{Procedure and materials}
 
 We elicited prior beliefs from each participant on eight different items (listed in \tableref{tab:Items}) using three different dependent measures, which we call \emph{give-a-number}, \emph{binned histograms}, and \emph{paired comparisons}. Each participant rated each item using each dependent measure. Trial order was randomized.
-
-On  \emph{give-a-number} (GAN) trials, participants saw the context sentence and GAN question for each item (see \tableref{tab:Items}) and were asked to provide one number by adjusting a slider with endpoints labeled as the lowest and highest number for that item. Min and max numbers are shown in \tableref{tab:Items} and were taken from previous studies that had used these items \cite{DegenTessler2015:Wonky-worlds:-L,SchollerFranke2015:Semantic-values,KaoWu2014:Nonliteral-Unde}\jd{any others?}. The selected number appeared above the slider so participants knew exactly what the value of the slider would be. 
-
-On \emph{binned histogram} (BH) trials, participants saw an item's context sentence and were asked to \emph{Please rate how likely it is that Y} (where Y corresponded to  the appropriate BH frame in \tableref{tab:Items}). They then adjusted 15 sliders, one per bin, with five points labeled \emph{impossible}, \emph{not very likely}, \emph{neutral}, \emph{very likely}, and \emph{extremely likely}. Bins were determined by dividing up the entire interval spanned by the item's minimum and maximum value into equally sized bins (see \tableref{tab:Items} for each item's bin size). 
-
-On \emph{paired comparison} (PC) trials, participants  saw an item's context sentence and were asked to click on one of two options which were shown side by side -- whichever one they thought was more likely.  Each option used the appropriate PC frame in\tableref{tab:Items} and numbers were filled in by comparing the following bins: 1 vs 2, 2 vs 6, 6 vs 11, 11 vs 14, and 14 vs 15. Paired comparison trials always occurred as a block of five trials, with order of comparisons randomized within block.
-
-
-Results are shown in \figref{fig:Results}. Data analysis and modeling is reported in the next section.\jd{do we need to say anything about this or just go straight to the model?}
-
-\begin{itemize}
-\item why within-participant? \jd{because doing it between participants would mean not knowing if any differences in results are due to differences in beliefs or differences in the measure. ie we didn't want to confound participants and measures. do we need to talk about this?}
-%\item what was the exact randomization / procedure?
-%\item items are given in Table~\ref{tab:Items}
-%\item include bins as well?
-
-%\item results are in Figure~\ref{fig:Results}
-\end{itemize}
 
 \begin{table*}
   \centering
@@ -226,6 +209,26 @@ Results are shown in \figref{fig:Results}. Data analysis and modeling is reporte
   \caption{Experimental items. \emph{X} was a randomly generated name (different on each trial). \emph{N} was one of the bins.}
   \label{tab:Items}
 \end{table*}
+
+On  \emph{give-a-number} (GAN) trials, participants saw the context sentence and GAN question for each item (see \tableref{tab:Items}) and were asked to provide one number by adjusting a slider with endpoints labeled as the lowest and highest number for that item. Min and max numbers are shown in \tableref{tab:Items} and were taken from previous studies that had used these items \cite{DegenTessler2015:Wonky-worlds:-L,SchollerFranke2015:Semantic-values,KaoWu2014:Nonliteral-Unde}\jd{any others?}. The selected number appeared above the slider so participants knew exactly what the value of the slider would be. 
+
+On \emph{binned histogram} (BH) trials, participants saw an item's context sentence and were asked to \emph{Please rate how likely it is that Y} (where Y corresponded to  the appropriate BH frame in \tableref{tab:Items}). They then adjusted 15 sliders, one per bin, with five points labeled \emph{impossible}, \emph{not very likely}, \emph{neutral}, \emph{very likely}, and \emph{extremely likely}. Bins were determined by dividing up the entire interval spanned by the item's minimum and maximum value into equally sized bins (see \tableref{tab:Items} for each item's bin size). 
+
+On \emph{paired comparison} (PC) trials, participants  saw an item's context sentence and were asked to click on one of two options which were shown side by side -- whichever one they thought was more likely.  Each option used the appropriate PC frame in\tableref{tab:Items} and numbers were filled in by comparing the following bins: 1 vs 2, 2 vs 6, 6 vs 11, 11 vs 14, and 14 vs 15. Paired comparison trials always occurred as a block of five trials, with order of comparisons randomized within block.
+
+
+Results are shown in \figref{fig:Results}. Data analysis and modeling is reported in the next section.\jd{do we need to say anything about this or just go straight to the model?}
+
+\begin{itemize}
+\item why within-participant? \jd{because doing it between participants would mean not knowing if any differences in results are due to differences in beliefs or differences in the measure. ie we didn't want to confound participants and measures. do we need to talk about this?}
+%\item what was the exact randomization / procedure?
+%\item items are given in Table~\ref{tab:Items}
+%\item include bins as well?
+
+%\item results are in Figure~\ref{fig:Results}
+\end{itemize}
+
+
 
 \begin{figure}
   \centering
@@ -433,6 +436,10 @@ population-level hyper-prior on $P_{ij}$ will lead to shrinkage.
 \ndg{can say that one possibility (future work) would be to switch to a fatter-tailed distribution relating Q to P, in order to deal with outliers.}
 
 \section{Conclusions}
+
+\begin{itemize}
+\item \ndg{say more clearly that we focus on unidimensional distributions and why.}
+\end{itemize}
 
 
 \section{Acknowledgments}
