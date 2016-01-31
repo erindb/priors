@@ -200,7 +200,7 @@ plotChoicesPPCPaper = ggplot(choice_ppc, aes(x = bin, y = mean)) + geom_point() 
                             "3" = "6&11",
                             "4" = "11&14",
                             "5" = "14&15"
-  )) + theme(axis.text.x = element_text( angle=-25))
+  )) + theme(axis.text.x = element_text( angle=-35))
 plotChoicesData = ggplot(choice_ppc, aes(x = factor(bin), y = yemp)) + geom_bar(stat = "identity", fill = "lightgray") +
   facet_wrap(~ item, scale = "free") +
   geom_errorbar(aes(ymin = cilow, ymax = cihigh), color = "darkgray", width = .5) +
