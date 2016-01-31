@@ -27,10 +27,12 @@
 \usepackage{todonotes}
 \usepackage{amsmath}
 \usepackage{color}
+\usepackage{booktabs}
 
 \definecolor{Green}{RGB}{10,200,100}
 \newcommand{\ndg}[1]{\textcolor{Green}{[ndg: #1]}}  
-
+\definecolor{Blue}{RGB}{10,100,200}
+\newcommand{\jd}[1]{\textcolor{Blue}{[jd: #1]}} 
 
 %% commands
 \newcommand{\set}[1]{\left\{#1\right\}}
@@ -38,18 +40,23 @@
 \newcommand{\citet}[1]{\citeA{#1}}
 \newcommand{\citep}[1]{\cite{#1}}
 
+\newcommand{\tableref}[1]{Table \ref{#1}}
+\newcommand{\figref}[1]{Fig.~\ref{#1}}
+\newcommand{\appref}[1]{Appendix \ref{#1}}
+\newcommand{\sectionref}[1]{Section \ref{#1}}
+
 
 \title{What does the crowd believe? A hierarchical approach to estimating subjective beliefs
   from empirical data}
  
-\author{{\large \bf Erin Bennett, Judith Degen, Michael Henry Tessler, Noah D. Goodman}\\
-     \{ebennett,jdegen,mhtessler,ngoodman\}@stanford.edu \\
-     Department of Psychology, 450 Serra Mall \\
-  Stanford, CA 94305 USA \AND {\large \bf Michael Franke} \\
+\author{{\large \bf Michael Franke} \\
   michael.franke@uni-tuebingen.de \\
   Department of Linguistics, Wilhelmstra\ss e 19 \\
- 72074 T\"{u}bingen, Germany
-  \AND}
+ 72074 T\"{u}bingen, Germany \AND 
+ {\large \bf Erin Bennett, Judith Degen, Michael Henry Tessler, Noah D. Goodman}\\
+     \{ebennett,jdegen,mhtessler,ngoodman\}@stanford.edu \\
+     Department of Psychology, 450 Serra Mall \\
+  Stanford, CA 94305 USA }
 
 
 \begin{document}
@@ -65,12 +72,12 @@ author's affiliation and postal address in ordinary 10~point type.}
 
 
 \begin{abstract}
-  Subjects' beliefs about everyday events are of theoretical interest on their own and also an
+  Experimental participants' beliefs about everyday events are of theoretical interest on their own and also an
   important ingredient for model building---especially in Bayesian models of phenomena such as logical
   reasoning, future predictions, and language use. Here, we explore several recently used 
   methods for measuring subjective beliefs about unidimensional properties. \ndg{say what kind of subjective beliefs /distributions we look at more clearly.} 
   We a hierarchical Bayesian data analysis model for inferring likely ``population-level beliefs'' as the central
-  tendency of subjects' individual-level beliefs. 
+  tendency of participants' individual-level beliefs. 
   Three different dependent measures---\ndg{name them?}---are related to individual-level beliefs through likelihood ``linking functions.''
 %  functions for three types of task measures. 
   Our results suggest that the practice of
@@ -94,15 +101,15 @@ and language use. Naturally, then, it becomes important to validate any method f
 to be used for explanatory purposes.
 
 A family of models where this is particularly pressing are Bayesian models of cognition which
-seek to explain task behavior in a variety of domains as partially informed by what subjects
+seek to explain task behavior in a variety of domains as partially informed by what participants
 believe about mundane events---their \emph{prior beliefs}. Take interpretation of language. Empirical data on whether a
 statement like ``That watch cost $n$ dollars'' is understood to convey speaker affect, rather
 than literal meaning, can be explained well by a Bayesian model of utterance interpretation
 \citep{KaoWu2014:Nonliteral-Unde}. In this model a crucial role is played by
-an empirical measure of subjects' expectations about the likely or normal price of a
+an empirical measure of participants' expectations about the likely or normal price of a
 watch. 
 Other examples of domains in which empirically successful models have included some
-measure of subjects' belief include making future predictions
+measure of participants' belief include making predictions about everyday events 
 \citep{GriffithsTenenbaum2006:Optimal-Predict}, the strength of pragmatic enrichments
 \citep{DegenTessler2015:Wonky-worlds:-L}, the interpretation of vague quantifiers
 \citep{SchollerFranke2015:Semantic-values}, \textcolor{red}{ \dots }
@@ -113,7 +120,7 @@ Many methods of assessing subjective beliefs exist. One approach is to take actu
 as an approximation \citep{GriffithsTenenbaum2006:Optimal-Predict}. This will not
 work when sufficient real-world data is unavailable---for instance, for beliefs about imaginary events. 
 Even where available, real-world
-frequencies may deviate systematically from subjects' beliefs, and this can be problematic for
+frequencies may deviate systematically from participants' beliefs, and this can be problematic for
 the predictions of a model that relies on subjective beliefs.
 %\citep{MarcusDavis2013:How-Robust-Are-}.
 
@@ -123,7 +130,7 @@ exist, especially in the economics literature
 perhaps most prominent method uses so-called \emph{scoring rules}
 \citep{Savage1971:Elicitation-of-,SchlagTremewan2014:A-penny-for-you}. Roughly speaking,
 scoring rules are particular schemes of rewarding participants' answers in such a way as to
-make sure that responses are what we want them to be: the actual subjective probability of an
+make sure that responses are what the experimenter wants them to be: the actual subjective probability of an
 event, the mean of a distribution, a credible interval etc. Scoring rules are highly faithful
 but require participants to become sufficiently familiar with the (usually probabilistic)
 payoff scheme. Scoring rules also must make assumptions about how much participants value
@@ -138,18 +145,18 @@ technique of eliciting subjective beliefs that is good enough for testing the ge
 predictions of models that rely on these measures for their predictions. A further complication
 is that it may be impractical to obtain, from the same participant, data on subjective beliefs
 and data on the task of interest, especially if exposure to one of these measures is likely to
-affect the other. This suggests that, for practical reasons, there is a demand of
-reliable-enough measures of what we will sloppily call ``population-level beliefs'': estimates
+affect the other. This suggests that, for practical reasons, there is a demand for
+reliable-enough measures of what we will  call ``population-level beliefs'': estimates
 of the central tendency or average of subjective beliefs in a given population.
 
-A very simple technique that has been used with apparent success is to have subjects adjust
+A very simple technique that has been used with apparent success is to have participants adjust
 sliders in order to express their (relative) levels of support for values of uncertain
 contiguous quantities
-\citep{KaoWu2014:Nonliteral-Unde,SchollerFranke2015:Semantic-values}. \textcolor{red}{ MORE REFERENCES } Subjects are confronted with a short and simple description of a situation or an
+\citep{KaoWu2014:Nonliteral-Unde,SchollerFranke2015:Semantic-values}. \textcolor{red}{ MORE REFERENCES } Participants are confronted with a short and simple description of a situation or an
 event, such as ``John bought a watch,'' and asked for their estimates of the watch's price. To
-give their estimate, they are asked to adjust sliders, whose ends are labelled as ``extremely
+give their estimate, they are asked to adjust sliders whose endpoints are labelled as ``extremely
 likely'' and ``extremely unlikely,'' for a number of bins that partition the range of plausible
-values (established by a pre-test). E.g., for the price of a watch bins could be
+values (established by a pre-test). E.g., for the price of a watch bins could be \jd{erin: fill in}
 \textcolor{red}{ FILL ME }
 
 \ndg{should we also talk about the other dependent measures? i think part of what's interesting is comparing the different dependent measures to each other?}
@@ -168,68 +175,73 @@ values (established by a pre-test). E.g., for the price of a watch bins could be
   \end{itemize}
 \end{itemize}
 
-\section{Experiments}
+\section{Experiment}
+
+\subsection{Methods} 
+
+\paragraph{Participants} We recruited 20 self-reported native speakers of English over Mechanical Turk.
+
+\paragraph{Procedure and materials}
+
+We elicited prior beliefs from each participant on eight different items (listed in \tableref{tab:Items}) using three different dependent measures, which we call \emph{give-a-number}, \emph{binned histograms}, and \emph{paired comparisons}. Each participant rated each item using each dependent measure. Trial order was randomized.
+
+On  \emph{give-a-number} (GAN) trials, participants saw the context sentence and GAN question for each item (see \tableref{tab:Items}) and were asked to provide one number by adjusting a slider with endpoints labeled as the lowest and highest number for that item. Min and max numbers are shown in \tableref{tab:Items} and were taken from previous studies that had used these items \cite{DegenTessler2015:Wonky-worlds:-L,SchollerFranke2015:Semantic-values,KaoWu2014:Nonliteral-Unde}\jd{any others?}. The selected number appeared above the slider so participants knew exactly what the value of the slider would be. 
+
+On \emph{binned histogram} (BH) trials, participants saw an item's context sentence and were asked to \emph{Please rate how likely it is that Y} (where Y corresponded to  the appropriate BH frame in \tableref{tab:Items}). They then adjusted 15 sliders, one per bin, with five points labeled \emph{impossible}, \emph{not very likely}, \emph{neutral}, \emph{very likely}, and \emph{extremely likely}. Bins were determined by dividing up the entire interval spanned by the item's minimum and maximum value into equally sized bins (see \tableref{tab:Items} for each item's bin size). 
+
+On \emph{paired comparison} (PC) trials, participants  saw an item's context sentence and were asked to click on one of two options which were shown side by side -- whichever one they thought was more likely.  Each option used the appropriate PC frame in\tableref{tab:Items} and numbers were filled in by comparing the following bins: 1 vs 2, 2 vs 6, 6 vs 11, 11 vs 14, and 14 vs 15. Paired comparison trials always occurred as a block of five trials, with order of comparisons randomized within block.
+
+
+Results are shown in \figref{fig:Results}. Data analysis and modeling is reported in the next section.\jd{do we need to say anything about this or just go straight to the model?}
 
 \begin{itemize}
-\item why within-participant?
-\item what was the exact randomization / procedure?
-\item items are given in Table~\ref{tab:Items}
-\item include bins as well?
-\item what were the lighting round bin comparisons?
-  \begin{itemize}
-  \item 1 vs 2
-  \item 2 vs 6
-  \item 6 vs 11
-  \item 11 vs 14
-  \item 14 vs 15
-  \end{itemize}
-\item results are in Figure~\ref{fig:Results}
+\item why within-participant? \jd{because doing it between participants would mean not knowing if any differences in results are due to differences in beliefs or differences in the measure. ie we didn't want to confound participants and measures. do we need to talk about this?}
+%\item what was the exact randomization / procedure?
+%\item items are given in Table~\ref{tab:Items}
+%\item include bins as well?
+
+%\item results are in Figure~\ref{fig:Results}
 \end{itemize}
 
-\begin{table}
+\begin{table*}
   \centering
-  \begin{tabular}{p{8cm}}
-    1.  X has just fetched himself a cup of \textbf{coffee} from the office vending machine.
-         What do you think the temperature of his coffee is?  \\
-    2.  X \textbf{commuted} to work yesterday. 
-        How many minutes do you think she spent commuting yesterday? \\
-3.  X told a \textbf{joke} to N kids. 
-    How many of the kids do you think laughed?\\
+  \begin{tabular}{l p{2.2cm} p{2.5cm} p{3.5cm} p{3cm} p{2.5cm}}
+	\toprule
+	Item & Bins (units, min, max, step) & Context sentence & GAN question & BH frame & PC frame \\
+	\midrule
+    coffee & degrees, $<$44, $>200$, 13& X has just fetched himself a cup of coffee from the office vending machine. & What do you think the temperature of his coffee is?  & his coffee was the following temperatures & The temperature of his coffee is N degrees.\\
+	commute & minutes, 0, $>$98, 7 & X commuted to work yesterday. & How many minutes do you think she spent commuting yesterday? & she commuted for the following numbers of minutes yesterday & She spent N minutes commuting.\\
+	joke & children, 0, 14, 1  & X told a joke to 14 kids. & How many of the kids do you think laughed? & the following number of kids laughed & N of the children laughed.\\
     
-4.  X bought a \textbf{laptop}.    
-    How much do you think it cost?\\
-    
-5.  X threw N \textbf{marbles} into a pool.
-    How many of the marbles do you think sank?\\
+	laptop & dollars, 0, $>$7500, 500& X bought a laptop. & How much do you think it cost? & the laptop cost the following numbers of dollars & The laptop cost \$N.\\
+    marbles & marbles, 0, 14, 1 & X threw 14 marbles into a pool. & How many of the marbles do you think sank? & the following number of marbles sank & N of the marbles sank.\\
 
-6.  X just went to the \textbf{movies} to see a blockbuster.
-    How many minutes long do you think the movie was?\\
+	movies & minutes, 0, $>210$, 16& X just went to the movies to see a blockbuster. & How many minutes long do you think the movie was? & the movie was the following numbers of minutes long & The movie was N minutes long.\\
 
-7.  X watched \textbf{TV} last week.
-    How many hours do you think he spent watching TV last week? \\
+	TV & hours, 0, $>$43, 3& X watched TV last week. & How many hours do you think he spent watching TV last week? & he watched TV for the following numbers of hours last week & He spent N hours watching TV.\\
 
-8.  X bought a \textbf{watch}.
-    How much do you think it cost?
+	watch & dollars, 0, $>$750, 50 & X bought a watch.& How much do you think it cost? & it cost the following numbers of dollars & The watch cost \$N.\\
+    \bottomrule
   \end{tabular}
-  \caption{Experimental items}
+  \caption{Experimental items. \emph{X} was a randomly generated name (different on each trial). \emph{N} was one of the bins.}
   \label{tab:Items}
-\end{table}
+\end{table*}
 
 \begin{figure}
   \centering
   \begin{subfigure}[b]{0.5\textwidth}
     \includegraphics[width = \textwidth]{plots/data_sliderNumber.pdf}
-    \caption{slider ratings \& number choices}
+    \caption{Red: proportion of choosing a number in each bin on \emph{give-a-number} trials. Black: mean slider ratings on \emph{binned histogram} trials.}
     \label{fig:slider}
   \end{subfigure}
 
   \begin{subfigure}[b]{0.5\textwidth}
     \includegraphics[width = \textwidth]{plots/data_choice.pdf}
-    \caption{bin comparison}
+    \caption{Proportion of choosing the higher bin on \emph{paired comparison} trials.}
     \label{fig:lighting}
   \end{subfigure}
 
-  \caption{Results from experiments. Error bars show bootstrapped 95\% confidence intervals.}
+  \caption{Experimental results. Error bars show bootstrapped 95\% confidence intervals.}
   \label{fig:Results}
 \end{figure}
 
@@ -237,24 +249,24 @@ values (established by a pre-test). E.g., for the price of a watch bins could be
 \section{Model}
 
 The data we would like to explain are: (i) the normalized slider ratings $s_{ijk} \in [0;1]$ of
-subject $i \in \set{1, \dots, 20}$ for item $j \in \set{1, \dots, 8}$ and bin
-$k \in \set{1, \dots, 15}$; (ii) the bins $n_{ij} \in \set{1, \dots, 15}$ in which subject
-$i$'s number choice for item $i$ was; and (iii) the binary choices $c_{ijl} \in \set{0,1}$ of
-whether subject $i$ selected the higher bin for item $j$ in the bin comparison condition
-$l$. There two simplifications in need of commenting. In (i), we focus on slider ratings after
-normalizing for each subject, because we assume that slider adjustments reflect relative, not
+participant $i \in \set{1, \dots, 20}$ for item $j \in \set{1, \dots, 8}$ and bin
+$k \in \set{1, \dots, 15}$ from the binned histogram task; (ii) the bins $n_{ij} \in \set{1, \dots, 15}$ in which participant
+$i$'s number choice for item $i$ was in the give-a-number task; and (iii) the binary choices $c_{ijl} \in \set{0,1}$ of
+whether participant $i$ selected the higher bin for item $j$ in the paired comparison task for each comparison
+$l$. There are two simplifications in need of commenting. In (i), we focus on slider ratings after
+normalizing for each participant, because we assume that slider adjustments reflect relative, not
 absolute estimates of subjective beliefs. In (ii), we focus on bin choices, not actual number
 choices, in order to avoid, as much as possible, considerations of salience of particular
-numbers, and also because otherwise data from items with smaller domains of plausible number
+numbers, and also because otherwise data from items with smaller domains of plausible numbers
 would get more weight than data from items which allow for a wider set of number choices.
 
 All three pieces of data are to be explained as functions of subjective beliefs $P_{ij}$, where
-$P_{ij}$ is a probability vector of length 15 with $P_{ijk}$ being subject $i$'s belief about
+$P_{ij}$ is a probability vector of length 15 with $P_{ijk}$ being participant $i$'s belief about
 the relative likelihood of bin $k$ for item $j$. Each $P_{ij}$ defines a likelihood for our
 data, via appropriate link functions (to be spelled out presently). Variance in subjective
 beliefs is harnessed by a population-level hyper-prior with central tendency $Q_{j}$, i.e., a
 stochastic vector of length 15, which we call a ``population-level belief'' about item $j$. The
-structure of this model is pictured in Figure~\ref{fig:ModelGraph}.
+structure of this model is pictured in \figref{fig:ModelGraph}.
 
 \begin{figure}[]
   \centering
@@ -304,18 +316,18 @@ of $P_{ij}$. For $a \rightarrow 0$, all bins become equiprobable.
  a & \sim \text{Gamma}(2,1)
 \end{align*}
 
-Finally, consider the link function for bin comparisons. We are after the likelihood with which
-subject $i$ selects the higher bin for item $j$ in bin comparison condition $l$. Suppose $l$ is
+Finally, consider the link function for bin comparisons. We are interested in the likelihood with which
+participant $i$ selects the higher bin for item $j$ in bin comparison condition $l$. Suppose $l$ is
 about comparing the lower bin $b_l$ to the higher $b_h$. The perhaps most natural approach
 would be to link the likelihood of choosing $b_h$ over $b_l$ to the difference between
-$P_{ijb_h}$ and $P_{ijb_l}$. This, however, does not appear to be what subjects were doing. For
+$P_{ijb_h}$ and $P_{ijb_l}$. This, however, does not appear to be what participants were doing. For
 example, take the ``marbles'' case where we see almost unanimous choices of bin 11 over bin 6,
-despite seeing any pronounced difference in slider ratings for these bins. Indeed, a model that
+despite seeing no pronounced difference in slider ratings for these bins. Indeed, a model that
 implements this idea failed to capture the relevant regularities in the data blatantly.
 
 Another plausible link function that accommodates for this is to assume that what matters in
 bin comparisons is the distance to the mode of $P_{ij}$: soft-max prefer the bin that is closer
-to the mode of $P_{ij}$; select random if both bins are equally far from the
+to the mode of $P_{ij}$; select randomly if both bins are equally far from the
 prototype.\footnote{Notice that
   $(1 + \exp(2b(1-p^{\text{high}}_{ijl})) )^{-1} = \frac{\exp(b p^{\text{high}})}{\exp(b
     p^{\text{high}}) + \exp(b p^{\text{low}})}$
@@ -332,6 +344,7 @@ prototype.\footnote{Notice that
 
 \ndg{wow, this is weird! you tried softmax ratio of bin probs?}
 
+\jd{hm, doesn't seem too weird to me!}
 
 \section{Inference}
 
@@ -343,7 +356,7 @@ Of most theoretical interest are posterior estimates of $Q_j$. Figure~\ref{fig:P
 shows means of the posterior $Q_j$, with their 95\% HDIs, alongside the averaged normalized
 slider ratings. The latter provide a very good approximation of the latent, inferred
 population-level beliefs. Inspection of posteriors of individual $P_{ij}$ shows that there is
-ample variation between subjects. Nonetheless, the way the model suggest we should think about
+ample variation between participants. Nonetheless, the way the model suggest we should think about
 harnessing the individual $P_{ij}$s under a population-level central tendency is closely
 approximated by simply averaging over slider ratings. Although the match is clearly not
 perfect, it is good enough to maintain that the latter are a reasonable (enough) and practical
@@ -365,35 +378,35 @@ way of assessing what the crowd believes despite individual differences.
 
 Inferences based on the model are only as reliable as the model itself is plausible. Model
 criticism is therefore important. Figure~\ref{fig:PPCs} shows posterior predictive checks at
-the population-aggregate level for all of our three task types. For the slider rating task,
-posterior predictions are spot-on. Some of the number estimation data is surprising even for
-the model trained on this very data. This could have various reasons: (i) the number data does
+the population-aggregate level for all of our three task types. For the binned histogram task,
+posterior predictions are spot-on. Some of the give-a-number data is surprising even for
+the model trained on this very data. This could have various reasons: (i) the give-a-number data does
 not have a huge influence on the posterior likelihood, (ii) number choices may be influenced by
-saliency and/or roundness of numbers after all. Finally, there is one condition in the bin
+saliency and/or roundness of numbers after all. Finally, there is one condition in the paired
 comparison task that the model definitely got wrong. This is the choice of what is more likely:
 that one or that none of 14 marbles thrown into a pool would sink. The model would predict that
 almost everybody should answer that it is more likely that one marble sank. But that is not
-what we observe. It may be that subjects revise beliefs about ``normality'' of the marbles,
-while holding on to an assumption that all marbles behave the same
+what we observe. It may be that participants revise beliefs about ``normality'' of the marbles,
+while holding on to an assumption that all marbles behave in the same way 
 \cite{DegenTessler2015:Wonky-worlds:-L}.
 
 \begin{figure}
   \centering
   \begin{subfigure}[b]{0.5\textwidth}
     \includegraphics[width = \textwidth]{plots/ppc_slider.pdf}
-    \caption{slider rating}
+    \caption{Binned histogram task.}
     \label{fig:sliderPPC}
   \end{subfigure}
    
   \begin{subfigure}[b]{0.5\textwidth}
     \includegraphics[width = \textwidth]{plots/ppc_number.pdf}
-    \caption{number estimation}
+    \caption{Give-a-number task.}
     \label{fig:numberPPC}
   \end{subfigure}
 
   \begin{subfigure}[b]{0.5\textwidth}
     \includegraphics[width = \textwidth]{plots/ppc_choice.pdf}
-    \caption{bin comparison}
+    \caption{Paired comparison task.}
     \label{fig:lightingPPC}
   \end{subfigure}
 
@@ -405,11 +418,11 @@ while holding on to an assumption that all marbles behave the same
 
 Posterior predictive checks indicate that the trained model captures patterns of answers at the
 aggregate population level well. To have a more fine-grained measure of model fit, we also
-looked at posterior predictive $p$-values at the level of subjects and items. \ndg{need to say what this means -- i'm not even sure that i know!} Unfortunately,
-only the slider rating task, provides enough data for such a fine-grained analysis. For the
-slider rating task, fixing a subject and an item, observations and replicates are probability
+looked at posterior predictive $p$-values at the level of participants and items. \ndg{need to say what this means -- i'm not even sure that i know!} Unfortunately,
+only the slider rating task provides enough data for such a fine-grained analysis. For the
+slider rating task, fixing a participant and an item, observations and replicates are probability
 vectors of length 15. In a first analysis, we used the mean of these probability vectors as a
-test statistic. The minimum posterior predictive $p$-value over all 20 (subjects) times 8
+test statistic. The minimum posterior predictive $p$-value over all 20 (participants) times 8
 (items) cases was 0.13, suggesting that the means of observed $s_{ij}$ are non-surprising to
 the trained model. In a second analysis, we used entropy as a test statistic. Two cases gave
 posterior predictive $p$-values lower than 0.05. These were from the two participants who gave a
@@ -425,8 +438,8 @@ population-level hyper-prior on $P_{ij}$ will lead to shrinkage.
 \section{Acknowledgments}
 
 MF's work was supported by the Institutional Strategy of the University of T̈\"{u}bingen (Deutsche
-Forschungsgemeinschaft, ZUK 63) and the Priority Program XPrag.de (DFG Schwerpunktprogramm
-1727). 
+Forschungsgemeinschaft, ZUK 63). MF and JD's work was supported by the Priority Program XPrag.de (DFG Schwerpunktprogramm
+1727). This work was further supported by ONR grant N00014-13-1-0788 and a James S. McDonnell Foundation Scholar Award to NDG and an SNF Early Postdoc.Mobility Award to JD.
 
 
 
