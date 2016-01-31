@@ -424,7 +424,7 @@ that one or that none of 14 marbles thrown into a pool would sink. The model wou
 almost everybody should answer that it is more likely that one marble sank. But that is not
 what we observe. It may be that participants revise beliefs about ``normality'' of the marbles,
 while holding on to an assumption that all marbles behave in the same way 
-\cite{DegenTessler2015:Wonky-worlds:-L}.
+\cite{DegenTessler2015:Wonky-worlds:-L}. 
 
 \begin{figure}
   \centering
@@ -454,26 +454,42 @@ while holding on to an assumption that all marbles behave in the same way
 
 Posterior predictive checks indicate that the trained model captures patterns of answers at the
 aggregate population level well. To have a more fine-grained measure of model fit, we also
-looked at posterior predictive $p$-values at the level of participants and items. \ndg{need to say what this means -- i'm not even sure that i know!} Unfortunately,
-only the slider rating task provides enough data for such a fine-grained analysis. For the
-slider rating task, fixing a participant and an item, observations and replicates are probability
+looked at posterior predictive $p$-values \citep{GelmanCarlin2014:Bayesian-Data-A} at the level
+of participants and items. We focus on the binned histograms task, because here the
+population-level posterior predictive checks revealed no systematic deviance. For the slider
+rating task, fixing a participant and an item, observations and replicates are probability
 vectors of length 15. In a first analysis, we used the mean of these probability vectors as a
 test statistic. The minimum posterior predictive $p$-value over all 20 (participants) times 8
 (items) cases was 0.13, suggesting that the means of observed $s_{ij}$ are non-surprising to
 the trained model. In a second analysis, we used entropy as a test statistic. Two cases gave
-posterior predictive $p$-values lower than 0.05. These were from the two participants who gave a
-very extreme slider rating for the ``marbles'' item, basically assigning all ``mass'' to the
+posterior predictive $p$-values lower than 0.05. These were from the two participants who gave
+a very extreme slider rating for the ``marbles'' item, basically assigning all ``mass'' to the
 last bin. What this suggests is that the model can cope reasonably well also with
 individual-level data, but has problems accounting for ``extreme'' choices, given that the
 population-level hyper-prior on $P_{ij}$ will lead to shrinkage.
-\ndg{can say that one possibility (future work) would be to switch to a fatter-tailed distribution relating Q to P, in order to deal with outliers.}
 
 \section{Conclusions}
 
-\begin{itemize}
-\item \ndg{say more clearly that we focus on unidimensional distributions and why.}
-\end{itemize}
+There aspects of the data that the model does not capture well, but there are also natural
+explanations for these discrepancies. It therefore does not seem implausible that subjects'
+latent beliefs could have generated the data from all three task types roughly in the way that
+the model assumes, with each subjective belief being an expression of a population-level
+central tendency. If that is so, then mean slider ratings from the binned histogram task would
+seem to be a practical and reliable approximation of what the crowd believes.
 
+The data and model presented here suggest that mean slider ratings are consistent with other
+measures of subjective belief, namely from give-a-number and paired comparison tasks. Future
+research should evaluate whether this holds for other possible measures of subjective beliefs
+as well, such as from inferring parameterized distributions, or the use of scoring rules or the
+iterated learning paradigm. 
+
+It also remains to be checked if and how our results can be extended to other types of
+uncertain variables. Here, we focused on uncertainty about unidimensional contiguous variables,
+because that was what many previous Bayesian models needed for checking their predictions. It
+remains to be seen whether the binned histogram task can be applied to higher-dimensional
+variables. Also, although it is suggestive that our results extend to cases where uncertainty
+about a binary event is measured with a single (similarly labelled slider), this should be
+checked carefully. 
 
 \section{Acknowledgments}
 

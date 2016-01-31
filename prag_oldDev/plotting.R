@@ -205,12 +205,12 @@ plotChoicesData = ggplot(choice_ppc, aes(x = factor(bin), y = yemp)) + geom_bar(
   facet_wrap(~ item, scale = "free") +
   geom_errorbar(aes(ymin = cilow, ymax = cihigh), color = "darkgray", width = .5) +
   xlab("condition") + ylab("choce prop. higher bin") + 
-  scale_x_discrete(labels=c("1" = "1 vs 2", 
-                            "2" = "2 vs 6",
-                            "3" = "6 vs 11",
-                            "4" = "11 vs 14",
-                            "5" = "14 vs 15"
-  )) + theme(axis.text.x = element_text( angle=-25))
+  scale_x_discrete(labels=c("1" = "1 & 2", 
+                            "2" = "2 & 6",
+                            "3" = "6 & 11",
+                            "4" = "11 & 14",
+                            "5" = "14 & 15"
+  )) + theme(axis.text.x = element_text( angle=-30))
 plotChoicesDataPaper = ggplot(choice_ppc, aes(x = factor(bin), y = yemp)) + geom_bar(stat = "identity", fill = "lightgray") +
   facet_wrap(~ item, scale = "free_y", ncol = 2) +
   geom_errorbar(aes(ymin = cilow, ymax = cihigh), color = "darkgray", width = .5) +
