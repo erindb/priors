@@ -158,23 +158,25 @@ they adjust sliders whose endpoints are labelled as ``extremely likely'' and ``e
 unlikely.'' Each slider corresponds to on out of 15 bins that partition the range of plausible
 values (established by a pre-test), such as 0--50\$, 50--100\$, \dots 700--750\$. Each
 subject's slider ratings are normalized within each item, and the results are averaged across
-subjects to obtain an estimate of the population's average belief about each item. 
+subjects to obtain an estimate of the population's average belief about each item. These
+averaged normalized slider ratings per bin (henceforth: mean slider ratings) look intuitively
+plausible and give good results if fed into cognitive models that predict behavior in language
+or reasoning tasks, for instance.
 
-
-
-\ndg{should we also talk about the other dependent measures? i think part of what's interesting is comparing the different dependent measures to each other?}
-
-\begin{itemize}
-\item explain slider rating task
-\item our goal here is to validate whether ``population-level beliefs'' are approximated well
-  enough by normalized average slider ratings
-\item use hierarchical Bayesian modeling
-  \begin{itemize}
-  \item calculate likelihoods from subjective beliefs
-  \item each subjective belief is drawn from a population-level central tendency, which is a
-    ``belief'' as well
-  \end{itemize}
-\end{itemize}
+Explanatory success notwithstanding, the question remains whether mean slider ratings measure
+what we would like them to. Are these good approximations of a central tendency of subjects'
+individual beliefs? Are these measures consistent with subjects' behavior in other tasks, such
+as \emph{give-a-number}, as well? To address this issue we collected data in a within-subject
+from three task types: (i) \emph{binned histograms}, (ii) \emph{give-a-number} and (iii)
+\emph{paired comparisons}, i.e., a direct comparison of two bins from the \emph{binned
+  histograms} task. Using a Bayesian hierarchical model, we used the data from all three
+dependent measures to infer likely latent subjective beliefs, where each subjective belief is,
+intuitively, a noisy perturbation of a population-level belief. We find that mean \emph{a
+  posteriori} population-level beliefs are approximated well by mean slider ratings, suggesting
+that the latter may indeed be a plausible, yet cheap measure of ``what the crowd beliefs.''
+Moreover, the model is able to capture subjects' behavior in all three task types reasonably
+well, suggesting that what mean sliders measure is what we think it is: a population-level
+central tendency of latent subjective beliefs.
 
 \section{Experiment}
 
@@ -187,6 +189,7 @@ subjects to obtain an estimate of the population's average belief about each ite
 We elicited prior beliefs from each participant on eight different items (listed in \tableref{tab:Items}) using three different dependent measures, which we call \emph{give-a-number}, \emph{binned histograms}, and \emph{paired comparisons}. Each participant rated each item using each dependent measure. Trial order was randomized.
 
 \begin{table*}
+  \footnotesize
   \centering
   \begin{tabular}{l p{2.2cm} p{2.5cm} p{3.5cm} p{3cm} p{2.5cm}}
 	\toprule
