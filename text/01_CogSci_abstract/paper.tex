@@ -59,9 +59,9 @@
   Department of Linguistics, Wilhelmstra\ss e 19 \\
  72074 T\"{u}bingen, Germany \AND 
  {\large \bf Erin Bennett, Judith Degen, Michael Henry Tessler, Noah D. Goodman}\\
-     \{ebennett,jdegen,mhtessler,ngoodman\}@stanford.edu \\
-     Department of Psychology, 450 Serra Mall \\
-  Stanford, CA 94305 USA }
+     \{ebennett, jdegen, mtessler, ngoodman\}@stanford.edu \\
+     Department of Psychology, Stanford University \\
+     450 Serra Mall, Stanford, CA 94305 USA }
 
 
 \begin{document}
@@ -293,7 +293,7 @@ about what they thought was mostly likely the case (usually: bin 15 in the
 The data we would like to explain are: (i) the normalized slider ratings $s_{ijk} \in [0;1]$ of
 participant $i \in \set{1, \dots, 20}$ for item $j \in \set{1, \dots, 8}$ and bin
 $k \in \set{1, \dots, 15}$ from the binned histogram task; (ii) the bins $n_{ij} \in \set{1, \dots, 15}$ in which participant
-$i$'s number choice for item $i$ was in the give-a-number task; and (iii) the binary choices $c_{ijl} \in \set{0,1}$ of
+$i$'s number choice for item $j$ was in the give-a-number task; and (iii) the binary choices $c_{ijl} \in \set{0,1}$ of
 whether participant $i$ selected the higher bin for item $j$ in the paired comparison task for each comparison
 $l$. There are two simplifications in need of commenting. In (i), we focus on slider ratings after
 normalizing for each participant, because we assume that slider adjustments reflect relative, not
@@ -315,7 +315,8 @@ To fill the structure in \figref{fig:ModelGraph} with life, we need to spell out
 parameterized link functions, one for each task type, and the relation between population-level
 belief $Q_j$ to individual beliefs $P_{ij}$. Let's start with the latter. For fixed $Q_j$, the
 idea is that $P_{ij}$ are noise-perturbed variants scattered around $Q_j$, with some parameter
-$w$ to determine how much perturbation we should expect. To realize this, the model assumes
+$w$ to determine how much perturbation we should expect.
+ To realize this, the model assumes
 that $P_{ij}$ are distributed according to a Dirichlet distribution with weights given by
 $w Q_{j}$:
 \begin{align*}
@@ -324,7 +325,7 @@ $w Q_{j}$:
 \end{align*}
 The higher $w$, the more likely it is that $P_{ij}$ is ``close'' to $Q_j$.
 
-The link function for the slider rating data uses a logit transformation to project observed
+The link function for the \textbf{slider rating data} uses a logit transformation to project observed
 slider ratings $s_{ijk}$ and latent probabilities $P_{ijk}$, which are bound to lie between 0
 and 1, to the reals. The likelihood of logit-transformed observation $s_{ijk}$ is given by a
 Gaussian with standard deviation $\sigma$ around the logit-transformed predictor $P_{ijk}$. On
@@ -339,7 +340,7 @@ $\kappa=1$.
         \sigma &  \sim \text{Gamma}(0.0001,0.0001) & \kappa &\sim \text{Gamma}(5,5)
 \end{align*}
  
-The link function for number choice data treats each bin $n_{ij}$ as a draw from a categorical
+The link function for \textbf{number choice data} treats each bin $n_{ij}$ as a draw from a categorical
 distribution where the probability of bin $k$ is proportional to $\expo(a P_{ij})$, i.e., a
 soft-max choice from $P_{ij}$. The higher parameter $a$, the more likely $n_{ij}$ is the mode
 of $P_{ij}$. For $a \rightarrow 0$, all bins become equiprobable.
@@ -349,19 +350,21 @@ of $P_{ij}$. For $a \rightarrow 0$, all bins become equiprobable.
  a & \sim \text{Gamma}(2,1)
 \end{align*}
 
-Finally, consider the link function for bin comparisons. We are interested in the likelihood
+Finally, consider the link function for \textbf{bin comparisons}. We are interested in the likelihood
 with which participant $i$ selects the higher bin for item $j$ in bin comparison condition
 $l$. Suppose $l$ is about comparing the lower bin $b_l$ to the higher $b_h$. The perhaps most
 natural approach would be to link the likelihood of choosing $b_h$ over $b_l$ to the difference
 between $P_{ijb_h}$ and $P_{ijb_l}$. However, as discussed above, this does not appear to be
-what participants were doing. Indeed, a model that implements this idea failed to capture the
-relevant regularities in the data blatantly. Another plausible link function is to assume that
+what participants were doing. Indeed, a model that implements this idea blatantly failed to capture the
+relevant regularities in the data. Another plausible link function is to assume that
 what matters in bin comparisons is the distance to the mode of $P_{ij}$: soft-max prefer the
 bin that is closer to the mode of $P_{ij}$; select randomly if both bins are equally far from
 the prototype.\footnote{Notice that
   $(1 + \exp(2b(1-p^{\text{high}}_{ijl})) )^{-1} = \frac{\exp(b p^{\text{high}})}{\exp(b
     p^{\text{high}}) + \exp(b p^{\text{low}})}$
-  with $p^\text{low}_{ijl} = 2 - p^\text{high}_{ijl}$.}
+  with $p^\text{low}_{ijl} = 2 - p^\text{high}_{ijl}$.
+  \mht{I am unable to notice this. Double check? Intuition tells me $p^\text{low}_{ijl} = 1 - p^\text{high}_{ijl}$.}
+  }
 \begin{align*}
   c_{ijl} & \sim \text{Bern}( (1 + \exp(2b(1-p^{\text{high}}_{ijl})) )^{-1} ) \ \ \ 
   b  \sim \text{Gamma}(2,1) \\
@@ -411,7 +414,7 @@ Of most theoretical interest are posterior estimates of $Q_j$. \figref{fig:Poste
 shows means of the posterior $Q_j$, with their 95\% HDIs, alongside the averaged normalized
 slider ratings. The latter provide a very good approximation of the latent, inferred
 population-level beliefs. Inspection of posteriors of individual $P_{ij}$ shows that there is
-ample variation between participants. Nonetheless, the way the model suggest we should think about
+ample variation between participants. Nonetheless, the way the model suggests we should think about
 harnessing the individual $P_{ij}$s under a population-level central tendency is closely
 approximated by simply averaging over slider ratings. Although the match is clearly not
 perfect, it is good enough to maintain that the latter are a reasonable (enough) and practical
@@ -430,12 +433,12 @@ way of assessing what the crowd believes despite individual differences.
 Inferences based on the model are only as reliable as the model itself is plausible. Model
 criticism is therefore important. \figref{fig:PPCs} shows posterior predictive checks at
 the population-aggregate level for all of our three task types. For the binned histogram task,
-posterior predictions are spot-on. Some of the give-a-number data is surprising even for
-the model trained on this very data. This could have various reasons: (i) the give-a-number data does
+posterior predictions are spot-on. For the give-a-number task, some of the data is surprising despite 
+the model being trained on this very data. This could have various reasons: (i) the give-a-number data does
 not have a huge influence on the posterior likelihood, (ii) number choices may be influenced by
-saliency and/or roundness of numbers after all. Finally, there is one condition in the paired
+saliency and/or roundness of numbers after all (and thus, not accurately reflect the true beliefs $Q_j$). Finally, there is one condition in the paired
 comparison task that the model definitely got wrong. This is the choice of what is more likely:
-that one or that none of 14 marbles thrown into a pool would sink. The model would predict that
+One or none of 14 marbles thrown into a pool would sink. The model would predict that
 almost everybody should answer that it is more likely that one marble sank. But that is not
 what we observe. It may be that participants revise beliefs about ``normality'' of the marbles,
 while holding on to an assumption that all marbles behave in the same way 
@@ -482,7 +485,7 @@ a very extreme slider rating for the ``marbles'' item, basically assigning all `
 last bin. What this suggests is that the model can cope reasonably well also with
 individual-level data, but has problems accounting for ``extreme'' choices, given that the
 population-level hyper-prior on $P_{ij}$ will lead to shrinkage.
-
+\mht{Is it worth mentioning about the possilbiity of including subject-specific link function parameters e.g., $\kappa$ and $\alpha$?}
 \section{Conclusion}
 
 The data and model presented here suggest that mean slider ratings are consistent with other
