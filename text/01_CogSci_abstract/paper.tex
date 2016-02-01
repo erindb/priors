@@ -129,13 +129,14 @@ distribution best explains the observed number choices, either at the individual
 
 More sophisticated \emph{give-a-number} tasks give more information, but can be difficult to
 implement and analyze. A prominent method in economics uses \emph{scoring rules}
-\citep{Savage1971:Elicitation-of-,AndersenFountain2014:Estimating-Subj,SchlagTremewan2014:A-penny-for-you}. Roughly
-put, scoring rules are schemes of rewarding participants' answers that make sure that responses
-(by rational participants) faithfully reflect a measure of interest: the actual subjective
-probability of an event, the mean of a distribution, a credible interval etc. Scoring-rule
-tasks require participants to become sufficiently familiar with the (usually probabilistic)
-payoff scheme. Another insightful, but also complex approach is to use a cleverly designed
-\emph{iterated learning paradigm} \citep{LewandowskyGriffiths2009:The-Wisdom-of-I}.
+\citep{Savage1971:Elicitation-of-,AndersenFountain2014:Estimating-Subj,SchlagTremewan2014:A-penny-for-you}. Scoring
+rules are complex schemes of assigning monetary rewards to participants' answers that make sure
+that responses (by rational participants) faithfully reflect a measure of interest: the actual
+subjective probability of an event, the mean of a distribution, a credible interval
+etc. Scoring-rule tasks require participants to become sufficiently familiar with the (usually
+probabilistic) payoff scheme. Another insightful, but also complex approach is to use a
+cleverly designed \emph{iterated learning paradigm}
+\citep{LewandowskyGriffiths2009:The-Wisdom-of-I}.
 
 
 \begin{table*}
@@ -191,20 +192,21 @@ ratings are normalized and the results averaged across participants. The resulti
   slider ratings} look like plausible population-level beliefs and give good results when fed
 into cognitive models that predict task behavior based on prior expectations.
 
-Explanatory success aside, the question remains whether mean slider ratings measure
-what we would like them to. Are these good approximations of a central tendency of participants'
-individual beliefs? Are these measures consistent with participants' behavior in other tasks, such
-as \emph{give-a-number}, as well? To address this issue we collected data in a within-subject paradigm 
-from three task types: (i) \emph{binned histograms}, (ii) \emph{give-a-number} and (iii)
-\emph{paired comparisons}, i.e., a direct comparison of two bins from the \emph{binned
-  histograms} task. Using a Bayesian hierarchical model, we used the data from all three
-dependent measures to infer likely latent subjective beliefs, where each subjective belief is,
-intuitively, a noisy perturbation of a population-level belief. We find that mean \emph{a
-  posteriori} population-level beliefs are approximated well by mean slider ratings, suggesting
-that the latter may indeed be a plausible, yet cheap measure of what the crowd believes.
-Moreover, the model is able to capture participants' behavior in all three task types reasonably
-well, suggesting that what mean slider ratings measure is what we think it is: a population-level
-central tendency of latent subjective beliefs.
+Explanatory success aside, the question remains whether mean slider ratings measure what we
+would like them to. Are these good approximations of a central tendency of participants'
+individual beliefs? Are these measures consistent with participants' behavior in other tasks,
+such as \emph{give-a-number}, as well? To address this issue we collected data in a
+within-subject paradigm from three task types: (i) \emph{binned histograms}, (ii)
+\emph{give-a-number} and (iii) \emph{paired comparisons}, i.e., a direct comparison of two bins
+from the \emph{binned histograms} task that included as a further consistency check. Using a
+Bayesian hierarchical model, we used the data from all three dependent measures to infer likely
+latent subjective beliefs, where each subjective belief is, intuitively, a noisy perturbation
+of a population-level belief. We find that mean \emph{a posteriori} population-level beliefs
+are approximated well by mean slider ratings, suggesting that the latter may indeed be a
+plausible, yet cheap measure of what the crowd believes.  Moreover, the model is able to
+capture participants' behavior in all three task types reasonably well, suggesting that what
+mean slider ratings measure is what we think it is: a population-level central tendency of
+latent subjective beliefs.
 
 \section{Experimental elicitation of prior beliefs}
 
@@ -228,11 +230,11 @@ slider would be.
 
 
 On \emph{binned histogram} (BH) trials, participants saw an item's context sentence and were
-asked to \emph{Please rate how likely it is that Y} (where Y corresponded to the appropriate BH
-frame in \tableref{tab:Items}). They then adjusted 15 sliders, one per bin, with five points
-labeled \emph{impossible}, \emph{not very likely}, \emph{neutral}, \emph{very likely}, and
-\emph{extremely likely}. Bins were determined by dividing up the entire interval spanned by the
-item's minimum and maximum value into equally sized bins (\tableref{tab:Items}).
+asked to \emph{Please rate how likely it is that Y} (where $Y$ came from the corresponding BH
+frame in \tableref{tab:Items}). They adjusted 15 continuous sliders, one per bin, with five
+points labeled \emph{impossible}, \emph{not very likely}, \emph{neutral}, \emph{very likely},
+and \emph{extremely likely}. Bins were determined by dividing the interval spanned by
+the item's minimum and maximum value into equally sized bins (\tableref{tab:Items}).
 
 
 
