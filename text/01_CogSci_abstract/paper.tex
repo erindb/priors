@@ -72,12 +72,12 @@
 \maketitle
 
 \begin{abstract}
-  Experimental participants' beliefs about everyday events are both of theoretical interest in
-  their own right and an important ingredient in model building---especially in cognitive
-  Bayesian models of phenomena such as logical reasoning, future predictions, and language
+  People's beliefs about everyday events are both of theoretical interest in
+  their own right and an important ingredient in model building---especially in 
+  Bayesian cognitive models of phenomena such as logical reasoning, future predictions, and language
   use. Here, we explore several recently used methods for measuring subjective beliefs about
   unidimensional contiguous properties, such as the likely price of a new watch. We use a
-  hierarchical Bayesian model for inferring likely population-level beliefs as the central
+  hierarchical Bayesian data-analysis model for inferring likely population-level beliefs as the central
   tendency of participants' individual-level beliefs.  Three different dependent measures are
   used to infer latent beliefs: (i) slider ratings of (relative) likelihood of intervals of
   values, (ii) a give-a-number task, and (iii) choice of the more likely of two intervals of
@@ -96,29 +96,33 @@
 We cannot look into a person's head. But in making sense of observed behavior we readily
 ascribe beliefs and desires to fellow agents. This happens intuitively, in folk psychology, but
 also in science. Scientific ascription of latent mental states plays an important role in many
-explanations of higher-order cognition: decision making, reasoning, language use etc. It is
+explanations of higher-order cognition: decision making, reasoning, language use, etc. It is
 therefore vital to have methods for validating explanatory mental state ascriptions.
 
 A family of models where this is particularly pressing are Bayesian models of cognition which
 seek to explain task behavior in a variety of domains as partially informed by what
 participants believe about mundane events---their \emph{prior beliefs}. Take interpretation of
-language. Empirical data on whether a statement like ``That watch cost $n$ dollars'' is
-understood to convey speaker affect, rather than literal meaning, can be explained well by a
+language. 
+``That watch cost a million dollars,'' tends to be interpreted as hyperbole: conveying affect rather than literal truth.
+Empirical data on whether a statement like ``That watch cost $n$ dollars'' is
+understood as hyperbole can be explained well by a
 Bayesian model of utterance interpretation \citep{KaoWu2014:Nonliteral-Unde}. This model
 assigns a crucial role to an empirical measure of participants' expectations about the likely
-or normal price of a watch.  Other examples of domains in which empirically successful models
+or normal price of a watch---only when the uttered price is sufficiently unlikely \emph{a priori} will hyperbolic interpretation be possible.  
+Other examples of domains in which empirically successful models
 have included a measure of participants' prior beliefs include making predictions about
 everyday events \citep{GriffithsTenenbaum2006:Optimal-Predict}, referential communication
 \citep{FrankGoodman2012:Predicting-Prag}, the strength of pragmatic enrichments
 \citep{DegenTessler2015:Wonky-worlds:-L}, or the interpretation of quantifiers
 \citep{SchollerFranke2015:Semantic-values}.
 
+Many methods have been used to build prior distributions used in Bayesian cognitive models.
 One method of getting at subjective beliefs is to take actual frequencies as an approximation
 to subjective beliefs \cite<e.g.>{GriffithsTenenbaum2006:Optimal-Predict}. Unfortunately,
 frequency data may be unavailable (e.g., one-shot events) or deviate from participants'
 subjective beliefs in crucial respects.
 
-Another frequent approach is to empirically measure subjective beliefs by \emph{give-a-number}
+Another common approach is to empirically measure subjective beliefs by \emph{give-a-number}
 tasks. The simplest version would be this: being told that John just bought a new watch,
 participants are asked for a single numerical estimate of its price. This task is easy to
 comprehend and implement, but a single number does not provide much information about the
@@ -126,17 +130,22 @@ subjective belief that it is a manifestation of. One solution is to infer which 
 distribution best explains the observed number choices, either at the individual level
 \citep{Manski2004:Measuring-Expec} or at the population level
 \citep{TauberSteyvers2013:Inferring-Subje}.
-
 More sophisticated \emph{give-a-number} tasks give more information, but can be difficult to
-implement and analyze. A prominent method in economics uses \emph{scoring rules}
-\citep{Savage1971:Elicitation-of-,AndersenFountain2014:Estimating-Subj,SchlagTremewan2014:A-penny-for-you}. Scoring
-rules are complex schemes of assigning monetary rewards to participants' answers that make sure
-that responses (by rational participants) faithfully reflect a measure of interest: the actual
-subjective probability of an event, the mean of a distribution, a credible interval
-etc. Scoring-rule tasks require participants to become sufficiently familiar with the (usually
-probabilistic) payoff scheme. Another insightful, but also complex approach is to use a
-cleverly designed \emph{iterated learning paradigm}
-\citep{LewandowskyGriffiths2009:The-Wisdom-of-I}.
+implement and analyze. 
+
+
+More complex elicitation methods include \emph{scoring rules} \citep{Savage1971:Elicitation-of-,AndersenFountain2014:Estimating-Subj,SchlagTremewan2014:A-penny-for-you}, prominent in economics, and the \emph{iterated learning paradigm} \citep{LewandowskyGriffiths2009:The-Wisdom-of-I}.
+These more complex methods are powerful but difficult to implement, and often assume very specific behavior from participants---such as optimal decision making under perfect knowledge of the payoff scheme.
+%}. Scoring
+%rules are complex schemes of assigning monetary rewards to participants' answers that make sure
+%that responses (by rational participants) faithfully reflect a measure of interest: the actual
+%subjective probability of an event, the mean of a distribution, a credible interval
+%etc. Scoring-rule tasks, however, require participants to become sufficiently familiar with the (usually
+%probabilistic) payoff scheme and assume close to optimal choices. 
+%
+%A final insightful, but also complex approach is to use a
+%cleverly designed
+
 
 
 \begin{table*}
@@ -167,6 +176,7 @@ cleverly designed \emph{iterated learning paradigm}
   \label{tab:Items}
 \end{table*}
 
+%
 In sum, there is tradeoff between simplicity of paradigms and their information
 content. Ideally, we would like to have an experimental method for measuring subjective beliefs
 that (i) provides sufficient and reliable-enough information about subjective beliefs to derive
@@ -182,7 +192,7 @@ potential cross-over effects.
 A simple technique that seems to fit this bill is the \emph{binned histogram} task that has
 recently been used with apparent success
 \cite<e.g.>{KaoWu2014:Nonliteral-Unde,KaoBergen2014:Formalizing--th,Tessler2015:Understanding-B,SchollerFranke2015:Semantic-values}. Participants
-adjust sliders to express (relative) subjective beliefs about how likely the value of an
+adjust sliders to express (relative) subjective beliefs about how likely it is that the value of an
 uncertain contiguous quantity lies in some interval of possible values (a bin). E.g., to report
 beliefs about the a watch's price, participants adjust sliders whose endpoints are labelled
 ``extremely likely'' and ``impossible.'' Each slider corresponds to one of 15 bins that
@@ -195,15 +205,17 @@ into cognitive models that predict task behavior based on prior expectations.
 Explanatory success aside, the question remains whether mean slider ratings measure what we
 would like them to. Are these good approximations of a central tendency of participants'
 individual beliefs? Are these measures consistent with participants' behavior in other tasks,
-such as \emph{give-a-number}, as well? To address this issue we collected data in a
+such as \emph{give-a-number}? To address this issue we collected data in a
 within-subject paradigm from three task types: (i) \emph{binned histograms}, (ii)
-\emph{give-a-number} and (iii) \emph{paired comparisons}, i.e., a direct comparison of two bins
-from the \emph{binned histograms} task that included as a further consistency check. Using a
-Bayesian hierarchical model, we used the data from all three dependent measures to infer likely
+\emph{give-a-number} and (iii) \emph{paired comparisons}. The latter asks participants for a direct comparison of two bins
+from the \emph{binned histograms} task, and was included as a further consistency check. 
+We used a Bayesian hierarchical model to analyze this data jointly.
+This model inferred likely
 latent subjective beliefs, where each subjective belief is, intuitively, a noisy perturbation
 of a population-level belief. We find that mean \emph{a posteriori} population-level beliefs
-are approximated well by mean slider ratings, suggesting that the latter may indeed be a
-plausible, yet cheap measure of what the crowd believes.  Moreover, the model is able to
+are approximated well by mean slider ratings from the binned-histograms task, suggesting that this may indeed be a
+sound and easy measure of what the crowd believes.  
+Moreover, the model is able to
 capture participants' behavior in all three task types reasonably well, suggesting that what
 mean slider ratings measure is what we think it is: a population-level central tendency of
 latent subjective beliefs.
