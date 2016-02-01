@@ -252,7 +252,7 @@ the item's minimum and maximum value into equally sized bins (\tableref{tab:Item
 
 On \emph{paired comparison} (PC) trials, participants saw an item's context sentence and had to
 click on one of two options shown side by side -- whichever one they thought was more likely.
-Each option used the appropriate PC frame in\tableref{tab:Items} and numbers were filled in by
+Each option used the appropriate PC frame in \tableref{tab:Items} and numbers were filled in by
 comparing the following bins: 1 vs 2, 2 vs 6, 6 vs 11, 11 vs 14, and 14 vs 15. Paired
 comparison trials always occurred as a block of five trials, with order of comparisons
 randomized within block.
@@ -351,8 +351,8 @@ of $P_{ij}$. For $a \rightarrow 0$, all bins become equiprobable.
 
 Finally, consider the link function for \textbf{bin comparisons}. We are interested in the
 likelihood with which participant $i$ selects the higher bin for item $j$ in bin comparison
-condition $l$. Suppose $l$ is about comparing the lower bin $b_l$ to the higher $b_h$. The
-perhaps most natural approach would be to link the likelihood of choosing $b_h$ over $b_l$ to
+condition $l$. Suppose $l$ is about comparing the lower bin $b_l$ to the higher $b_h$. 
+Perhaps the most natural approach would be to link the likelihood of choosing $b_h$ over $b_l$ to
 the difference between $P_{ijb_h}$ and $P_{ijb_l}$. However, as discussed above, this does not
 appear to be what participants were doing. Indeed, a model that implements this idea blatantly
 fails to capture the relevant regularities in the data. Another plausible link function is to
@@ -387,11 +387,11 @@ The model was implemented in JAGS \cite{Plummer2003:JAGS:-A-Program}. 50,000 sam
 obtained from two chains with a thinning rate of 2 after a burn-in of 100,000 that ensured
 convergence according to $\hat{R}$ \cite{GelmanRubin1992:Inference-from-}.
 
-Means and bounds of 95\% HDIs of the posteriors for model parameters are in
+Means and bounds of 95\% high-density intervals (HDIs) of the posteriors for model parameters are in
 Table~\ref{tab:SummaryStats}. Posterior credible levels of $w$ allow for a limited amount of
 slack around $Q_j$. Values for $\kappa$ indicate that, on average, participants had no
 preference for or against extreme slider ratings. Relatively high values of $a$ indicate that
-participants, on average, had a strong tendency to choose modal in the \emph{give-a-number}
+participants, on average, had a strong tendency to choose modal values in the \emph{give-a-number}
 task.
 \begin{table}[ht]
 \centering
@@ -503,7 +503,7 @@ whether the binned histogram task can be applied to higher-dimensional variables
 prior beliefs over, say, \emph{height} and \emph{weight} of an individual or, more abstractly,
 different dimensions of a multi-dimensional property like \emph{intelligence}. Another
 challenge lies in devising means of eliciting prior expectations about properties that do not
-have clear and familiar measure terms, like the mentioned \emph{intelligence}.
+have clear and familiar measure terms that can be used to label bins---again like \emph{intelligence}.
 
 Finally, another aspect that our model has ignored so far are potential individual differences
 in the way subjective beliefs $P_{ij}$ generates responses. It is not unlikely that there is
