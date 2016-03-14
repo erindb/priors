@@ -155,7 +155,7 @@
       \node[below of = ab] (nij) {$n_{ij} \sim
         \text{Categorical}(\expo(a P_{ij}))$};
 
-      \node[below of = nij] (cijl) {$c_{ijl} \sim \text{Bern}(\text{exp}(b \ (p^{\text{high}}_{ijl}, p^{\text{low}}_{ijl}))$, where};
+      \node[below of = nij] (cijl) {$c_{ijl} \sim \text{Bern}((1 + \expo(2b(1-p^{\text{high}}_{ijl})))^{-1})$};
 
       \node[below of = cijl, node distance = 1.35cm] (pcijl) {$p^\text{high}_{ijl} = \begin{cases} 2 & \text{if $mode(P_{ij})$ is closer to higher} \\
 & \text{ bin of $l$ than to lower bin }  \\ 1 & \text{if equal
