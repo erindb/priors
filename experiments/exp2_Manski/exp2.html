@@ -1,0 +1,287 @@
+<html>
+
+<head>
+   <meta charset="UTF-8">
+    <title>Priors</title>
+
+    <!--JS-->
+
+    <!-- external general utilities -->
+    <script src="../_shared/js/jquery-1.11.1.min.js "></script>
+    <script src="../_shared/full-projects/jquery-ui/jquery-ui.min.js"></script>
+    <script src="../_shared/js/underscore-min.js"></script>
+    <!-- if you want to draw stuff: -->
+    <!-- <script src="../_shared/js/raphael-min.js"></script> -->
+
+    <!-- cocolab experiment logic -->
+    <script src="../_shared/js/exp-V2.js"></script>
+    <script src="../_shared/js/stream-V2.js"></script>
+
+    <!-- cocolab general utilities -->
+    <script src="../_shared/js/mmturkey.js "></script>
+    <script src="../_shared/js/browserCheck.js"></script>
+    <script src="../_shared/js/utils.js"></script>
+
+    <!-- if you want to draw cute creatures (depends on raphael): -->
+    <!-- <script src="../_shared/js/ecosystem.js"></script> -->
+
+    <!-- experiment specific helper functions -->
+    <!-- <script src="js/local-utils.js"></script> -->
+
+    <!--CSS-->
+    <link href="../_shared/full-projects/jquery-ui/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
+    <link href="../_shared/css/cocolab-style.css" rel="stylesheet" type="text/css"/>
+    <link href="local-style.css" rel="stylesheet" type="text/css"/>
+
+    <!-- experiment file -->
+    <script src="exp2.js"></script>
+    
+</head>
+
+<body onload="init();">
+  <noscript>This task requires JavaScript.</noscript>
+
+  <div class="slide" id="i0" >
+    <img src="../_shared/images/cocologo.png" alt="Stanford CoCoLab" id="cocologo"></img>
+    <p id="cocolab">Stanford CoCoLab</p>
+    <p id="instruct-text">Thank you very much for participating in our experiment. In this experiment, we are interested in how people estimate different everyday quantities. The experiment will likely take about 30 minutes to finish.</p>
+    <button id="start_button" type="button">Start Experiment</button>
+    <p id="legal">Legal information: By answering the following questions, you are participating in a study being performed by cognitive scientists in the Stanford Department of Psychology. If you have questions about this research, please contact Erin Bennett at <a href="mailto://erindb@stanford.edu">erindb@stanford.edu</a> or Noah Goodman, at ngoodman@stanford.edu. You must be  at least 18 years old to participate. Your participation in this research is voluntary. You may decline to answer any or all of the following questions. You may decline further participation, at any time, without adverse consequences. Your anonymity is assured; the researchers who have requested your participation will not receive any personal information about you.</p>
+  </div>
+
+  <div class="slide" id="instructions">
+    <p>In this experiment you will have several different kinds of questions asking you to estimate different everyday quantities. Though these situations may be somewhat repetative, please pay attention and give us your best guess for each question.</p>
+    <p>Thank you!</p>
+    <button id="start_button" type="button" onclick="_s.button()">Continue</button>
+  </div>
+
+      
+<div class="slide" id="Manski">
+    <div class="M_slide" id="Manski_sliders"> 
+      <h3 id="Manski_sentence"></h3>
+      <h3 id="Manski_question"></h3>
+    <br>
+        <p>
+        <span id = "Qlike1">{{}} </span> 
+        <span id = "Qlike2">{{}} </span> 
+        <span id="number_guess_likely" style="font-weight: bold;" font-size= 33pt>?</span>
+            </p>
+    <table id="likely_slider_table" class="slider_table">
+<!--        <tr><td class="left"><h3 id="min"></h3></td><td class="right"><h3 id="max"></h3></td></tr>-->
+        <tr><td colspan="2"><div id="likely_single_slider" class="slider"></div></td></tr>
+      </table> 
+    
+    <br>
+    <p>
+        <span id = "Qmin1">{{}}</span>
+        <span id = "Qmin2">{{}}</span>
+        <span id="number_guess_min" style="font-weight: bold;" >?</span>
+    </p>
+    <table id="min_slider_table" class="slider_table">
+<!--        <tr><td class="left"><h3 id="min"></h3></td><td class="right"><h3 id="max"></h3></td></tr>-->
+        <tr><td colspan="2"><div id="min_single_slider" class="slider"></div></td></tr>
+    </table> 
+        <br>
+    <p id="Qmax">
+        <span id = "Qmax1">{{}}</span><span id = "Qmax2">{{}}</span>
+        <span id="number_guess_max" style="font-weight: bold;">?</span>
+    </p>
+    <table id="max_slider_table" class="slider_table">
+<!--        <tr><td class="left"><h3 id="min"></h3></td><td class="right"><h3 id="max"></h3></td></tr>-->
+        <tr><td colspan="2"><div id="max_single_slider" class="slider"></div></td></tr>
+    </table> 
+    <button onclick="_s.button()">Continue</button>
+      <div class="err" id="Manski_err">Please adjust every slider before continuing. Also the lowest possible number must be lower than the most likely number and the most likely number must be lower than the highest possible number.</div>
+    </div>     
+    
+    <div class='M_slide' id='Manski_1'>
+    <p><span id="questionM1">{{BRIAN DROPPED N MARBLES INTO THE POOL}}</span><span> or less?</span> </p>
+    <br>
+    <h1 id="number_guess_M1">?</h1> 
+     <table id="M1_slider_table" class="slider_table">
+       <tr><td class="left"><h3 id="minM1"></h3></td><td class="right"><h3 id="maxM1"></h3></td></tr>
+        <tr><td colspan="2"><div id="M1_single_slider" class="slider"></div></td></tr>
+    </table> 
+   <button type='button' id='continue1' onclick="_s.button()">Continue</button>
+        <span id="itemError1" class='err'><br><br>ERROR: Please adjust the slider before continuing.</span>
+     
+    </div>    
+
+ <div class='M_slide' id='Manski_2'>
+   <p> <span id="questionM2">{{BRIAN DROPPED N MARBLES INTO THE POOL}}</span><span> or less?</span></p>
+    <br>
+     <h1 id="number_guess_M2" style="font-weight: bold;" font-size= 33pt>?</h1>
+    <table id="M2_slider_table" class="slider_table">
+       <tr><td class="left"><h3 id="minM2"></h3></td><td class="right"><h3 id="maxM2"></h3></td></tr>
+        <tr><td colspan="2"><div id="M2_single_slider" class="slider"></div></td></tr>
+    </table> 
+     <button type='button' id='continue2' onclick="_s.button()">Continue</button>
+     <span id="itemError2" class='err'><br><br>ERROR: Please adjust the slider before continuing.</span>
+    </div>    
+
+ <div class='M_slide' id='Manski_3'>
+   <p> <span id="questionM3">{{BRIAN DROPPED N MARBLES INTO THE POOL}}</span> <span> or less?</span></p>
+     <br>
+    <h1 id="number_guess_M3" style="font-weight: bold;" font-size= 33pt>?</h1>
+    <table id="M3_slider_table" class="slider_table">
+       <tr><td class="left"><h3 id="minM3"></h3></td><td class="right"><h3 id="maxM3"></h3></td></tr>
+        <tr><td colspan="2"><div id="M3_single_slider" class="slider"></div></td></tr>
+    </table> 
+    <button type='button' id='continue3' onclick="_s.button()">Continue</button>
+    <span id="itemError3" class='err'><br><br>ERROR: Please adjust the slider before continuing.</span>
+ </div> 
+
+ <div class='M_slide' id='Manski_4'>
+   <p> <span id="questionM4">{{BRIAN DROPPED N MARBLES INTO THE POOL}}</span> <span> or less?</span></p><br>
+     <br>
+    <h1 id="number_guess_M4" style="font-weight: bold;" font-size= 33pt>?</h1> 
+     <table id="M4_slider_table" class="slider_table">
+       <tr><td class="left"><h3 id="minM4"></h3></td><td class="right"><h3 id="maxM4"></h3></td></tr>
+        <tr><td colspan="2"><div id="M4_single_slider" class="slider"></div></td></tr>
+    </table> 
+    <button type='button' id='continue4' onclick="_s.button()">Continue</button>
+    <span id="itemError4" class='err'><br><br>ERROR: Please adjust the slider before continuing.</span>
+ </div>
+
+ <div class='M_slide' id='Manski_5'>
+   <p> <span id="questionM5">{{BRIAN DROPPED N MARBLES INTO THE POOL}}</span><span> or less?</span></p><br>
+     <br>
+    <h1 id="number_guess_M5" style="font-weight: bold;" font-size= 33pt>?</h1> 
+     <table id="M5_slider_table" class="slider_table">
+       <tr><td class="left"><h3 id="minM5"></h3></td><td class="right"><h3 id="maxM5"></h3></td></tr>
+        <tr><td colspan="2"><div id="M5_single_slider" class="slider"></div></td></tr>
+    </table> 
+    <button type='button' id='continue5' onclick="_s.button()">Continue</button>
+    <span id="itemError5" class='err'><br><br>ERROR: Please adjust the slider before continuing.</span>
+ </div>
+    
+ <div class='M_slide' id='Manski_6'>
+   <p> <span id="questionM6">{{BRIAN DROPPED N MARBLES INTO THE POOL}}</span><span> or less?</span></p><br>
+     <br>
+    <h1 id="number_guess_M6" style="font-weight: bold;" font-size= 33pt>?</h1>
+     <table id="M6_slider_table" class="slider_table">
+       <tr><td class="left"><h3 id="minM6"></h3></td><td class="right"><h3 id="maxM6"></h3></td></tr>
+        <tr><td colspan="2"><div id="M6_single_slider" class="slider"></div></td></tr>
+    </table> 
+    <button type='button' id='continue6' onclick="_s.button()">Continue</button>
+    <span id="itemError6" class='err'><br><br>ERROR: Please adjust the slider before continuing.</span>
+ </div>
+</div>
+
+
+<div class="slide" id="trial">
+    <div class="subslide" id="give_number">
+      <h3 id="give_number_sentence"></h3>
+      <h3 id="give_number_question"></h3>
+      <h1 id="number_guess">?</h1>
+      <table id="give_number_slider_table" class="slider_table">
+        <tr><td class="left"><h3 id="min"></h3></td><td class="right"><h3 id="max"></h3></td></tr>
+        <tr><td colspan="2"><div id="give_number_single_slider" class="slider"></div></td></tr>
+      </table>
+      <button onclick="_s.button()">Continue</button>
+      <div class="err" id="give_number_err">Please adjust the slider before continuing.</div>
+    </div>
+
+    <div class="subslide" id="binned_histogram">
+      <h3 id="binned_histogram_sentence"></h3>
+      <p id="binned_histogram_prompt"></p>
+      <table cellspacing="0" cellpadding="0" border="0" align="center"><tbody id="slider_table">
+        </tbody></table>
+
+      <button onclick="_s.button()">Continue</button>
+      <div class="err" id="binned_histogram_err">Please adjust all of the sliders before continuing.</div>
+    </div>
+
+    <div class="subslide" id="lightning">
+      <p>In this section, click on which of the choices below is more likely.</p>
+      <br/>
+      <h3 id="lightning_sentence"></h3>
+      <p>Which of the following do you think is more likely?</p>
+      <div id="button_container">
+        <button class="lightning_choice" id="left_button" onclick="_s.choose('left')">
+          <h3 id="left_choice"></h3>
+        </button>
+        <button class="lightning_choice" id="right_button" onclick="_s.choose('right')">
+          <h3 id="right_choice"></h3>
+        </button></div>
+    </div>
+
+  </div>
+
+  <div class="slide" id="final_lightning">
+      <p>In this section, click on which of the choices below is more likely.</p>
+      <br/>
+      <h3 id="final_lightning_sentence"></h3>
+      <p>Which of the following do you think is more likely?</p>
+      <div id="final_button_container">
+        <button class="lightning_choice" id="final_left_button" onclick="_s.choose('left')">
+          <h3 id="final_left_choice"></h3>
+        </button>
+        <button class="final_lightning_choice" id="final_right_button" onclick="_s.choose('right')">
+          <h3 id="final_right_choice"></h3>
+        </button></div>
+    </div>
+
+  <div class="slide"  id="subj_info">
+    <div class="long_form">
+      <div class="subj_info_title">Additional information</div>
+      <p class="info">Answering these questions is optional, but will help us understand your answers.</p>
+      <p>Did you read the instructions and do you think you did the HIT correctly?</p>
+      <label><input type="radio"  name="assess" value="No"/>No</label>
+      <label><input type="radio"  name="assess" value="Yes"/>Yes</label>
+      <label><input type="radio"  name="assess" value="Confused"/>I was confused</label>
+
+      <p>Gender:
+        <select id="gender">
+          <label><option value=""/></label>
+          <label><option value="Male"/>Male</label>
+          <label><option value="Female"/>Female</label>
+          <label><option value="Other"/>Other</label>
+        </select>
+      </p>
+
+      <p>Age: <input type="text" id="age"/></p>
+
+      <p>Level Of Education:
+        <select id="education">
+          <label><option value="-1"/></label>
+          <label><option value="0"/>Some High School</label>
+          <label><option value="1"/>Graduated High School</label>
+          <label><option value="2"/>Some College</label>
+          <label><option value="3"/>Graduated College</label>
+          <label><option value="4"/>Hold a higher degree</label>
+        </select>
+      </p>
+
+      <p>Native Language: <input type="text" id="language"/></p>
+      <label>(the language(s) spoken at home when you were a child)</label>
+
+      <p>Did you enjoy the hit?</p>
+      <select id="enjoyment">
+        <label><option value="-1"></option></label>
+        <label><option value="0">Worse than the Average HIT</option></label>
+        <label><option value="1" >An Average HIT</option></label>
+        <label><option value="2">Better than average HIT</option></label>
+      </select>
+
+      <p>We would be interested in any comments you have about this experiment. Please type them here:</p>
+      <textarea id="comments" rows="3" cols="50"></textarea>
+      <br/>
+      <button onclick="_s.submit()">Submit</button>
+    </div>
+  </div>
+
+  <div id="thanks" class="slide js" >
+    <p  class="big">Thanks for your Time!</p>
+  </div>
+
+  <div class="progress">
+    <span>Progress:</span>
+    <div class="bar-wrapper">
+      <div class="bar" width="0%">
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
