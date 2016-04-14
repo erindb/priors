@@ -122,7 +122,7 @@ var items = [
 		give_number_question: "How much do you think it cost?",
 		binned_histogram_prompt: "Please rate how likely it is that the watch cost the following amounts of money.",
 		story: "The watch cost K",
-        manski: "prize of the watch",
+        manski: "price of the watch",
 		gender: "male",
 		min: 0,
 		max: 700,
@@ -142,16 +142,16 @@ var items = [
 		give_number_question: "How much do you think it cost?",
 		binned_histogram_prompt: "Please rate how likely it is that the laptop cost the following amounts of money.",
 		story: "The laptop cost K",
-        manski: "prize of the laptop",
+        manski: "price of the laptop",
 		gender: "female",
 		min: 0,
-		max: 7500,
+		max: 4200,
 		bins: [
-			"$0-$500", "$500-$1000", "$1000-$1500",
-			"$1500-$2000", "$2000-$2500", "$2500-$3000",
-			"$3000-$3500", "$3500-$4000", "$4000-$4500",
-			"$4500-$5000", "$5000-$5500", "$5500-$6000",
-			"$6000-$6500", "$6500-$7000", "more than $7500"
+			"$0-$300", "$300-$600", "$600-$900",
+			"$900-$1200", "$1200-$1500", "$1500-$1800",
+			"$1800-$2100", "$2100-$2400", "$2400-$2700",
+			"$2700-$3000", "$3000-$3300", "$3300-$3600",
+            "$3600-$3900", "$3900-$4200", "more than $4200"
 		]
 	},
 	{
@@ -374,6 +374,15 @@ var get_Manski_items = function() {
 
 function make_slides(f) {
   var   slides = {};
+    
+        //block enter key for every instance of class "slide" so that exp doesn't start from beginning when entering answer
+    $('html').bind('keypress', function(e)
+    {
+       if(e.keyCode == 13)
+       {
+          return false;
+       }
+    });
 
   slides.i0 = slide({
      name : "i0",
@@ -384,6 +393,13 @@ function make_slides(f) {
 
   slides.instructions = slide({
     name : "instructions",
+    button : function() {
+      exp.go(); //use exp.go() if and only if there is no "present" data.
+    }
+  });
+    
+slides.example = slide({
+    name : "example",
     button : function() {
       exp.go(); //use exp.go() if and only if there is no "present" data.
     }
@@ -432,7 +448,7 @@ slides.Manski = slide({
         //numbers to be displayed
 		$("#minM1").html(0);
 		$("#maxM1").html(100);
-        $('#questionM1').html("What do you think is the percent chance (or what are the chances out of 100) that the " +stim.manski+" will be "+ prefix +numM[0] + suffix); 
+        $('#questionM1').html("How likely do you think it is that the " +stim.manski+" will be "+ prefix +numM[0] + suffix); 
         //numbers for slider values
         var minM = 0;
         //start slider
@@ -449,7 +465,7 @@ slides.Manski = slide({
         //numbers to be displayed
 		$("#minM2").html(rating_M1);
 		$("#maxM2").html(100);
-        $('#questionM2').html("What do you think is the percent chance (or what are the chances out of 100) that the " +stim.manski+" will be "+ prefix +numM[1] + suffix); 
+        $('#questionM2').html("How likely do you think it is that the " +stim.manski+" will be "+ prefix +numM[1] + suffix); 
         //start slider
         //minimal value from number array generated in slide Manski_sliders
         _s.init_slider_M2(Number(rating_M1));
@@ -464,7 +480,7 @@ slides.Manski = slide({
         //numbers to be displayed
 		$("#minM3").html(rating_M2);
 		$("#maxM3").html(100);
-        $('#questionM3').html("What do you think is the percent chance (or what are the chances out of 100) that the " +stim.manski+" will be "+ prefix +numM[2] + suffix); 
+        $('#questionM3').html("How likely do you think it is that the " +stim.manski+" will be "+ prefix +numM[2] + suffix); 
         //start slider
         //minimal value from number array generated in slide Manski_sliders
         _s.init_slider_M3(Number(rating_M2));
@@ -480,7 +496,7 @@ slides.Manski = slide({
        
 		$("#minM4").html(rating_M3);
 		$("#maxM4").html(100);
-        $('#questionM4').html("What do you think is the percent chance (or what are the chances out of 100) that the " +stim.manski+" will be "+ prefix +numM[3] + suffix); 
+        $('#questionM4').html("How likely do you think it is that the " +stim.manski+" will be "+ prefix +numM[3] + suffix); 
         //start slider
         //minimal value from number array generated in slide Manski_sliders
         _s.init_slider_M4(Number(rating_M3));
@@ -495,7 +511,7 @@ slides.Manski = slide({
         //numbers to be displayed
 		$("#minM5").html(rating_M4);
 		$("#maxM5").html(100);
-        $('#questionM5').html("What do you think is the percent chance (or what are the chances out of 100) that the " +stim.manski+" will be "+ prefix +numM[4] + suffix); 
+        $('#questionM5').html("How likely do you think it is that the " +stim.manski+" will be "+ prefix +numM[4] + suffix); 
         //start slider
         //minimal value from number array generated in slide Manski_sliders
         _s.init_slider_M5(Number(rating_M4));
@@ -510,7 +526,7 @@ slides.Manski = slide({
         //numbers to be displayed
 		$("#minM6").html(rating_M5);
 		$("#maxM6").html(100);
-        $('#questionM6').html("What do you think is the percent chance (or what are the chances out of 100) that the " +stim.manski+" will be "+ prefix +numM[5] + suffix); 
+        $('#questionM6').html("How likely do you think it is that the " +stim.manski+" will be "+ prefix +numM[5] + suffix); 
         //start slider
         //minimal value from number array generated in slide Manski_sliders
         _s.init_slider_M6(Number(rating_M5));
@@ -573,37 +589,37 @@ slides.Manski = slide({
         utils.make_slider("#M1_single_slider", function(event, ui) {
         _s.M1_response_data = Math.round(ui.value * (100 - min) + min);
             console.log('ui value '+ui.value);
-        $("#number_guess_M1").html(_s.M1_response_data +"%");
+        $("#number_guess_M1").html(_s.M1_response_data +"% likely");
       });
     },
      init_slider_M2 : function(min) {
         utils.make_slider("#M2_single_slider", function(event, ui) {
         _s.M2_response_data = Math.round(ui.value * (100 - min) + min);
-        $("#number_guess_M2").html(_s.M2_response_data +"%");
+        $("#number_guess_M2").html(_s.M2_response_data +"% likely");
       });
     },
      init_slider_M3 : function(min) {
         utils.make_slider("#M3_single_slider", function(event, ui) {
         _s.M3_response_data = Math.round(ui.value * (100 - min) + min);
-        $("#number_guess_M3").html(_s.M3_response_data +"%");
+        $("#number_guess_M3").html(_s.M3_response_data +"% likely");
       });
     },
      init_slider_M4 : function(min) {
         utils.make_slider("#M4_single_slider", function(event, ui) {
         _s.M4_response_data = Math.round(ui.value * (100 - min) + min);
-        $("#number_guess_M4").html(_s.M4_response_data +"%");
+        $("#number_guess_M4").html(_s.M4_response_data +"% likely");
       });
     },
      init_slider_M5 : function(min) {
         utils.make_slider("#M5_single_slider", function(event, ui) {
         _s.M5_response_data = Math.round(ui.value * (100 - min) + min);
-        $("#number_guess_M5").html(_s.M5_response_data +"%");
+        $("#number_guess_M5").html(_s.M5_response_data +"% likely");
       });
     },
      init_slider_M6 : function(min) {
         utils.make_slider("#M6_single_slider", function(event, ui) {
         _s.M6_response_data = Math.round(ui.value * (100 - min) + min);
-        $("#number_guess_M6").html(_s.M6_response_data +"%");
+        $("#number_guess_M6").html(_s.M6_response_data +"% likely");
       });
     },
     
@@ -1053,7 +1069,7 @@ function init() {
       screenUW: exp.width
     };
   //blocks of the experiment:
-  exp.structure=["i0", "instructions", "Manski", 
+  exp.structure=["i0", "instructions", "example", "Manski", 
   "trial", "final_lightning", 
   'subj_info', 'thanks'];
   

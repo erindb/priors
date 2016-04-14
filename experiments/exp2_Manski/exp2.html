@@ -44,18 +44,34 @@
   <div class="slide" id="i0" >
     <img src="../_shared/images/cocologo.png" alt="Stanford CoCoLab" id="cocologo"></img>
     <p id="cocolab">Stanford CoCoLab</p>
-    <p id="instruct-text">Thank you very much for participating in our experiment. In this experiment, we are interested in how people estimate different everyday quantities. The experiment will likely take about 30 minutes to finish.</p>
+    <p id="instruct-text">Thank you very much for participating in our experiment. In this experiment you will be asked to estimate different everyday quantities in several different ways. The experiment will likely take about 30 minutes to finish.</p>
     <button id="start_button" type="button">Start Experiment</button>
     <p id="legal">Legal information: By answering the following questions, you are participating in a study being performed by cognitive scientists in the Stanford Department of Psychology. If you have questions about this research, please contact Erin Bennett at <a href="mailto://erindb@stanford.edu">erindb@stanford.edu</a> or Noah Goodman, at ngoodman@stanford.edu. You must be  at least 18 years old to participate. Your participation in this research is voluntary. You may decline to answer any or all of the following questions. You may decline further participation, at any time, without adverse consequences. Your anonymity is assured; the researchers who have requested your participation will not receive any personal information about you.</p>
   </div>
 
   <div class="slide" id="instructions">
-    <p>In this experiment you will have several different kinds of questions asking you to estimate different everyday quantities. Though these situations may be somewhat repetative, please pay attention and give us your best guess for each question.</p>
+    <p>In this experiment you will have several different kinds of questions asking you to estimate different everyday quantities. Though these situations may be somewhat repetitive, please pay attention and give us your best guess for each question.</p>
     <p>Thank you!</p>
     <button id="start_button" type="button" onclick="_s.button()">Continue</button>
   </div>
-
-      
+    
+  <div class="slide" id="example">
+    <h2> Instructions</h2>
+    <p>This experiment consists of two blocks. We will first familiarize you with the task of the first block. </p> 
+    <p> In this task, we will ask you for your estimate of different everyday quantities. For example:</p>
+      <p><b>Sue is a woman from the US. How many pairs of shoes do you think Sue owns?</b></p>
+      <p>First, we will ask you for your best guess and the minimal and maximal quantity you think is possible. For instance, we might think that Sue will probably have between 3 and 15 pairs of shoes, and most likely around 8. But these estimates are yours to make and can be quite subjective. </p> 
+    <p>After that, we are interested in your guess of the percent chance that the quantity is of a certain value or less. You will answer the question by adjusting a slider on a scale. For the current example, a possible answer might look like this:</p>
+    <p><b>How likely do you think it is that Sue owns 5 pairs of shoes or less?</b></p>
+    <img src="../_shared/images/slider1.jpg"></img>
+ <p>You will see this question up to 6 times per item. Please note that the quantities (e.g., pairs of shoes) change. Because your answers are percent chances, they have to increase as the quantities increase. This is why the left boundary of the slider changes according to your previous rating. So the next trial would look like this:</p>
+      <p><b>How likely do you think it is that Sue owns 8 pairs of shoes or less?</b></p>
+    <img src="../_shared/images/slider2.jpg"></img>
+    <p>If you have understood the task and want to begin the experiment, please click on the button.</p>
+    <button id="start_button" type="button" onclick="_s.button()">Continue</button>
+<br>
+  </div>
+    
 <div class="slide" id="Manski">
     <div class="M_slide" id="Manski_sliders"> 
       <h3 id="Manski_sentence"></h3>
@@ -99,7 +115,7 @@
     <br>
     <h1 id="number_guess_M1">?</h1> 
      <table id="M1_slider_table" class="slider_table">
-       <tr><td class="left"><h3 id="minM1"></h3></td><td class="right"><h3 id="maxM1"></h3></td></tr>
+       <tr><td class="left"><h3 id="minM1" style="color:red;"></h3></td><td class="right"><h3 id="maxM1"></h3></td></tr>
         <tr><td colspan="2"><div id="M1_single_slider" class="slider"></div></td></tr>
     </table> 
    <button type='button' id='continue1' onclick="_s.button()">Continue</button>
@@ -112,7 +128,7 @@
     <br>
      <h1 id="number_guess_M2" style="font-weight: bold;" font-size= 33pt>?</h1>
     <table id="M2_slider_table" class="slider_table">
-       <tr><td class="left"><h3 id="minM2"></h3></td><td class="right"><h3 id="maxM2"></h3></td></tr>
+       <tr><td class="left"><h3 id="minM2" style="color:red;"></h3></td><td class="right"><h3 id="maxM2"></h3></td></tr>
         <tr><td colspan="2"><div id="M2_single_slider" class="slider"></div></td></tr>
     </table> 
      <button type='button' id='continue2' onclick="_s.button()">Continue</button>
@@ -124,7 +140,7 @@
      <br>
     <h1 id="number_guess_M3" style="font-weight: bold;" font-size= 33pt>?</h1>
     <table id="M3_slider_table" class="slider_table">
-       <tr><td class="left"><h3 id="minM3"></h3></td><td class="right"><h3 id="maxM3"></h3></td></tr>
+       <tr><td class="left"><h3 id="minM3" style="color:red;"></h3></td><td class="right"><h3 id="maxM3"></h3></td></tr>
         <tr><td colspan="2"><div id="M3_single_slider" class="slider"></div></td></tr>
     </table> 
     <button type='button' id='continue3' onclick="_s.button()">Continue</button>
@@ -136,7 +152,7 @@
      <br>
     <h1 id="number_guess_M4" style="font-weight: bold;" font-size= 33pt>?</h1> 
      <table id="M4_slider_table" class="slider_table">
-       <tr><td class="left"><h3 id="minM4"></h3></td><td class="right"><h3 id="maxM4"></h3></td></tr>
+       <tr><td class="left"><h3 id="minM4" style="color:red;"></h3></td><td class="right"><h3 id="maxM4"></h3></td></tr>
         <tr><td colspan="2"><div id="M4_single_slider" class="slider"></div></td></tr>
     </table> 
     <button type='button' id='continue4' onclick="_s.button()">Continue</button>
@@ -148,7 +164,7 @@
      <br>
     <h1 id="number_guess_M5" style="font-weight: bold;" font-size= 33pt>?</h1> 
      <table id="M5_slider_table" class="slider_table">
-       <tr><td class="left"><h3 id="minM5"></h3></td><td class="right"><h3 id="maxM5"></h3></td></tr>
+       <tr><td class="left"><h3 id="minM5" style="color:red;"></h3></td><td class="right"><h3 id="maxM5"></h3></td></tr>
         <tr><td colspan="2"><div id="M5_single_slider" class="slider"></div></td></tr>
     </table> 
     <button type='button' id='continue5' onclick="_s.button()">Continue</button>
@@ -160,7 +176,7 @@
      <br>
     <h1 id="number_guess_M6" style="font-weight: bold;" font-size= 33pt>?</h1>
      <table id="M6_slider_table" class="slider_table">
-       <tr><td class="left"><h3 id="minM6"></h3></td><td class="right"><h3 id="maxM6"></h3></td></tr>
+       <tr><td class="left"><h3 id="minM6" style="color:red;"></h3></td><td class="right"><h3 id="maxM6"></h3></td></tr>
         <tr><td colspan="2"><div id="M6_single_slider" class="slider"></div></td></tr>
     </table> 
     <button type='button' id='continue6' onclick="_s.button()">Continue</button>
