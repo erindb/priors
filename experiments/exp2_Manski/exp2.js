@@ -61,6 +61,14 @@ function IsNumeric(n) {
     return !isNaN(n);
 } 
 
+  // secret shortcut. press '9' and all sliders are marked!
+  $('body').on('keypress', function(e) {
+    if (e.which == 57 || e.code == 57) {
+      nResponses = nbins;
+      $('.slider').css({'background': '#99D6EB'});
+    }
+  });
+
 var names = {
 	"male" : _.shuffle([
 		"James", "John", "Robert", "Michael", "William", "David",
@@ -259,9 +267,33 @@ var rating_M3 = 0;
 var rating_M4 = 0;
 var rating_M5 = 0;
 
-
-//numbers to be rated
+//numbers to be rated, Manski task
 var numM = [0,0,0,0,0,0];
+
+//data to save for final lightning round
+var bin_left = 0;
+var bin_right = 0;
+var tag_left = "test";
+var tag_right = "test";
+
+
+//function to create range sliders
+$(function() {
+  $("#slider-range").slider({
+    range: true,
+    min: 0,
+    max: 500,
+    values: [75, 300],
+    slide: function(e, ui) {
+      $("#amount").val("$75 - $" + ui.values[1]);
+      $("#slider-range").slider('values', 0, 75);
+      $("#slider-range").slider('values', 1, ui.values[1]);
+      $("#slider-range").slider('refresh');
+    }
+  });
+  $("#amount").val("$" + $("#slider-range").slider("values", 0) +
+    " - $" + $("#slider-range").slider("values", 1));
+});
 
 //gets all items at once, chooses a name, makes bin pairs, prepares "data frame" for item matching individual tasks
 var get_items = function() {
@@ -317,7 +349,9 @@ var get_final_items = function() {
 		choice1.name = names[choice1.gender].shift();
 		choice2.name = names[choice2.gender].shift();
 		choice1.bin = _.sample(choice1.bins);
+        choice1["bin"] = choice1.bin;
 		choice2.bin = _.sample(choice2.bins.filter(function(x) {return x != choice1.bin;}));
+        choice2["bin"] = choice2.bin;
 		pairs.push([choice1, choice2]);
 	}
 	return pairs;
@@ -823,22 +857,33 @@ slides.Manski = slide({
     	$(".err").hide();
     	$("#final_button_container").show();
     	_s.trial_start = Date.now();
+        //_s.this_trial_data = clone(pair);
 		$("#final_lightning_sentence").html();
 		$("#final_left_choice").html(
 			repXN(pair[0].backstory, pair[0].name) + " and " +
 			lowercase(repXN(pair[0].story, pair[0].name, pair[0].bin))
 		);
+        var choice1_tag  = pair[0].tag;
 		$("#final_right_choice").html(
 			repXN(pair[1].backstory, pair[1].name) + " and " +
 			lowercase(repXN(pair[1].story, pair[1].name, pair[1].bin))
 		);
+        bin_left = pair[0].bin;
+        bin_right = pair[1].bin;
+        tag_left = pair[0].tag;
+        tag_right = pair[1].tag;
 	},
 	choose: function(direction) {
 		_s.this_trial_data = {};
+        _s.this_trial_data["measure"] = "final_lightning";
 		_s.this_trial_data["response"] = $("#final_" + direction + "_choice").html();
 		_s.this_trial_data["chosen_direction"] = direction;
 		_s.this_trial_data["unchosen_contrast"] = $("#final_" + (direction == "right" ? "left" : "right") + "_choice").html();
 		_s.this_trial_data["rt"] = Date.now() - _s.trial_start;
+        _s.this_trial_data["bin_left"] = bin_left;
+        _s.this_trial_data["bin_right"] = bin_right;
+        _s.this_trial_data["tag_left"] = tag_left;
+        _s.this_trial_data["tag_right"] = tag_right;
 		exp.data_trials.push(clone(_s.this_trial_data));
     	$("#final_button_container").hide();
     	setTimeout(function() {
@@ -1069,9 +1114,14 @@ function init() {
       screenUW: exp.width
     };
   //blocks of the experiment:
-  exp.structure=["i0", "instructions", "example", "Manski", 
-  "trial", "final_lightning", 
+  exp.structure=["i0", "instructions", "example", 
+    "Manski", 
+     "trial", 
+  "final_lightning", 
   'subj_info', 'thanks'];
+    
+/*  exp.structure=["i0", "instructions", "final_lightning", 
+  'subj_info', 'thanks'];*/
   
   exp.data_trials = [];
   //make corresponding slides:
