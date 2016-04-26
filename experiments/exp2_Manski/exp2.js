@@ -600,31 +600,21 @@ function make_slides(f) {
         //changed definition of Manski slider function, values from minM (=last slider rating) to 100 percent)
         //only takes one input parameter
         init_slider_M1 : function(min) {
-
-            // //function to create range sliders
-            // $(function() {
-            //   $("#slider-range").slider({
-            //   });
-            //   $("#amount").val("$" + $("#slider-range").slider("values", 0) +
-            //     " - $" + $("#slider-range").slider("values", 1));
-            // });
-
             response_data_tag = "M1_response_data";
             number_guess_tag = "#number_guess_M1";
-
-            // response_callback_given_min = function(bind_min) {
-            //     return function(e, ui) {
-            //         _s[response_data_tag] = Math.round(ui.values[1]);
-            //         $(label).slider('values', 0, bind_min);
-            //         $(label).slider('values', 1, ui.values[1]);
-            //         // $(label).slider('refresh');
-            //         // console.log('ui value '+ui.values[1]);
-            //         $(number_guess_tag).html(_s[response_data_tag] +"% likely");
-            //     }
-            // };
-
             label = "#M1_single_slider";
             handle_label = label + " .ui-slider-handle";
+
+            response_callback = function(bind_min, bind_response_data_tag) {
+                return function(e,ui) {
+                    _s[bind_response_data_tag] = ui.values[1];
+                    $(number_guess_tag).html(_s[bind_response_data_tag] +"% likely");
+                    $(label).slider('values',1,ui.values[1]);
+                    $(label).slider('values',0,bind_min);
+                    $(label).slider('refresh');
+                }
+            }
+
             $(label).empty();
             $(label).slider({
                 range: true,
@@ -632,7 +622,87 @@ function make_slides(f) {
                 min : 0,
                 max : 100,
                 step: 1,
-                values : [min, min],
+                values : [min, min+1],
+                slide : response_callback(min, response_data_tag)
+                // function(e,ui){
+                //     _s[response_data_tag] = ui.values[1];
+                //     $(number_guess_tag).html(_s[response_data_tag] +"% likely");
+                //     $(label).slider('values',1,ui.values[1]);
+                //     $(label).slider('values',0,min);
+                //     $(label).slider('refresh');
+                // }
+            });
+            $($(handle_label)[0]).hide();
+            $($(handle_label)[1]).show();
+            rangle_label = label + " .ui-slider-range";
+            $(rangle_label).show();
+            $(rangle_label).css({
+                "background":"#99D6EB"
+            });
+            $($(handle_label)[1]).css({
+                "background":"#667D94",
+                "border-color": "#001F29"
+            });
+        },
+        init_slider_M2 : function(min) {
+            response_data_tag = "M2_response_data";
+            number_guess_tag = "#number_guess_M2";
+            label = "#M2_single_slider";
+            handle_label = label + " .ui-slider-handle";
+
+            response_callback = function(bind_min, bind_response_data_tag) {
+                return function(e,ui) {
+                    _s[bind_response_data_tag] = ui.values[1];
+                    $(number_guess_tag).html(_s[bind_response_data_tag] +"% likely");
+                    $(label).slider('values',1,ui.values[1]);
+                    $(label).slider('values',0,bind_min);
+                    $(label).slider('refresh');
+                }
+            }
+
+            $(label).empty();
+            $(label).slider({
+                range: true,
+                orientation: "horizontal",
+                min : 0,
+                max : 100,
+                step: 1,
+                values : [min, min+1],
+                slide : response_callback(min, response_data_tag)
+                // function(e,ui){
+                //     _s[response_data_tag] = ui.values[1];
+                //     $(number_guess_tag).html(_s[response_data_tag] +"% likely");
+                //     $(label).slider('values',1,ui.values[1]);
+                //     $(label).slider('values',0,min);
+                //     $(label).slider('refresh');
+                // }
+            });
+            $($(handle_label)[0]).hide();
+            $($(handle_label)[1]).show();
+            rangle_label = label + " .ui-slider-range";
+            $(rangle_label).show();
+            $(rangle_label).css({
+                "background":"#99D6EB"
+            });
+            $($(handle_label)[1]).css({
+                "background":"#667D94",
+                "border-color": "#001F29"
+            });
+        },
+        init_slider_M3 : function(min) {
+            response_data_tag = "M3_response_data";
+            number_guess_tag = "#number_guess_M3";
+            label = "#M3_single_slider";
+            handle_label = label + " .ui-slider-handle";
+            
+            $(label).empty();
+            $(label).slider({
+                range: true,
+                orientation: "horizontal",
+                min : 0,
+                max : 100,
+                step: 1,
+                values : [min, min+1],
                 slide : function(e,ui){
                     _s[response_data_tag] = ui.values[1];
                     $(number_guess_tag).html(_s[response_data_tag] +"% likely");
@@ -653,35 +723,107 @@ function make_slides(f) {
                 "border-color": "#001F29"
             });
         },
-        init_slider_M2 : function(min) {
-            utils.make_slider("#M2_single_slider", function(event, ui) {
-            _s.M2_response_data = Math.round(ui.value * (100 - min) + min);
-            $("#number_guess_M2").html(_s.M2_response_data +"% likely");
-          });
-        },
-        init_slider_M3 : function(min) {
-            utils.make_slider("#M3_single_slider", function(event, ui) {
-            _s.M3_response_data = Math.round(ui.value * (100 - min) + min);
-            $("#number_guess_M3").html(_s.M3_response_data +"% likely");
-          });
-        },
         init_slider_M4 : function(min) {
-            utils.make_slider("#M4_single_slider", function(event, ui) {
-            _s.M4_response_data = Math.round(ui.value * (100 - min) + min);
-            $("#number_guess_M4").html(_s.M4_response_data +"% likely");
-          });
+            response_data_tag = "M4_response_data";
+            number_guess_tag = "#number_guess_M4";
+            label = "#M4_single_slider";
+            handle_label = label + " .ui-slider-handle";
+            
+            $(label).empty();
+            $(label).slider({
+                range: true,
+                orientation: "horizontal",
+                min : 0,
+                max : 100,
+                step: 1,
+                values : [min, min+1],
+                slide : function(e,ui){
+                    _s[response_data_tag] = ui.values[1];
+                    $(number_guess_tag).html(_s[response_data_tag] +"% likely");
+                    $(label).slider('values',0,min);
+                    $(label).slider('values',1,ui.values[1]);
+                    $(label).slider('refresh');
+                }
+            });
+            $($(handle_label)[0]).hide();
+            $($(handle_label)[1]).show();
+            rangle_label = label + " .ui-slider-range";
+            $(rangle_label).show();
+            $(rangle_label).css({
+                "background":"#99D6EB"
+            });
+            $($(handle_label)[1]).css({
+                "background":"#667D94",
+                "border-color": "#001F29"
+            });
         },
         init_slider_M5 : function(min) {
-            utils.make_slider("#M5_single_slider", function(event, ui) {
-            _s.M5_response_data = Math.round(ui.value * (100 - min) + min);
-            $("#number_guess_M5").html(_s.M5_response_data +"% likely");
-          });
+            response_data_tag = "M5_response_data";
+            number_guess_tag = "#number_guess_M5";
+            label = "#M5_single_slider";
+            handle_label = label + " .ui-slider-handle";
+            
+            $(label).empty();
+            $(label).slider({
+                range: true,
+                orientation: "horizontal",
+                min : 0,
+                max : 100,
+                step: 1,
+                values : [min, min+1],
+                slide : function(e,ui){
+                    _s[response_data_tag] = ui.values[1];
+                    $(number_guess_tag).html(_s[response_data_tag] +"% likely");
+                    $(label).slider('values',0,min);
+                    $(label).slider('values',1,ui.values[1]);
+                    $(label).slider('refresh');
+                }
+            });
+            $($(handle_label)[0]).hide();
+            $($(handle_label)[1]).show();
+            rangle_label = label + " .ui-slider-range";
+            $(rangle_label).show();
+            $(rangle_label).css({
+                "background":"#99D6EB"
+            });
+            $($(handle_label)[1]).css({
+                "background":"#667D94",
+                "border-color": "#001F29"
+            });
         },
         init_slider_M6 : function(min) {
-            utils.make_slider("#M6_single_slider", function(event, ui) {
-            _s.M6_response_data = Math.round(ui.value * (100 - min) + min);
-            $("#number_guess_M6").html(_s.M6_response_data +"% likely");
-          });
+            response_data_tag = "M6_response_data";
+            number_guess_tag = "#number_guess_M6";
+            label = "#M6_single_slider";
+            handle_label = label + " .ui-slider-handle";
+            
+            $(label).empty();
+            $(label).slider({
+                range: true,
+                orientation: "horizontal",
+                min : 0,
+                max : 100,
+                step: 1,
+                values : [min, min+1],
+                slide : function(e,ui){
+                    _s[response_data_tag] = ui.values[1];
+                    $(number_guess_tag).html(_s[response_data_tag] +"% likely");
+                    $(label).slider('values',0,min);
+                    $(label).slider('values',1,ui.values[1]);
+                    $(label).slider('refresh');
+                }
+            });
+            $($(handle_label)[0]).hide();
+            $($(handle_label)[1]).show();
+            rangle_label = label + " .ui-slider-range";
+            $(rangle_label).show();
+            $(rangle_label).css({
+                "background":"#99D6EB"
+            });
+            $($(handle_label)[1]).css({
+                "background":"#667D94",
+                "border-color": "#001F29"
+            });
         },
         
             
