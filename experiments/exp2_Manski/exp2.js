@@ -600,11 +600,58 @@ function make_slides(f) {
         //changed definition of Manski slider function, values from minM (=last slider rating) to 100 percent)
         //only takes one input parameter
         init_slider_M1 : function(min) {
-            utils.make_slider("#M1_single_slider", function(event, ui) {
-            _s.M1_response_data = Math.round(ui.value * (100 - min) + min);
-                console.log('ui value '+ui.value);
-            $("#number_guess_M1").html(_s.M1_response_data +"% likely");
-          });
+
+            // //function to create range sliders
+            // $(function() {
+            //   $("#slider-range").slider({
+            //   });
+            //   $("#amount").val("$" + $("#slider-range").slider("values", 0) +
+            //     " - $" + $("#slider-range").slider("values", 1));
+            // });
+
+            response_data_tag = "M1_response_data";
+            number_guess_tag = "#number_guess_M1";
+
+            // response_callback_given_min = function(bind_min) {
+            //     return function(e, ui) {
+            //         _s[response_data_tag] = Math.round(ui.values[1]);
+            //         $(label).slider('values', 0, bind_min);
+            //         $(label).slider('values', 1, ui.values[1]);
+            //         // $(label).slider('refresh');
+            //         // console.log('ui value '+ui.values[1]);
+            //         $(number_guess_tag).html(_s[response_data_tag] +"% likely");
+            //     }
+            // };
+
+            label = "#M1_single_slider";
+            handle_label = label + " .ui-slider-handle";
+            $(label).empty();
+            $(label).slider({
+                range: true,
+                orientation: "horizontal",
+                min : 0,
+                max : 100,
+                step: 1,
+                values : [min, min],
+                slide : function(e,ui){
+                    _s[response_data_tag] = ui.values[1];
+                    $(number_guess_tag).html(_s[response_data_tag] +"% likely");
+                    $(label).slider('values',0,min);
+                    $(label).slider('values',1,ui.values[1]);
+                    $(label).slider('refresh');
+                }
+            });
+            $($(handle_label)[0]).hide();
+            $($(handle_label)[1]).show();
+            rangle_label = label + " .ui-slider-range";
+            $(rangle_label).show();
+            $(rangle_label).css({
+                "background":"#99D6EB"
+            });
+            $($(handle_label)[1]).css({
+                "background":"#667D94",
+                "border-color": "#001F29"
+            });
         },
         init_slider_M2 : function(min) {
             utils.make_slider("#M2_single_slider", function(event, ui) {
@@ -660,7 +707,6 @@ function make_slides(f) {
                     _stream.apply(this);
                 } //use exp.go() if and only if there is no "present" data.
             } else { 
-
                 //perc chance questions
                 // go to next item if answer is 100
                 if(_s.measure == 'Manski_1' |
@@ -668,24 +714,6 @@ function make_slides(f) {
                     _s.measure == 'Manski_3' |
                     _s.measure == 'Manski_4' |
                     _s.measure == 'Manski_5') {
-
-                    // //function to create range sliders
-                    // $(function() {
-                    //   $("#slider-range").slider({
-                    //     range: true,
-                    //     min: 0,
-                    //     max: 500,
-                    //     values: [75, 300],
-                    //     slide: function(e, ui) {
-                    //       $("#amount").val("$75 - $" + ui.values[1]);
-                    //       $("#slider-range").slider('values', 0, 75);
-                    //       $("#slider-range").slider('values', 1, ui.values[1]);
-                    //       $("#slider-range").slider('refresh');
-                    //     }
-                    //   });
-                    //   $("#amount").val("$" + $("#slider-range").slider("values", 0) +
-                    //     " - $" + $("#slider-range").slider("values", 1));
-                    // });
 
                     //if no rating
                     // the trial number within the Manski task
@@ -720,7 +748,7 @@ function make_slides(f) {
                     } else {
                         $("#itemError5").show();
                     }
-                },
+                }
             } //Manski_sliders
         }, //function
        
