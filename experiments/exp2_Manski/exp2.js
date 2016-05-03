@@ -602,7 +602,8 @@ function make_slides(f) {
         init_slider_M1 : function(min) {
             response_data_tag = "M1_response_data";
             number_guess_tag = "#number_guess_M1";
-            label = "#M1_single_slider";
+            slider_id = "M1_single_slider"
+            label = "#" + slider_id;
             handle_label = label + " .ui-slider-handle";
 
             response_callback = function(bind_min, bind_response_data_tag) {
@@ -615,7 +616,7 @@ function make_slides(f) {
                 }
             }
 
-            $(label).empty();
+            $(label).replaceWith('<div id="' + slider_id + '" class="slider is_range"></div>');
             $(label).slider({
                 range: true,
                 orientation: "horizontal",
@@ -634,9 +635,9 @@ function make_slides(f) {
             });
             $($(handle_label)[0]).hide();
             $($(handle_label)[1]).show();
-            rangle_label = label + " .ui-slider-range";
-            $(rangle_label).show();
-            $(rangle_label).css({
+            range_label = label + " .ui-slider-range";
+            $(range_label).show();
+            $(range_label).css({
                 "background":"#99D6EB"
             });
             $($(handle_label)[1]).css({
@@ -647,7 +648,8 @@ function make_slides(f) {
         init_slider_M2 : function(min) {
             response_data_tag = "M2_response_data";
             number_guess_tag = "#number_guess_M2";
-            label = "#M2_single_slider";
+            slider_id = "M2_single_slider"
+            label = "#" + slider_id;
             handle_label = label + " .ui-slider-handle";
 
             response_callback = function(bind_min, bind_response_data_tag) {
@@ -660,7 +662,7 @@ function make_slides(f) {
                 }
             }
 
-            $(label).empty();
+            $(label).replaceWith('<div id="' + slider_id + '" class="slider is_range"></div>');
             $(label).slider({
                 range: true,
                 orientation: "horizontal",
@@ -679,9 +681,9 @@ function make_slides(f) {
             });
             $($(handle_label)[0]).hide();
             $($(handle_label)[1]).show();
-            rangle_label = label + " .ui-slider-range";
-            $(rangle_label).show();
-            $(rangle_label).css({
+            range_label = label + " .ui-slider-range";
+            $(range_label).show();
+            $(range_label).css({
                 "background":"#99D6EB"
             });
             $($(handle_label)[1]).css({
@@ -692,10 +694,21 @@ function make_slides(f) {
         init_slider_M3 : function(min) {
             response_data_tag = "M3_response_data";
             number_guess_tag = "#number_guess_M3";
-            label = "#M3_single_slider";
+            slider_id = "M3_single_slider"
+            label = "#" + slider_id;
             handle_label = label + " .ui-slider-handle";
-            
-            $(label).empty();
+
+            response_callback = function(bind_min, bind_response_data_tag) {
+                return function(e,ui) {
+                    _s[bind_response_data_tag] = ui.values[1];
+                    $(number_guess_tag).html(_s[bind_response_data_tag] +"% likely");
+                    $(label).slider('values',1,ui.values[1]);
+                    $(label).slider('values',0,bind_min);
+                    $(label).slider('refresh');
+                }
+            }
+
+            $(label).replaceWith('<div id="' + slider_id + '" class="slider is_range"></div>');
             $(label).slider({
                 range: true,
                 orientation: "horizontal",
@@ -703,19 +716,20 @@ function make_slides(f) {
                 max : 100,
                 step: 1,
                 values : [min, min+1],
-                slide : function(e,ui){
-                    _s[response_data_tag] = ui.values[1];
-                    $(number_guess_tag).html(_s[response_data_tag] +"% likely");
-                    $(label).slider('values',0,min);
-                    $(label).slider('values',1,ui.values[1]);
-                    $(label).slider('refresh');
-                }
+                slide : response_callback(min, response_data_tag)
+                // function(e,ui){
+                //     _s[response_data_tag] = ui.values[1];
+                //     $(number_guess_tag).html(_s[response_data_tag] +"% likely");
+                //     $(label).slider('values',1,ui.values[1]);
+                //     $(label).slider('values',0,min);
+                //     $(label).slider('refresh');
+                // }
             });
             $($(handle_label)[0]).hide();
             $($(handle_label)[1]).show();
-            rangle_label = label + " .ui-slider-range";
-            $(rangle_label).show();
-            $(rangle_label).css({
+            range_label = label + " .ui-slider-range";
+            $(range_label).show();
+            $(range_label).css({
                 "background":"#99D6EB"
             });
             $($(handle_label)[1]).css({
@@ -726,10 +740,21 @@ function make_slides(f) {
         init_slider_M4 : function(min) {
             response_data_tag = "M4_response_data";
             number_guess_tag = "#number_guess_M4";
-            label = "#M4_single_slider";
+            slider_id = "M4_single_slider"
+            label = "#" + slider_id;
             handle_label = label + " .ui-slider-handle";
-            
-            $(label).empty();
+
+            response_callback = function(bind_min, bind_response_data_tag) {
+                return function(e,ui) {
+                    _s[bind_response_data_tag] = ui.values[1];
+                    $(number_guess_tag).html(_s[bind_response_data_tag] +"% likely");
+                    $(label).slider('values',1,ui.values[1]);
+                    $(label).slider('values',0,bind_min);
+                    $(label).slider('refresh');
+                }
+            }
+
+            $(label).replaceWith('<div id="' + slider_id + '" class="slider is_range"></div>');
             $(label).slider({
                 range: true,
                 orientation: "horizontal",
@@ -737,19 +762,20 @@ function make_slides(f) {
                 max : 100,
                 step: 1,
                 values : [min, min+1],
-                slide : function(e,ui){
-                    _s[response_data_tag] = ui.values[1];
-                    $(number_guess_tag).html(_s[response_data_tag] +"% likely");
-                    $(label).slider('values',0,min);
-                    $(label).slider('values',1,ui.values[1]);
-                    $(label).slider('refresh');
-                }
+                slide : response_callback(min, response_data_tag)
+                // function(e,ui){
+                //     _s[response_data_tag] = ui.values[1];
+                //     $(number_guess_tag).html(_s[response_data_tag] +"% likely");
+                //     $(label).slider('values',1,ui.values[1]);
+                //     $(label).slider('values',0,min);
+                //     $(label).slider('refresh');
+                // }
             });
             $($(handle_label)[0]).hide();
             $($(handle_label)[1]).show();
-            rangle_label = label + " .ui-slider-range";
-            $(rangle_label).show();
-            $(rangle_label).css({
+            range_label = label + " .ui-slider-range";
+            $(range_label).show();
+            $(range_label).css({
                 "background":"#99D6EB"
             });
             $($(handle_label)[1]).css({
@@ -760,10 +786,21 @@ function make_slides(f) {
         init_slider_M5 : function(min) {
             response_data_tag = "M5_response_data";
             number_guess_tag = "#number_guess_M5";
-            label = "#M5_single_slider";
+            slider_id = "M5_single_slider"
+            label = "#" + slider_id;
             handle_label = label + " .ui-slider-handle";
-            
-            $(label).empty();
+
+            response_callback = function(bind_min, bind_response_data_tag) {
+                return function(e,ui) {
+                    _s[bind_response_data_tag] = ui.values[1];
+                    $(number_guess_tag).html(_s[bind_response_data_tag] +"% likely");
+                    $(label).slider('values',1,ui.values[1]);
+                    $(label).slider('values',0,bind_min);
+                    $(label).slider('refresh');
+                }
+            }
+
+            $(label).replaceWith('<div id="' + slider_id + '" class="slider is_range"></div>');
             $(label).slider({
                 range: true,
                 orientation: "horizontal",
@@ -771,19 +808,20 @@ function make_slides(f) {
                 max : 100,
                 step: 1,
                 values : [min, min+1],
-                slide : function(e,ui){
-                    _s[response_data_tag] = ui.values[1];
-                    $(number_guess_tag).html(_s[response_data_tag] +"% likely");
-                    $(label).slider('values',0,min);
-                    $(label).slider('values',1,ui.values[1]);
-                    $(label).slider('refresh');
-                }
+                slide : response_callback(min, response_data_tag)
+                // function(e,ui){
+                //     _s[response_data_tag] = ui.values[1];
+                //     $(number_guess_tag).html(_s[response_data_tag] +"% likely");
+                //     $(label).slider('values',1,ui.values[1]);
+                //     $(label).slider('values',0,min);
+                //     $(label).slider('refresh');
+                // }
             });
             $($(handle_label)[0]).hide();
             $($(handle_label)[1]).show();
-            rangle_label = label + " .ui-slider-range";
-            $(rangle_label).show();
-            $(rangle_label).css({
+            range_label = label + " .ui-slider-range";
+            $(range_label).show();
+            $(range_label).css({
                 "background":"#99D6EB"
             });
             $($(handle_label)[1]).css({
@@ -794,10 +832,21 @@ function make_slides(f) {
         init_slider_M6 : function(min) {
             response_data_tag = "M6_response_data";
             number_guess_tag = "#number_guess_M6";
-            label = "#M6_single_slider";
+            slider_id = "M6_single_slider"
+            label = "#" + slider_id;
             handle_label = label + " .ui-slider-handle";
-            
-            $(label).empty();
+
+            response_callback = function(bind_min, bind_response_data_tag) {
+                return function(e,ui) {
+                    _s[bind_response_data_tag] = ui.values[1];
+                    $(number_guess_tag).html(_s[bind_response_data_tag] +"% likely");
+                    $(label).slider('values',1,ui.values[1]);
+                    $(label).slider('values',0,bind_min);
+                    $(label).slider('refresh');
+                }
+            }
+
+            $(label).replaceWith('<div id="' + slider_id + '" class="slider is_range"></div>');
             $(label).slider({
                 range: true,
                 orientation: "horizontal",
@@ -805,19 +854,20 @@ function make_slides(f) {
                 max : 100,
                 step: 1,
                 values : [min, min+1],
-                slide : function(e,ui){
-                    _s[response_data_tag] = ui.values[1];
-                    $(number_guess_tag).html(_s[response_data_tag] +"% likely");
-                    $(label).slider('values',0,min);
-                    $(label).slider('values',1,ui.values[1]);
-                    $(label).slider('refresh');
-                }
+                slide : response_callback(min, response_data_tag)
+                // function(e,ui){
+                //     _s[response_data_tag] = ui.values[1];
+                //     $(number_guess_tag).html(_s[response_data_tag] +"% likely");
+                //     $(label).slider('values',1,ui.values[1]);
+                //     $(label).slider('values',0,min);
+                //     $(label).slider('refresh');
+                // }
             });
             $($(handle_label)[0]).hide();
             $($(handle_label)[1]).show();
-            rangle_label = label + " .ui-slider-range";
-            $(rangle_label).show();
-            $(rangle_label).css({
+            range_label = label + " .ui-slider-range";
+            $(range_label).show();
+            $(range_label).css({
                 "background":"#99D6EB"
             });
             $($(handle_label)[1]).css({
@@ -825,8 +875,6 @@ function make_slides(f) {
                 "border-color": "#001F29"
             });
         },
-        
-            
         button : function() {
             if (_s.measure == 'Manski_sliders'){
                 //every slider checked and min < likely < max
