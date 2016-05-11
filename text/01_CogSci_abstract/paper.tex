@@ -30,7 +30,7 @@
 \usepackage{booktabs}
 \usepackage{caption}
 \captionsetup{belowskip=0pt,aboveskip=2pt}
-\setlength{\textfloatsep}{9pt}
+\setlength{\textfloatsep}{8pt}
 
 \definecolor{Green}{RGB}{10,200,100}
 \newcommand{\ndg}[1]{\textcolor{Green}{[ndg: #1]}}  
@@ -72,17 +72,18 @@
 \maketitle
 
 \begin{abstract}
-  People's beliefs about everyday events are both of theoretical interest in
-  their own right and an important ingredient in model building---especially in 
-  Bayesian cognitive models of phenomena such as logical reasoning, future predictions, and language
-  use. Here, we explore several recently used methods for measuring subjective beliefs about
-  unidimensional contiguous properties, such as the likely price of a new watch. We use a
-  hierarchical Bayesian data-analysis model for inferring likely population-level beliefs as the central
-  tendency of participants' individual-level beliefs.  Three different dependent measures are
-  used to infer latent beliefs: (i) slider ratings of (relative) likelihood of intervals of
-  values, (ii) a give-a-number task, and (iii) choice of the more likely of two intervals of
-  values. Our results suggest that using averaged normalized slider ratings for binned
-  quantities is a practical and fairly good approximator of inferred population-level beliefs.
+  People's beliefs about everyday events are both of theoretical interest in their own right
+  and an important ingredient in model building---especially in Bayesian cognitive models of
+  phenomena such as logical reasoning, future predictions, and language use. Here, we explore
+  several recently used methods for measuring subjective beliefs about unidimensional
+  contiguous properties, such as the likely price of a new watch. As a first step towards a way
+  of assessing and comparing belief elicitation methods, we use hierarchical Bayesian modeling
+  for inferring likely population-level beliefs as the central tendency of participants'
+  individual-level beliefs. Three different dependent measures are considered: (i) slider
+  ratings of (relative) likelihood of intervals of values, (ii) a give-a-number task, and (iii)
+  choice of the more likely of two intervals of values. Our results suggest that using averaged
+  normalized slider ratings for binned quantities is a practical and fairly good approximator
+  of inferred population-level beliefs.
 
   \textbf{Keywords:} subjective beliefs, hierarchical modeling, Bayesian data analysis,
   Bayesian cognitive models
@@ -93,27 +94,26 @@
 
 \section{Motivation}
 
-We cannot look into a person's head. But in making sense of observed behavior we readily
-ascribe beliefs and desires to fellow agents. This happens intuitively, in folk psychology, but
-also in science. Scientific ascription of latent mental states plays an important role in many
-explanations of higher-order cognition: decision making, reasoning, language use, etc. It is
-therefore vital to have methods for validating explanatory mental state ascriptions.
+When trying to understand observed behavior we readily ascribe beliefs and desires to fellow
+agents. This happens intuitively, in folk psychology, but also in science. Scientific
+ascription of latent mental states plays an important role in many explanations of higher-order
+cognition: decision making, reasoning, language use, etc. It is therefore vital to have methods
+for validating explanatory mental state ascriptions.
 
 A family of models where this is particularly pressing are Bayesian models of cognition which
 seek to explain task behavior in a variety of domains as partially informed by what
 participants believe about mundane events---their \emph{prior beliefs}. Take interpretation of
-language. 
-``That watch cost a million dollars,'' tends to be interpreted as hyperbole: conveying affect rather than literal truth.
-Empirical data on whether a statement like ``That watch cost $n$ dollars'' is
-understood as hyperbole can be explained well by a
-Bayesian model of utterance interpretation \citep{KaoWu2014:Nonliteral-Unde}. This model
-assigns a crucial role to an empirical measure of participants' expectations about the likely
-or normal price of a watch---only when the uttered price is sufficiently unlikely \emph{a priori} will hyperbolic interpretation be possible.  
-Other examples of domains in which empirically successful models
-have included a measure of participants' prior beliefs include making predictions about
-everyday events \citep{GriffithsTenenbaum2006:Optimal-Predict}, referential communication
-\citep{FrankGoodman2012:Predicting-Prag}, the strength of pragmatic enrichments
-\citep{DegenTessler2015:Wonky-worlds:-L}, or the interpretation of quantifiers
+language.  ``That watch cost a million dollars,'' tends to be interpreted as hyperbole:
+conveying affect rather than literal truth.  Empirical data on whether similar statements are
+understood as hyperbole can be explained well by a Bayesian model of utterance interpretation
+\citep{KaoWu2014:Nonliteral-Unde}. This model assigns a crucial role to an empirical measure of
+participants' expectations about the likely or normal price of a watch---only when the uttered
+price is sufficiently unlikely \emph{a priori} will hyperbolic interpretation be possible.
+Other examples of domains in which empirically successful models have included a measure of
+participants' prior beliefs include making predictions about everyday events
+\citep{GriffithsTenenbaum2006:Optimal-Predict}, referential reasoning
+\citep{FrankGoodman2012:Predicting-Prag}, strength of pragmatic enrichments
+\citep{DegenTessler2015:Wonky-worlds:-L}, or quantifier interpretation
 \citep{SchollerFranke2015:Semantic-values}.
 
 Many methods have been used to build prior distributions used in Bayesian cognitive models.
@@ -134,8 +134,12 @@ More sophisticated \emph{give-a-number} tasks give more information, but can be 
 implement and analyze. 
 
 
-More complex elicitation methods include \emph{scoring rules} \citep{Savage1971:Elicitation-of-,AndersenFountain2014:Estimating-Subj,SchlagTremewan2014:A-penny-for-you}, prominent in economics, and the \emph{iterated learning paradigm} \citep{LewandowskyGriffiths2009:The-Wisdom-of-I}.
-These more complex methods are powerful but difficult to implement, and often assume very specific behavior from participants---such as optimal decision making under perfect knowledge of the payoff scheme.
+More complex elicitation methods include \emph{scoring rules}
+\citep{Savage1971:Elicitation-of-,AndersenFountain2014:Estimating-Subj,SchlagTremewan2014:A-penny-for-you},
+prominent in economics, and the \emph{iterated learning paradigm}
+\citep{LewandowskyGriffiths2009:The-Wisdom-of-I}.  These methods are powerful but difficult to
+implement, and often assume very specific behavior from participants---such as optimal decision
+making under perfect knowledge of the payoff scheme.
 %}. Scoring
 %rules are complex schemes of assigning monetary rewards to participants' answers that make sure
 %that responses (by rational participants) faithfully reflect a measure of interest: the actual
@@ -192,12 +196,12 @@ potential cross-over effects.
 A simple technique that seems to fit this bill is the \emph{binned histogram} task that has
 recently been used with apparent success
 \cite<e.g.>{KaoWu2014:Nonliteral-Unde,KaoBergen2014:Formalizing--th,Tessler2015:Understanding-B,SchollerFranke2015:Semantic-values}. Participants
-adjust sliders to express (relative) subjective beliefs about how likely it is that the value of an
-uncertain contiguous quantity lies in some interval of possible values (a bin). E.g., to report
-beliefs about the a watch's price, participants adjust sliders whose endpoints are labelled
+adjust sliders to express (relative) subjective beliefs about how likely it is that the value
+of an uncertain contiguous quantity lies in some interval of possible values (a bin). E.g., to
+report beliefs about a watch's price, participants adjust sliders whose endpoints are labelled
 ``extremely likely'' and ``impossible.'' Each slider corresponds to one of 15 bins that
 partition the range of plausible values (established by a pre-test), such as ``\$0-\$50'',
-``\$50-\$100'', etc. up to ``\$700-\$750'' and ``more than \$750.'' Each participant's slider
+``\$50-\$100'', etc.~up to ``\$700-\$750'' and ``more than \$750.'' Each participant's slider
 ratings are normalized and the results averaged across participants. The resulting \emph{mean
   slider ratings} look like plausible population-level beliefs and give good results when fed
 into cognitive models that predict task behavior based on prior expectations.
@@ -205,28 +209,25 @@ into cognitive models that predict task behavior based on prior expectations.
 Explanatory success aside, the question remains whether mean slider ratings measure what we
 would like them to. Are these good approximations of a central tendency of participants'
 individual beliefs? Are these measures consistent with participants' behavior in other tasks,
-such as \emph{give-a-number}? To address this issue we collected data in a
-within-subject paradigm from three task types: (i) \emph{binned histograms}, (ii)
-\emph{give-a-number} and (iii) \emph{paired comparisons}. The latter asks participants for a direct comparison of two bins
-from the \emph{binned histograms} task, and was included as a further consistency check. 
-We used a Bayesian hierarchical model to analyze this data jointly.
-This model inferred likely
-latent subjective beliefs, where each subjective belief is, intuitively, a noisy perturbation
-of a population-level belief. We find that mean \emph{a posteriori} population-level beliefs
-are approximated well by mean slider ratings from the binned-histograms task, suggesting that this may indeed be a
-sound and easy measure of what the crowd believes.  
-Moreover, the model is able to
-capture participants' behavior in all three task types reasonably well, suggesting that what
-mean slider ratings measure is what we think it is: a population-level central tendency of
-latent subjective beliefs.
+such as \emph{give-a-number}? To scrutinize the binned histogram task we address these issues
+by collecting data in a within-subject paradigm from three task types: (i) \emph{binned
+  histograms}, (ii) \emph{give-a-number} and (iii) \emph{paired comparisons}. The latter asks
+participants for a direct comparison of two bins from the \emph{binned histograms} task, and
+was included as a further consistency check.  We used a Bayesian hierarchical model to analyze
+this data jointly.  The model infers latent subjective beliefs, where each subjective
+belief is, intuitively, a noisy perturbation of a population-level belief. We find that mean
+\emph{a posteriori} population-level beliefs are approximated well by mean slider ratings from
+the binned-histograms task, suggesting that this may indeed be a sound and easy measure of what
+the crowd believes.  Moreover, the model is able to capture participants' behavior in all three
+task types reasonably well, suggesting that what mean slider ratings measure is what we think
+it is: a population-level central tendency of latent subjective beliefs.
 
 \section{Experimental elicitation of prior beliefs}
 
 \paragraph{Participants, procedure and materials} We recruited 20 self-reported English native
 speakers over Mechanical Turk and collected responses for eight different items (listed in
-\tableref{tab:Items}) using three different dependent measures: \emph{binned histograms},
-\emph{give-a-number} and \emph{paired comparisons}. Each participant rated each item using each
-dependent measure. Trial order was randomized.
+\tableref{tab:Items}) using the three different dependent measures mentioned above. Each
+participant rated each item using each dependent measure. Trial order was randomized.
 
 
 
@@ -294,15 +295,18 @@ invited participants to think about what they thought was mostly likely the case
 
 The data we would like to explain are: (i) the normalized slider ratings $s_{ijk} \in [0;1]$ of
 participant $i \in \set{1, \dots, 20}$ for item $j \in \set{1, \dots, 8}$ and bin
-$k \in \set{1, \dots, 15}$ from the binned histogram task; (ii) the bins $n_{ij} \in \set{1, \dots, 15}$ in which participant
-$i$'s number choice for item $j$ was in the give-a-number task; and (iii) the binary choices $c_{ijl} \in \set{0,1}$ of
-whether participant $i$ selected the higher bin for item $j$ in the paired comparison task for each comparison
-$l$. There are two simplifications in need of commenting. In (i), we focus on slider ratings after
-normalizing for each participant, because we assume that slider adjustments reflect relative, not
-absolute estimates of subjective beliefs. In (ii), we focus on bin choices, not actual number
-choices, in order to avoid, as much as possible, considerations of salience of particular
-numbers, and also because otherwise data from items with smaller domains of plausible numbers
-would get more weight than data from items which allow for a wider set of number choices.
+$k \in \set{1, \dots, 15}$ from the binned histogram task; (ii) the bins
+$n_{ij} \in \set{1, \dots, 15}$ in which participant $i$'s number choice for item $j$ was in
+the give-a-number task; and (iii) the binary choices $c_{ijl} \in \set{0,1}$ of whether
+participant $i$ selected the higher bin for item $j$ in the paired comparison task for each
+comparison $l$. There are two simplifications in need of commenting. In (i), we focus on slider
+ratings after normalizing for each participant, because we assume that slider adjustments
+reflect relative, not absolute estimates of subjective beliefs. In (ii), we focus on bin
+choices, not actual number choices, in order to avoid, as much as possible, considerations of
+salience of particular numbers, and also because otherwise data from items with smaller domains
+of plausible numbers would get more weight than data from items with a wider range of
+number choices. (Future work should investigate the relation to an explicit \emph{give-a-bin}
+task.)
 
 All three pieces of data are to be explained as functions of subjective beliefs $P_{ij}$, with
 $P_{ijk}$ being participant $i$'s belief about the relative likelihood of bin $k$ for item
@@ -406,15 +410,14 @@ task.
 \label{tab:SummaryStats}
 \end{table}
 
-Of most theoretical interest are posterior estimates of $Q_j$. \figref{fig:PosteriorQj} shows
-means of the posterior $Q_j$s, with their 95\% HDIs, alongside the mean slider ratings. The
-latter provide a very good approximation of the latent, inferred population-level
-beliefs. Inspection of posteriors of individual $P_{ij}$ shows that there is ample variation
-between participants. Nonetheless, the way the model suggests we should think about harnessing
-the individual $P_{ij}$s under a population-level central tendency is closely approximated by
-mean slider ratings. Although the match is not perfect, it is good enough to say that the
-latter are a practical way of approximating what the crowd believes despite individual
-differences.
+Posterior estimates of $Q_j$ are the most relevant. \figref{fig:PosteriorQj} shows their means
+with their 95\% HDIs, alongside the mean slider ratings. The latter provide a very good
+approximation of the inferred population-level beliefs. Inspection of posteriors of
+individual $P_{ij}$ shows that there is ample variation between participants. Still, the
+way the model suggests we should think about harnessing the individual $P_{ij}$s under a
+population-level central tendency is closely approximated by mean slider ratings. Although the
+match is not perfect, it is good enough to say that the latter are a practical way of
+approximating what the crowd believes despite individual differences.
 
 \begin{figure}
   \centering
@@ -469,18 +472,18 @@ while holding on to an assumption that all marbles behave in the same way
 Posterior predictive checks indicate that the trained model captures patterns of answers at the
 aggregate population level well. To have a more fine-grained measure of model fit, we also
 looked at posterior predictive $p$-values \citep{GelmanCarlin2014:Bayesian-Data-A} at the level
-of participants and items. We focus on the binned histograms task, because here the
-population-level posterior predictive checks revealed no systematic deviance. For this task,
-fixing a participant and an item, observations and replicates are probability vectors of length
-15. In a first analysis, we used the mean of these probability vectors as a test statistic. The
-minimum posterior predictive $p$-value over all 20 (participants) times 8 (items) cases was
-0.13, suggesting that the means of observed $s_{ij}$ are non-surprising to the trained
-model. In a second analysis, we used entropy as a test statistic. Two cases gave posterior
-predictive $p$-values lower than 0.05. These were from the two participants who gave a very
-extreme slider rating for the ``marbles'' item, basically assigning all ``mass'' to the last
-bin. What this suggests is that the model can cope reasonably well also with individual-level
-data, but has problems accounting for ``extreme'' choices, given that the population-level
-hyper-prior on $P_{ij}$ will lead to shrinkage.
+of participants and items. We look at the binned histograms task, because this is our main
+focus here and population-level posterior predictive checks for BH revealed no systematic
+deviance. Fixing a participant and an item, observations and replicates are probability vectors
+of length 15. In a first analysis, we used the mean of these probability vectors as a test
+statistic. The minimum posterior predictive $p$-value over all 20 (participants) times 8
+(items) cases was 0.13, suggesting that the means of observed $s_{ij}$ are non-surprising to
+the trained model. In a second analysis, we used entropy as a test statistic. Two cases gave
+posterior predictive $p$-values lower than 0.05. These were from the two participants who gave
+a very extreme slider rating for the ``marbles'' item, basically assigning all ``mass'' to the
+last bin. What this suggests is that the model can cope reasonably well also with
+individual-level data, but, somewhat unsurprisingly, has problems accounting for ``extreme''
+choices, given that the population-level hyper-prior on $P_{ij}$ will lead to shrinkage.
 
 \section{Conclusion}
 
@@ -519,7 +522,8 @@ MF's work was supported by the Institutional Strategy of the University of T̈\"
 (DFG, ZUK 63). MF, FD, AS and JD's work was supported by the
 Priority Program XPrag.de (DFG Schwerpunktprogramm 1727). This work was further supported by
 ONR grant N00014-13-1-0788 and a James S. McDonnell Foundation Scholar Award to NDG and an SNF
-Early Postdoc.Mobility Award to JD.
+Early Postdoc.Mobility Award to JD. Thanks to three anonymous reviewers for helpful suggestions
+and criticism.
 
 
 
