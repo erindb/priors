@@ -136,3 +136,8 @@ textarea {
     width:0px;
     background-color:#000000
 }
+
+.is_range > .ui-slider-range {
+	display: inline-block;
+	background-color: "#99D6EB";
+}
