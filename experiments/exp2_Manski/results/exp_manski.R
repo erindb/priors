@@ -26,15 +26,12 @@ summary(binned_histogram)
 binned_histogram$response = as.numeric(as.character(binned_histogram$response))
 
 ##get bin_num
-all_bins = as.character(unique(binned_histogram$bins))
-all_bins = c(all_bins, all_bins[1])
-all_bins = lapply(all_bins, function(str) {
-  str = gsub("u", "", str)
-  str = gsub("'", "\"", str)
-  str = gsub(".xb0", "°", str)
-  fromJSON(str)
-})
-names(all_bins) = c("joke", "movies", "tv", "coffee", "watch", "commute", "laptop", "marbles")
+library(dplyr)
+library(tidyr)
+unique_bins = binned_histogram %>% group_by(tag, bins) %>% summarise(N = length(tag)) %>%
+  as.data.frame
+all_bins = lapply(as.character(unique_bins$bins), fromJSON)
+names(all_bins) = as.character(unique_bins$tag)
 binned_histogram$bin_num = sapply(1:nrow(binned_histogram), function(i) {
   bin = as.character(binned_histogram$bin)[i]
   tag = as.character(binned_histogram$tag)[i]
@@ -126,49 +123,20 @@ lightning_summary = aggregate(higher_chosen~choice+tag,FUN="mean",data=lightning
 lightning_summary$YMin = lightning_summary$higher_chosen - aggregate(higher_chosen~choice+tag,FUN="ci.low",data=lightning)$higher_chosen
 lightning_summary$YMax = lightning_summary$higher_chosen + aggregate(higher_chosen~choice+tag,FUN="ci.high",data=lightning)$higher_chosen
 
-current_levels = c(
-  ### marbles / joke
-  "0  >?< 1 ", "1  >?< 5 ", "5  >?< 10 ", "10  >?< 13 ", "13  >?< 14 ",
-  ### movies
-  "0-15 >?< 15-30", "15-30 >?< 75-90", "75-90 >?< 150-165", "150-165 >?< 195-210", "195-210 >?< 210 ",
-  ### TV
-  "0-3 >?< 4-6", "4-6 >?< 16-18", "16-18 >?< 31-33", "31-33 >?< 40-42", "40-42 >?< 43 ",
-  ### commute
-  "0-6 >?< 7-13", "7-13 >?< 35-41", "35-41 >?< 70-76", "70-76 >?< 91-97", "91-97 >?< 98 ",
-  ### laptop
-  "$0-$500 >?< $500-$1000", "$500-$1000 >?< $2500-$3000", "$2500-$3000 >?< $5000-$5500",
-  "$5000-$5500 >?< $6500-$7000", "$6500-$7000 >?< $7500",
-  ### watch
-  "$0-$50 >?< $50-$100", "$50-$100 >?< $250-$300", "$250-$300 >?< $500-$550",
-  "$500-$550 >?< $650-$700", "$650-$700 >?< $750",
-  ### coffee
-  "44°F - 56°F >?< 44°F ", "44°F  >?< 44°F - 56°F", "44°F - 56°F >?< 92°F - 104°F",
-  "92°F - 104°F >?< 152°F - 164°F", "152°F - 164°F >?< 188°F - 200°F", "188°F - 200°F >?< 200°F "
-)
-desired_levels = c(
-  ### marbles/joke
-  "0 >?< 1", "1 >?< 5", "5 >?< 10", "10 >?< 13", "13 >?< 14",
-  ### movies
-  "0 >?< 1", "1 >?< 5", "5 >?< 10", "10 >?< 13", "13 >?< 14",
-  ### TV
-  "0 >?< 1", "1 >?< 5", "5 >?< 10", "10 >?< 13", "13 >?< 14",
-  ### commute
-  "0 >?< 1", "1 >?< 5", "5 >?< 10", "10 >?< 13", "13 >?< 14",
-  ### laptop
-  "0 >?< 1", "1 >?< 5", "5 >?< 10", "10 >?< 13", "13 >?< 14",
-  ### watch
-  "0 >?< 1", "1 >?< 5", "5 >?< 10", "10 >?< 13", "13 >?< 14",
-  ### coffee
-  "0 >?< 1",
-  "0 >?< 1", "1 >?< 5", "5 >?< 10", "10 >?< 13", "13 >?< 14"
-)
-names(desired_levels) = current_levels
-
-lightning_summary$choice_as_bin_number = sapply(lightning_summary$choice, function(choice) {
-  return(desired_levels[choice])
-})
+lightning_summary$choice_as_bin_number = mapply(function(choice, tag) {
+  ## we did not do this comparison for any of the other items
+  if (choice=='44°F - 56°F >?< 92°F - 104°F') {
+    return(NA)
+  }
+  choice=strsplit(choice, ' +>\\?< +')[[1]][1]
+  if (choice=='44°F') {
+    choice='44°F or less'
+  }
+  bins = all_bins[[tag]]
+  bin_num = which(bins==choice)
+}, lightning_summary$choice, as.character(lightning_summary$tag))
 lightning_summary$choice_as_bin_number = factor(lightning_summary$choice_as_bin_number,
-                                                levels=c("0 >?< 1", "1 >?< 5", "5 >?< 10", "10 >?< 13", "13 >?< 14"))
+                                                levels=c(1, 2, 6, 11, 14), labels=c("0 >?< 1", "1 >?< 5", "5 >?< 10", "10 >?< 13", '14'="13 >?< 14"))
 
 ggplot(lightning_summary, aes(x=choice_as_bin_number, y=higher_chosen)) +
   geom_bar(stat="identity") +
@@ -178,7 +146,6 @@ ggplot(lightning_summary, aes(x=choice_as_bin_number, y=higher_chosen)) +
 ggsave("graphs/lightning_round.pdf",height=8)
 ggsave("graphs/lightning_round.png",height=8)
  
-
 ## COMPARISON OF BINNED HISTOGRAM AND NUMBER TASK
 ### NUMBER TASK
 give_number = subset(d, measure == "give_number")
@@ -203,31 +170,18 @@ give_number$bin = sapply(1:nrow(give_number), function(i) {
   bins[bins$Item == tag & bins$Min <= response & bins$Max >= response,]$Bin
 })
 
-### BINNED HISTOGRAM
-binned_histogram = droplevels(subset(d, measure == "binned_histogram"))
-summary(binned_histogram)
-binned_histogram$response = as.numeric(as.character(binned_histogram$response))
+####################################################
 
-##get bin_num
-all_bins = as.character(unique(binned_histogram$bins))
-all_bins = c(all_bins, all_bins[1])
-all_bins = lapply(all_bins, function(str) {
-  str = gsub("u", "", str)
-  str = gsub("'", "\"", str)
-  str = gsub(".xb0", "°", str)
-  fromJSON(str)
-})
-names(all_bins) = c("joke", "movies", "tv", "coffee", "watch", "commute", "laptop", "marbles")
-binned_histogram$bin_num = sapply(1:nrow(binned_histogram), function(i) {
-  bin = as.character(binned_histogram$bin)[i]
-  tag = as.character(binned_histogram$tag)[i]
-  which(all_bins[[tag]] == bin)
-})
+### BINNED HISTOGRAM
 
 # normalize responses
-library(dplyr)
-library(plyr)
 tmp =  ddply(binned_histogram, .(workerid,tag), summarise, bin=bin, bin_num=bin_num,normresponse=response/sum(response))
+
+ggplot(tmp, aes(x=bin_num, y=normresponse,group=1)) +
+  geom_point() +
+  geom_line() +  
+  geom_vline(inherit_aes=F,data=give_number,aes(xintercept=bin),color="red") +
+  facet_grid(workerid ~ tag, scale="free")
 
 ggplot(tmp, aes(x=bin_num, y=normresponse,group=1)) +
   geom_point() +
