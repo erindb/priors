@@ -4,6 +4,9 @@ setwd("/Users/titlis/cogsci/projects/stanford/projects/priors/experiments/exp2_M
 source("helpers.R")
 
 d = read.table("data/results.csv", header=T, sep=",",quote="\"")
+summary(d)
+unique(d[d$comments != "",]$comments)
+summary(d$measure)
 
 ### NUMBER TASK
 #by item histogram of given a number
@@ -15,10 +18,6 @@ ggplot(give_number, aes(x=response)) +
 ggsave("graphs/number_histogram.pdf")
 ggsave("graphs/number_histogram.png")
 
-summary(d)
-unique(d[d$comments != "",]$comments)
-summary(d$measure)
-
 ### BINNED HISTOGRAM
 # by item histogram of binned histograms
 binned_histogram = droplevels(subset(d, measure == "binned_histogram"))
@@ -26,8 +25,8 @@ summary(binned_histogram)
 binned_histogram$response = as.numeric(as.character(binned_histogram$response))
 
 ##get bin_num
-library(dplyr)
-library(tidyr)
+# library(dplyr)
+# library(tidyr)
 unique_bins = binned_histogram %>% group_by(tag, bins) %>% summarise(N = length(tag)) %>%
   as.data.frame
 all_bins = lapply(as.character(unique_bins$bins), fromJSON)
@@ -45,11 +44,10 @@ binned_histogram$bin_num = sapply(1:nrow(binned_histogram), function(i) {
 #   geom_bar(stat="identity") +
 #   facet_wrap(~ tag, scale="free")
 
-agr = aggregate(response~bin+tag+bin_num,data=binned_histogram,FUN="mean")
-agr$CILow = aggregate(response~bin+tag+bin_num,data=binned_histogram,FUN="ci.low")$response
-agr$CIHigh = aggregate(response~bin+tag+bin_num,data=binned_histogram,FUN="ci.high")$response
-agr$YMin = agr$response - agr$CILow
-agr$YMax = agr$response + agr$CIHigh
+agr = binned_histogram %>%
+  group_by(bin,tag,bin_num) %>%
+  summarise(response = mean(response),CILow = ci.low(response),CIHigh = ci.high(response)) %>%
+  mutate(YMin=response-CILow,YMax=response+CIHigh)
 
 ggplot(agr, aes(x=bin_num, y=response)) +
   geom_bar(stat="identity") +
@@ -59,15 +57,16 @@ ggsave("graphs/binned_histogram_raw_means.pdf")
 ggsave("graphs/binned_histogram_raw_means.png")
 
 # normalize responses
-library(dplyr)
-library(plyr)
-tmp =  ddply(binned_histogram, .(workerid,tag), summarise, bin=bin, bin_num=bin_num,normresponse=response/sum(response))
-
-agr = aggregate(normresponse~bin+tag+bin_num,data=tmp,FUN="mean")
-agr$CILow = aggregate(normresponse~bin+tag+bin_num,data=tmp,FUN="ci.low")$normresponse
-agr$CIHigh = aggregate(normresponse~bin+tag+bin_num,data=tmp,FUN="ci.high")$normresponse
-agr$YMin = agr$normresponse - agr$CILow
-agr$YMax = agr$normresponse + agr$CIHigh
+# library(dplyr)
+# library(plyr)
+agr =  binned_histogram %>%
+  group_by(workerid,tag) %>%
+  mutate(sumresponse=sum(response)) %>% 
+  group_by(workerid,tag,bin_num,bin) %>%
+  summarise(normresponse=response/sumresponse) %>%
+  group_by(bin,tag,bin_num) %>%
+  summarise(normresponse = mean(normresponse),CILow=ci.low(normresponse),CIHigh=ci.high(normresponse)) %>%
+  mutate(YMin=normresponse-CILow,YMax=normresponse+CIHigh)
 
 ggplot(agr, aes(x=bin_num, y=normresponse)) +
   geom_bar(stat="identity") +
@@ -175,23 +174,29 @@ give_number$bin = sapply(1:nrow(give_number), function(i) {
 ### BINNED HISTOGRAM
 
 # normalize responses
-tmp =  ddply(binned_histogram, .(workerid,tag), summarise, bin=bin, bin_num=bin_num,normresponse=response/sum(response))
+tmp =  binned_histogram %>%
+  group_by(workerid,tag) %>%
+  mutate(sumresponse = sum(response)) %>%
+  group_by(workerid,tag,bin_num) %>%
+  summarise(normresponse=response/sumresponse)
 
 ggplot(tmp, aes(x=bin_num, y=normresponse,group=1)) +
   geom_point() +
   geom_line() +  
-  geom_vline(inherit_aes=F,data=give_number,aes(xintercept=bin),color="red") +
+  geom_vline(data=give_number,aes(xintercept=bin),color="red") +
   facet_grid(workerid ~ tag, scale="free")
 
 ggplot(tmp, aes(x=bin_num, y=normresponse,group=1)) +
   geom_point() +
   geom_line() +  
-  geom_vline(inherit_aes=F,data=give_number,aes(xintercept=bin),color="red") +
+  geom_vline(data=give_number,aes(xintercept=bin),color="red") +
   facet_grid(workerid ~ tag, scale="free")
 ggsave("graphs/histogram_and_number_bysubject_byitem.png",height=15)
 
 # summarize binned histogram
-bh_summary = ddply(tmp, .(workerid, tag), summarise, bh_mean=sum(bin_num*normresponse),bh_mode=paste(which(normresponse == max(normresponse)),collapse="_"))
+bh_summary = tmp %>%
+  group_by(workerid, tag) %>%
+  summarise(bh_mean=sum(bin_num*normresponse),bh_mode=paste(which(normresponse == max(normresponse)),collapse="_"))
 head(bh_summary)
 bh_summary$bh_mode # there's a few cases with more than one mode 
 bh_summary$bh_mode_na = as.numeric(as.character(bh_summary$bh_mode))
@@ -207,8 +212,12 @@ gof(bh_summary$number_response, bh_summary$bh_mean)
 gof(bh_summary$number_response, bh_summary$bh_mode_na)
 
 # by-subject correlations for means
-cor_means = ddply(bh_summary, .(workerid), summarise, r=gof(number_response, bh_mean, na.rm=TRUE)["r",])
-cor_modes = ddply(bh_summary[!is.na(bh_summary$bh_mode_na),], .(workerid), summarise, r=gof(number_response, bh_mode_na,na.rm=TRUE)["r",])
+cor_means = bh_summary %>%
+  group_by(workerid) %>%
+  summarise(r=gof(number_response, bh_mean, na.rm=TRUE)["r",])
+cor_modes = bh_summary[!is.na(bh_summary$bh_mode_na),] %>%
+  group_by(workerid) %>%
+  summarise(r=gof(number_response, bh_mode_na,na.rm=TRUE)["r",])
 
 
 # mode vs number response, collapsed across subjects (37 cases where there was more than one mode were excluded)
@@ -273,6 +282,8 @@ ggplot(gathered, aes(x=number_response, y=value, color=measure, group=measure)) 
   facet_wrap(~workerid)
 ggsave("graphs/bhmeasure_vs_number_response_bysubject.png")
 
+
+library(lmerTest)
 head(bh_summary)
 m = lmer(number_response ~ bh_mean + (1+bh_mean|workerid), data=bh_summary)
 summary(m)
@@ -284,6 +295,50 @@ m.1 = lmer(number_response ~ bh_mode_na + bh_mean + (1+bh_mode_na+ bh_mean|worke
 summary(m.1)
 
 
+### MANSKI
+
+manski_summary = subset(d, measure == "Manski_sliders") %>%
+  select(workerid,tag,Manski_min,Manski_likely,Manski_max) %>%
+  gather(Measure,Value,-workerid,-tag) %>%
+  group_by(tag,Measure) %>%
+  summarise(Mean = mean(Value), CILow = ci.low(Value), CIHigh = ci.high(Value))
+manski_summary = as.data.frame(manski_summary)
+manski_summary$YMin = manski_summary$Mean - manski_summary$CILow
+manski_summary$YMax = manski_summary$Mean + manski_summary$CIHigh
+manski_summary$Response = factor(x=gsub("Manski_","",as.character(manski_summary$Measure)),levels=c("min","likely","max"))
+
+manski_ind = subset(d, measure == "Manski_sliders") %>%
+  select(workerid,tag,Manski_min,Manski_likely,Manski_max) %>%
+  gather(Measure,Value,-workerid,-tag) %>%
+  group_by(tag,Measure,workerid) %>%
+  summarise(Mean = mean(Value))
+manski_ind = as.data.frame(manski_ind)
+manski_ind$Response = factor(x=gsub("Manski_","",as.character(manski_ind$Measure)),levels=c("min","likely","max"))
+
+ggplot(manski_summary, aes(x=Response,y=Mean)) +
+  geom_bar(stat="identity") +
+  geom_errorbar(aes(ymin=YMin,ymax=YMax),width=.25) +
+  geom_line(data=manski_ind,aes(group=workerid),alpha=.5,color="lightblue") +
+  facet_wrap(~ tag,scale="free")
+ggsave("graphs/manski_summary.png",width=8)
 
 
+manski_cumulative = subset(d, measure %in% c("Manski_1","Manski_2","Manski_3","Manski_4","Manski_5","Manski_6")) %>%
+  select(rating_M1,rating_M2,rating_M3,rating_M4,rating_M5,rating_M6,workerid,tag,number_M1,number_M2,number_M3,number_M4,number_M5,number_M6,measure)
+manski_cumulative$Rating = rowSums(manski_cumulative[, c("rating_M1", "rating_M2","rating_M3","rating_M4","rating_M5","rating_M6")], na.rm=TRUE)
+manski_cumulative$Number = rowSums(manski_cumulative[, c("number_M1", "number_M2","number_M3","number_M4","number_M5","number_M6")], na.rm=TRUE)
+head(manski_cumulative)
 
+ggplot(manski_cumulative, aes(x=Number,y=Rating,group=workerid)) +
+  geom_smooth(aes(group=1),color="black") +
+  geom_line(color="lightblue",alpha=.5) +  
+  ylim(c(0,100)) +
+  # geom_ribbon(aes(ymin=YMin,ymax=YMax)) +
+  facet_wrap(~tag,scale="free")
+ggsave("graphs/manski_cumulative.png",width=8)
+
+ggplot(manski_cumulative, aes(x=Number,y=Rating,group=1)) +
+  geom_line() +
+  geom_vline(data=manski_ind,aes(xintercept=Mean,color=Response)) +
+  facet_grid(workerid~tag,scale="free")
+ggsave("graphs/manski_bysubj.png",width=12,height=30)
