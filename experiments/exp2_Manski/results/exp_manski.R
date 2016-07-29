@@ -1,6 +1,6 @@
 library(ggplot2)
 library(rjson)
-setwd("/Users/titlis/cogsci/projects/stanford/projects/priors/experiments/exp2_Manski/results")
+# setwd("/Users/titlis/cogsci/projects/stanford/projects/priors/experiments/exp2_Manski/results")
 source("helpers.R")
 
 d = read.table("data/results.csv", header=T, sep=",",quote="\"")
