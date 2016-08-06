@@ -6,3 +6,4 @@ text/01_CogSci_abstract/paper.pdf
 *.aux
 *.Rhistory
 .Rproj.user
+.DS_Store
