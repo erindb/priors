@@ -29,7 +29,7 @@ binned_histogram = droplevels(subset(d, measure == "binned_histogram")) %>%
 binned_histogram$bin_num = 1:15
 
 y.slider = array(0, dim = c(50,8,15))
-for (i in 1:nrow(bin_dat)){
+for (i in 1:nrow(binned_histogram)){
   y.slider[binned_histogram$workerid[i] + 1, 
            as.numeric(binned_histogram$tag)[i],
            binned_histogram$bin_num[i]] = binned_histogram$response[i]
