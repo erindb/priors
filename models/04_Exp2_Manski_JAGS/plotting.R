@@ -21,7 +21,7 @@ if (readFlag){
 # prepare samples
 csamples = tbl_df(melt(out$sims.list))
 colnames(csamples) = c("value", "step", "subject", "item", "bin", "variable")
-csamples$item = levels(factor(bin_dat$tag))[csamples$item]
+csamples$item = levels(factor(binned_histogram$tag))[csamples$item]
 
 #######################
 # posteriors
@@ -30,7 +30,7 @@ csamples$item = levels(factor(bin_dat$tag))[csamples$item]
 # item pop
 meansIP = tbl_df(melt(out$sims.list$item.pop)) %>%
   rename(step = Var1, item = Var2, bin = Var3) %>%
-  mutate(item = levels(factor(bin_dat$tag))[item] ) %>%
+  mutate(item = levels(factor(binned_histogram$tag))[item] ) %>%
   group_by(item, bin) %>%
   summarise(
     mean = mean(value),
@@ -52,7 +52,7 @@ pop_priorsPaper = ggplot(meansIP, aes(x = bin, y = mean)) + geom_line() + geom_p
 # subjective priors
 meansIPSubj = tbl_df(melt(out$sims.list$subj)) %>%
   rename(step = Var1, subject = Var2, item = Var3, bin = Var4) %>%
-  mutate(item = levels(factor(bin_dat$tag))[item] ) %>%
+  mutate(item = levels(factor(binned_histogram$tag))[item] ) %>%
   filter(subject <= 20) %>%
   group_by(subject, item, bin) %>%
   summarise(
@@ -129,6 +129,7 @@ plotSliderDataPaper = ggplot(slider_aggr, aes(x = bin, y = y_means)) + geom_line
 
 
 # numbers
+number_dat = give_number
 number_dat$chosen_bin = factor(number_dat$chosen_bin, levels = 1:15)
 DNm = tbl_df(melt(table(number_dat$tag, number_dat$chosen_bin))) %>%
   rename(item = Var1, bin = Var2)
@@ -250,16 +251,16 @@ if (savePlots){
 
 # save plots for CogSciPaper  
 factor = 0.55
-if (savePlots){
-  # pdfs
-  ggsave('../text/01_CogSci_abstract/plots/pop_priors.pdf', pop_priorsPaper, width=10*factor, height = 8*factor)
-#   ggsave('../text/01_CogSci_abstract/plots/pop_priorsSubj.pdf', pop_priorsSubj, width=10*factor, height = 8*factor)
-#   ggsave('../text/01_CogSci_abstract/plots/posterior_parameters.pdf', posterior_parameters, width=10*factor, height = 8*factor)
-  ggsave('../text/01_CogSci_abstract/plots/ppc_slider.pdf', plotSliderPPCPaper,  width=10*factor, height = 8*factor)
-  ggsave('../text/01_CogSci_abstract/plots/ppc_number.pdf', plotNumbersPPCPaper, width=10*factor, height = 8*factor)
-  ggsave('../text/01_CogSci_abstract/plots/ppc_choice.pdf', plotChoicesPPCPaper, width=10*factor, height = 6*factor)
-  ggsave('../text/01_CogSci_abstract/plots/data_slider.pdf', plotSliderDataPaper,  width=10*factor, height = 8*factor)
-  ggsave('../text/01_CogSci_abstract/plots/data_sliderNumber.pdf', plotSliderNumberDataPaper,  width=10*factor, height = 10*factor)
-  ggsave('../text/01_CogSci_abstract/plots/data_number.pdf', plotNumbersDataPaper,  width=10*factor, height = 8*factor)
-  ggsave('../text/01_CogSci_abstract/plots/data_choice.pdf', plotChoicesDataPaper, width=10*factor, height = 8*factor)
-}
+# if (savePlots){
+#   # pdfs
+#   ggsave('../text/01_CogSci_abstract/plots/pop_priors.pdf', pop_priorsPaper, width=10*factor, height = 8*factor)
+# #   ggsave('../text/01_CogSci_abstract/plots/pop_priorsSubj.pdf', pop_priorsSubj, width=10*factor, height = 8*factor)
+# #   ggsave('../text/01_CogSci_abstract/plots/posterior_parameters.pdf', posterior_parameters, width=10*factor, height = 8*factor)
+#   ggsave('../text/01_CogSci_abstract/plots/ppc_slider.pdf', plotSliderPPCPaper,  width=10*factor, height = 8*factor)
+#   ggsave('../text/01_CogSci_abstract/plots/ppc_number.pdf', plotNumbersPPCPaper, width=10*factor, height = 8*factor)
+#   ggsave('../text/01_CogSci_abstract/plots/ppc_choice.pdf', plotChoicesPPCPaper, width=10*factor, height = 6*factor)
+#   ggsave('../text/01_CogSci_abstract/plots/data_slider.pdf', plotSliderDataPaper,  width=10*factor, height = 8*factor)
+#   ggsave('../text/01_CogSci_abstract/plots/data_sliderNumber.pdf', plotSliderNumberDataPaper,  width=10*factor, height = 10*factor)
+#   ggsave('../text/01_CogSci_abstract/plots/data_number.pdf', plotNumbersDataPaper,  width=10*factor, height = 8*factor)
+#   ggsave('../text/01_CogSci_abstract/plots/data_choice.pdf', plotChoicesDataPaper, width=10*factor, height = 8*factor)
+# }

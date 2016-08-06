@@ -5,12 +5,11 @@ source('helpers/helpers.R')
 source('~/Desktop/data/svn/ProComPrag/dev_tmp/typicality_quantifiers/model/helpers.r')
 source('process_data.R')
 
-
 saveFlag = TRUE
 
 data_aggr <- list(y.slider = y.slider, y.number = y.number, y.choice = y.choice, 
                   higher = higher, lower = lower,
-                  nSubjs = 20, nItems = 8, nBins = 15, nLightConds = 5,
+                  nSubjs = 50, nItems = 8, nBins = 15, nLightConds = 5,
                   ones = rep(1,15))
 params <- c('w', 
             'a', 
@@ -25,6 +24,8 @@ params <- c('w',
             )
 
 model = "models/model.jags.R"
+# burnin = 100
+# iter = 100
 burnin = 10000
 iter = 10000
 out = jags(data = data_aggr,
@@ -41,7 +42,7 @@ out = jags(data = data_aggr,
             verbose = TRUE,
             parallel = TRUE)
 
-if (saveFlag) { save(out, file = "~/Desktop/Dropbox/priors_data/outTMP.Rdat") }
+if (saveFlag) { save(out, file = "~/Desktop/Dropbox/priors_data/outExp2.Rdat") }
 
 stop()
 
