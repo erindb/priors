@@ -10,10 +10,12 @@ theme_set(theme_bw() + theme(plot.background=element_blank()) )
 readFlag = TRUE
 savePlots = TRUE
 
+nSubj = 50
+
 if (readFlag){
   # load(file = "/Users/micha/Desktop/Dropbox/priors_data/out_25.Rdat")
   # load(file = "/Users/micha/Desktop/Dropbox/priors_data/outTMP.Rdat")
-  load(file = "/Users/micha/Desktop/Dropbox/priors_data/out.Rdat")
+  load(file = "/Users/micha/Desktop/Dropbox/priors_data/outExp2.Rdat")
 } else {
   # source('main.R')
 }
@@ -161,7 +163,7 @@ plotNumbersDataPaper = ggplot(number_aggr, aes(x = bin, y = value)) + geom_bar(s
   facet_wrap(~ item, scale = "free_y", ncol = 2) + ylab("frequency number choice")
 plotSliderNumberDataPaper = ggplot(slider_aggr, aes(x = bin, y = y_means)) + geom_line() + geom_point() + facet_wrap(~ item, scale = "free_y", ncol = 2) + 
   geom_errorbar(aes(ymin = cilow, ymax = cihigh), width = .5, position = position_dodge(.1), color = 'gray') +
-  ylab("mean slider rating / bin proportion of number choice") + geom_bar(data = number_aggr, aes(x = bin, y = value/20), stat = "identity", fill = "firebrick", alpha = 0.5)
+  ylab("mean slider rating / bin proportion of number choice") + geom_bar(data = number_aggr, aes(x = bin, y = value/nSubj), stat = "identity", fill = "firebrick", alpha = 0.5)
 
 
 # lightning choices
@@ -251,16 +253,16 @@ if (savePlots){
 
 # save plots for CogSciPaper  
 factor = 0.55
-# if (savePlots){
-#   # pdfs
-#   ggsave('../text/01_CogSci_abstract/plots/pop_priors.pdf', pop_priorsPaper, width=10*factor, height = 8*factor)
-# #   ggsave('../text/01_CogSci_abstract/plots/pop_priorsSubj.pdf', pop_priorsSubj, width=10*factor, height = 8*factor)
-# #   ggsave('../text/01_CogSci_abstract/plots/posterior_parameters.pdf', posterior_parameters, width=10*factor, height = 8*factor)
-#   ggsave('../text/01_CogSci_abstract/plots/ppc_slider.pdf', plotSliderPPCPaper,  width=10*factor, height = 8*factor)
-#   ggsave('../text/01_CogSci_abstract/plots/ppc_number.pdf', plotNumbersPPCPaper, width=10*factor, height = 8*factor)
-#   ggsave('../text/01_CogSci_abstract/plots/ppc_choice.pdf', plotChoicesPPCPaper, width=10*factor, height = 6*factor)
-#   ggsave('../text/01_CogSci_abstract/plots/data_slider.pdf', plotSliderDataPaper,  width=10*factor, height = 8*factor)
-#   ggsave('../text/01_CogSci_abstract/plots/data_sliderNumber.pdf', plotSliderNumberDataPaper,  width=10*factor, height = 10*factor)
-#   ggsave('../text/01_CogSci_abstract/plots/data_number.pdf', plotNumbersDataPaper,  width=10*factor, height = 8*factor)
-#   ggsave('../text/01_CogSci_abstract/plots/data_choice.pdf', plotChoicesDataPaper, width=10*factor, height = 8*factor)
-# }
+if (savePlots){
+  # pdfs
+  ggsave('plots/paper/pop_priors.pdf', pop_priorsPaper, width=10*factor, height = 8*factor)
+#   ggsave('plots/paper/pop_priorsSubj.pdf', pop_priorsSubj, width=10*factor, height = 8*factor)
+#   ggsave('plots/paper/posterior_parameters.pdf', posterior_parameters, width=10*factor, height = 8*factor)
+  ggsave('plots/paper/ppc_slider.pdf', plotSliderPPCPaper,  width=10*factor, height = 8*factor)
+  ggsave('plots/paper/ppc_number.pdf', plotNumbersPPCPaper, width=10*factor, height = 8*factor)
+  ggsave('plots/paper/ppc_choice.pdf', plotChoicesPPCPaper, width=10*factor, height = 6*factor)
+  ggsave('plots/paper/data_slider.pdf', plotSliderDataPaper,  width=10*factor, height = 8*factor)
+  ggsave('plots/paper/data_sliderNumber.pdf', plotSliderNumberDataPaper,  width=10*factor, height = 10*factor)
+  ggsave('plots/paper/data_number.pdf', plotNumbersDataPaper,  width=10*factor, height = 8*factor)
+  ggsave('plots/paper/data_choice.pdf', plotChoicesDataPaper, width=10*factor, height = 8*factor)
+}
