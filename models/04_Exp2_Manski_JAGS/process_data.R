@@ -2,7 +2,7 @@ require(dplyr)
 require('bootstrap')
 library('rjson')
 library('stringr')
-source('helpers/helpers.R')
+source('//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/helpers/helpers.R')
 
 ## for bootstrapping 95% confidence intervals
 theta <- function(x,xdata,na.rm=T) {mean(xdata[x],na.rm=na.rm)}
@@ -11,8 +11,8 @@ ci.low <- function(x,na.rm=T) {
 ci.high <- function(x,na.rm=T) {
   quantile(bootstrap(1:length(x),1000,theta,x,na.rm=na.rm)$thetastar,.975,na.rm=na.rm) - mean(x,na.rm=na.rm)}
 
-d = read.table("data/results.csv", header=T, sep=",",quote="\"")
-bins = read.csv("data/bins.txt",header=T)
+d = read.table("//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/data/results.csv", header=T, sep=",",quote="\"")
+bins = read.csv("//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/data/bins.txt",header=T)
 
 ## number choices (treated as bins)
 give_number = d %>% filter(measure == "give_number") %>% droplevels() %>%
