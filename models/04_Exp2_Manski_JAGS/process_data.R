@@ -137,3 +137,5 @@ for (i in 1:nrow(choice_dat)){
         as.numeric(choice_dat$tag)[i],
         choice_dat$condition[i]] = min(choice_dat$chosen_bin[i], choice_dat$unchosen_bin[i])
 }
+
+save(y.slider, y.slider_means, y.choice, y.number, file = "data/processed_data.RData")

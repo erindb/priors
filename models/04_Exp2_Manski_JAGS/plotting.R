@@ -13,8 +13,6 @@ savePlots = TRUE
 nSubj = 50
 
 if (readFlag){
-  # load(file = "/Users/micha/Desktop/Dropbox/priors_data/out_25.Rdat")
-  # load(file = "/Users/micha/Desktop/Dropbox/priors_data/outTMP.Rdat")
   load(file = "/Users/micha/Desktop/Dropbox/priors_data/outExp2.Rdat")
 } else {
   # source('main.R')
@@ -40,7 +38,7 @@ meansIP = tbl_df(melt(out$sims.list$item.pop)) %>%
     min = HDIofMCMC(value)[1]
   )
 meansIP$y_emp = y.slider_means$mymean
-pop_priors = ggplot(meansIP, aes(x = bin, y = mean)) + geom_line() + geom_point() + facet_wrap(~ item, scale = "free") +
+pop_priors = ggplot(meansIP, aes(x = bin, y = mean)) + geom_line() + geom_point() + facet_wrap(~ item, nrow = 2, scale = "free") +
   geom_ribbon(aes(ymin=min, ymax=max), fill="gray", alpha="0.5") +
   geom_line(aes(x = bin, y = y_emp) , color = "firebrick")  + geom_point(aes(x = bin, y = y_emp ), color = "firebrick") +
   ylab(" mean posterior Q_{ijk} / average slider rating")
@@ -70,7 +68,7 @@ meansIPSubj$maxPop = meansIP$max
 pop_priorsSubj = ggplot(meansIPSubj, aes(x = bin, y = mean, group = subject)) + 
   geom_ribbon(aes(ymin=minPop, ymax=maxPop), fill="lightgray", alpha=0.5) +
   geom_line(color="darkgray", size = 0.5, alpha = 0.7)  +
-  facet_wrap(~ item, scale = "free") +
+  facet_wrap(~ item, nrow = 2, scale = "free") +
   # geom_line(aes(x = bin, y = y_emp) , color = "firebrick")  + geom_point(aes(x = bin, y = y_emp ), color = "firebrick") +
   geom_line(aes(x = bin, y = meanPop) , color = "black", alpha = 0.7)
 show(pop_priorsSubj)
@@ -111,7 +109,7 @@ slider_aggr = slider_aggr[order(slider_aggr$item,slider_aggr$bin),]
 slider_aggr$y_means = y.slider_means$mymean
 slider_aggr$cilow = y.slider_means$cilow
 slider_aggr$cihigh = y.slider_means$cihigh
-plotSliderPPC = ggplot(slider_aggr, aes(x = bin, y = mean)) + geom_line() + geom_point() + facet_wrap(~ item, scale = "free") + 
+plotSliderPPC = ggplot(slider_aggr, aes(x = bin, y = mean)) + geom_line() + geom_point() + facet_wrap(~ item, nrow = 2, scale = "free") + 
   geom_ribbon(aes(ymin=min, ymax=max), fill="gray", alpha="0.5") +
   # geom_errorbar(aes(ymin = min, ymax = max), width = .5, position = position_dodge(.1), color = 'gray') +
   geom_line(aes(x = bin, y = y_means) , color = "firebrick") + geom_point( aes(x = bin, y = y_means) , color = "firebrick") +
@@ -121,7 +119,7 @@ plotSliderPPCPaper = ggplot(slider_aggr, aes(x = bin, y = mean)) + geom_line() +
   # geom_errorbar(aes(ymin = min, ymax = max), width = .5, position = position_dodge(.1), color = 'gray') +
   geom_line(aes(x = bin, y = y_means) , color = "firebrick") + geom_point( aes(x = bin, y = y_means) , color = "firebrick") +
   ylab("slider rating")
-plotSliderData = ggplot(slider_aggr, aes(x = bin, y = y_means)) + geom_line() + geom_point() + facet_wrap(~ item, scale = "free") + 
+plotSliderData = ggplot(slider_aggr, aes(x = bin, y = y_means)) + geom_line() + geom_point() + facet_wrap(~ item, nrow = 2, scale = "free") + 
   geom_errorbar(aes(ymin = cilow, ymax = cihigh), width = .5, position = position_dodge(.1), color = 'gray') +
   ylab("mean slider rating")
 plotSliderDataPaper = ggplot(slider_aggr, aes(x = bin, y = y_means)) + geom_line() + geom_point() + facet_wrap(~ item, scale = "free_y", ncol = 2) + 
@@ -148,7 +146,7 @@ number_aggr = ppcM %>%
 number_aggr = number_aggr[order(number_aggr$item, number_aggr$bin),]
 number_aggr$value = DNm$value
 plotNumbersPPC = ggplot(number_aggr, aes(x = bin, y = mean)) + geom_point() + geom_line() +
-  facet_wrap(~ item, scale = "free") + 
+  facet_wrap(~ item, nrow = 2, scale = "free") + 
   geom_ribbon(aes(ymin=low,ymax=high), fill="gray", alpha="0.5") +
   geom_line( aes(x = bin, y = value) , color = "firebrick") + geom_point( aes(x = bin, y = value) , color = "firebrick") +
   ylab("frequency")
@@ -158,7 +156,7 @@ plotNumbersPPCPaper = ggplot(number_aggr, aes(x = bin, y = mean)) + geom_point()
   geom_line( aes(x = bin, y = value) , color = "firebrick") + geom_point( aes(x = bin, y = value) , color = "firebrick") +
   ylab("frequency")
 plotNumbersData = ggplot(number_aggr, aes(x = bin, y = value)) + geom_bar(stat = "identity") +
-  facet_wrap(~ item, scale = "free") + ylab("frequency number choice")
+  facet_wrap(~ item, nrow = 2, scale = "free") + ylab("frequency number choice")
 plotNumbersDataPaper = ggplot(number_aggr, aes(x = bin, y = value)) + geom_bar(stat = "identity") +
   facet_wrap(~ item, scale = "free_y", ncol = 2) + ylab("frequency number choice")
 plotSliderNumberDataPaper = ggplot(slider_aggr, aes(x = bin, y = y_means)) + geom_line() + geom_point() + facet_wrap(~ item, scale = "free_y", ncol = 2) + 
@@ -183,7 +181,7 @@ choice_ppc$yemp = choice_emp$yemp
 choice_ppc$cilow = choice_emp$cilow
 choice_ppc$cihigh = choice_emp$cihigh
 plotChoicesPPC = ggplot(choice_ppc, aes(x = bin, y = mean)) + geom_point() + geom_line() +
-  facet_wrap(~ item, scale = "free") + 
+  facet_wrap(~ item, nrow = 2, scale = "free") + 
   geom_ribbon(aes(ymin=low,ymax=high), fill="gray", alpha="0.5") +
   geom_line( aes(x = bin, y = yemp) , color = "firebrick") + geom_point( aes(x = bin, y = yemp) , color = "firebrick") +
   xlab("condition") + ylab("choice prop. higher bin") + 
@@ -205,7 +203,7 @@ plotChoicesPPCPaper = ggplot(choice_ppc, aes(x = bin, y = mean)) + geom_point() 
                             "5" = "14&15"
   )) + theme(axis.text.x = element_text( angle=-35))
 plotChoicesData = ggplot(choice_ppc, aes(x = factor(bin), y = yemp)) + geom_bar(stat = "identity", fill = "lightgray") +
-  facet_wrap(~ item, scale = "free") +
+  facet_wrap(~ item, nrow = 2, scale = "free") +
   geom_errorbar(aes(ymin = cilow, ymax = cihigh), color = "darkgray", width = .5) +
   xlab("condition") + ylab("choce prop. higher bin") + 
   scale_x_discrete(labels=c("1" = "1 & 2", 
@@ -230,25 +228,25 @@ plotChoicesDataPaper = ggplot(choice_ppc, aes(x = factor(bin), y = yemp)) + geom
 # save plots for presentations
 if (savePlots){
   # pdfs
-  ggsave('plots/pop_priors.pdf', pop_priors, width=10, height = 8)
-  ggsave('plots/pop_priorsSubj.pdf', pop_priorsSubj, width=10, height = 8)
-  ggsave('plots/posterior_parameters.pdf', posterior_parameters, width=10, height = 8)
-  ggsave('plots/ppc_slider.pdf', plotSliderPPC,  width=10, height = 8)
-  ggsave('plots/ppc_number.pdf', plotNumbersPPC, width=10, height = 8)
-  ggsave('plots/ppc_choice.pdf', plotChoicesPPC, width=10, height = 8)
-  ggsave('plots/data_slider.pdf', plotSliderData,  width=10, height = 8)
-  ggsave('plots/data_number.pdf', plotNumbersData,  width=10, height = 8)
-  ggsave('plots/data_choice.pdf', plotChoicesData, width=10, height = 8)
+  ggsave('plots/pop_priors.pdf', pop_priors, width=10, height = 6)
+  ggsave('plots/pop_priorsSubj.pdf', pop_priorsSubj, width=10, height = 6)
+  ggsave('plots/posterior_parameters.pdf', posterior_parameters, width=10, height = 6)
+  ggsave('plots/ppc_slider.pdf', plotSliderPPC,  width=10, height = 6)
+  ggsave('plots/ppc_number.pdf', plotNumbersPPC, width=10, height = 6)
+  ggsave('plots/ppc_choice.pdf', plotChoicesPPC, width=10, height = 6)
+  ggsave('plots/data_slider.pdf', plotSliderData,  width=10, height = 6)
+  ggsave('plots/data_number.pdf', plotNumbersData,  width=10, height = 6)
+  ggsave('plots/data_choice.pdf', plotChoicesData, width=10, height = 6)
   # pngs
-  ggsave('plots/pop_priors.png', pop_priors, width=10, height = 8)
-  ggsave('plots/pop_priorsSubj.png', pop_priorsSubj, width=10, height = 8)
-  ggsave('plots/posterior_parameters.png', posterior_parameters, width=10, height = 8)
-  ggsave('plots/ppc_slider.png', plotSliderPPC,  width=10, height = 8)
-  ggsave('plots/ppc_number.png', plotNumbersPPC, width=10, height = 8)
-  ggsave('plots/ppc_choice.png', plotChoicesPPC, width=10, height = 8)
-  ggsave('plots/data_slider.png', plotSliderData,  width=10, height = 8)
-  ggsave('plots/data_number.png', plotNumbersData,  width=10, height = 8)
-  ggsave('plots/data_choice.png', plotChoicesData, width=10, height = 8)
+  ggsave('plots/pop_priors.png', pop_priors, width=10, height = 6)
+  ggsave('plots/pop_priorsSubj.png', pop_priorsSubj, width=10, height = 6)
+  ggsave('plots/posterior_parameters.png', posterior_parameters, width=10, height = 6)
+  ggsave('plots/ppc_slider.png', plotSliderPPC,  width=10, height = 6)
+  ggsave('plots/ppc_number.png', plotNumbersPPC, width=10, height = 6)
+  ggsave('plots/ppc_choice.png', plotChoicesPPC, width=10, height = 6)
+  ggsave('plots/data_slider.png', plotSliderData,  width=10, height = 6)
+  ggsave('plots/data_number.png', plotNumbersData,  width=10, height = 6)
+  ggsave('plots/data_choice.png', plotChoicesData, width=10, height = 6)
 }
 
 # save plots for CogSciPaper  

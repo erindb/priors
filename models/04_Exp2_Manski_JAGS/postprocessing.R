@@ -11,8 +11,7 @@ theme_set(theme_bw() + theme(plot.background=element_blank()) )
 readFlag = TRUE
 
 if (readFlag){
-  # load(file = "/Users/micha/Desktop/Dropbox/priors_data/out_25.Rdat")
-  load(file = "/Users/micha/Desktop/Dropbox/priors_data/out.Rdat")
+  load(file = "/Users/micha/Desktop/Dropbox/priors_data/outExp2.Rdat")
 } else {
   # source('main.R')
 }
@@ -51,8 +50,8 @@ y.emp = logistic(y.slider)
 
 posteriorMeans = array(0, dim = c(dim(y.rep)[1], dim(y.rep)[2], dim(y.rep)[3]))
 posteriorEntrs = array(0, dim = c(dim(y.rep)[1], dim(y.rep)[2], dim(y.rep)[3]))
-pValueMean = matrix(0, nrow = 20, ncol = 8)
-pValueEntr = matrix(0, nrow = 20, ncol = 8)
+pValueMean = matrix(0, nrow = 50, ncol = 8)
+pValueEntr = matrix(0, nrow = 50, ncol = 8)
 
 for (i in 1:(dim(y.rep)[2])) {
   for (j in 1:(dim(y.rep)[3])) {
@@ -73,7 +72,7 @@ for (i in 1:(dim(y.rep)[2])) {
 
 ## two failures for means: two y.repects who gave "extreme" ratings for marble case fall out!!
 ## check empirical means for marbles:
-sapply(1:20, function(i) sum(1:15*y.emp[i,5,]))
+sapply(1:50, function(i) sum(1:15*y.emp[i,5,]))
 
 ## a few failures for "entropy: the two "extreme" cases plus another 18 cases of (almost) flat input
 

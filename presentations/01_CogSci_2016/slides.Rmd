@@ -24,167 +24,100 @@ require('rstan')
 theme_set(theme_bw() + theme(plot.background=element_blank()) )
 ```
 
-## overview
+# motivation
 
-<span style = "color:firebrick">recap</span>
+## point of departure
 
-- 3 types of Bayesianism:
-    - Bayesian versions of classical statistical tests
-    - Bayesian modeling of data-generating process
-    - cognitive models that assume that people "are Bayesian"
+<span style = "color:firebrick">relevance</span>
 
-<span style = "color:white"> dummy </span>
+- belief + intention + rationality $\Rightarrow$ action
 
-<span style = "color:firebrick">today</span>
+<span style = "color:white"> &nbsp; </span>
 
-- subjective beliefs for models of "Bayesian cognition"
+<span style = "color:firebrick">problem</span>
 
-## what, where from, where to?
+- beliefs are latent, only act is directly observable
 
-<span style = "color:firebrick">the "priors consortium"</span>
+<span style = "color:white"> &nbsp; </span>
+<span style = "color:white"> &nbsp; </span>
+<span style = "color:white"> &nbsp; </span>
 
-<div style = "float:left; width:45%;">
-  
-  - Erin D. Bennett
-  - Fabian Dablander
-  - Judith Degen
-  - Michael Franke
-  - Noah Goodman
-  
-</div>
+<span style = "color:firebrick">INSERT A COOL PICTURE??</span>
 
-<div style = "float:right; width:45%;">
-  
-  - Justine Kao
-  - Anthea Schoeller
-  - Michael Henry Tessler
-  - Ciyang Qing
-  - ... ??? ...
-  
-</div>  
-
-<span style = "color:white"> dummy </span>
-
-<span style = "color:white"> dummy </span>
-
-<p>
-
-<div>
-<span style = "color:firebrick">disclaimer</span>
-
-- this is mess in progress
-- all follies are mine
-
-</div>
-
-# background
-
-## "Bayesian cognition"
-
-<span style = "color:firebrick">Bayes for learning</span>
-
-- prior beliefs on what "structure" can be expected
-    - (possibly innate) learning biases
-- Bayes rule to learn from sparse input
-    - language acquisition 
-    - conceptualization, generalization
-
-<span style = "color:firebrick">Bayes for performance</span>
-
-- model task behavior as (partly) Bayesian inference
-    - rationalistic explanation, not necessarily mechanism/process
-- subject's beliefs about everyday events (task items) plays a role
-    - reasoning from premisses, future predictions, etc.
-    - language use and interpretation
-        - vagueness, non-literal interpretation etc.
-        
-## example: vague <span style = "font-style: italic">many</span>
+## mundane beliefs may matter
 
 <span style = "color:firebrick">sentence</span>
 
 Joe eats many burgers.
 
+<span style = "color:white"> &nbsp; </span>
+
 <span style = "color:firebrick">cardinal surprise reading</span>
 
-Joe eats more bugers that we would expect of him.
+Joe eats more burgers that we would expect of him.
 
-<span style = "color:firebrick">theory</span>
+<span style = "color:white"> &nbsp; </span>
+<span style = "color:white"> &nbsp; </span>
+<span style = "color:white"> &nbsp; </span>
 
-- look at expectation $p$ about burger consumption for the "kind of guy" that Joe is
-    - $p(n)$ is the probability that a guy like Joe eats $n$ burgers
-    - let $P$ be the cumulative distribution of $p$
-- let $b$ be the number of burgers that Joe actually eats
-- "Joe eats many burgers" is true iff $P(b)$ is bigger than a fixed threshold
-    - that threshold is the same for all sentences of this kind
-    - contextual vagueness from uncertainty about $p$
+<span style = "color:firebrick">INSERT A COOL PICTURE</span>
 
 <div style = "position:absolute; top: 620px; right:60px; color:darkblue;">
   (e.g., Schoeller & Franke 2015)
 </div>
 
-## enter subjective beliefs
+## how to determine beliefs?
 
-<span style = "color:firebrick">desideratum</span>
+<span style = "color:firebrick">real-world frequencies</span>
 
-- compact, versatile respresentation of subjective beliefs
-- non-expert beliefs about possibly mundane affairs
-- cheap, fast and reliable ways of assessment
+- may not exist or may not be known
 
-<span style = "color:firebrick">previous literature</span>
+<span style = "color:white"> &nbsp; </span>
 
-- take real-world frequencies as stand-in for subjective beliefs
-- measure beliefs experimentally, e.g.:
-    - infer parameters of Gaussian from a judgements of cumulative probability (Manski, 2004)
-    - infer parameters and type of distribution from predictions (Tauber & Steyvers 2013)
-    - binned slider ratings (Kao et al., 2014)
+<span style = "color:firebrick">experimental measures</span>
 
-## binned slider ratings
+- give-number task & inference of parameterized distribution 
+    - e.g., Manski (2004); Tauber & Steyvers (2013)
+    - <span style = "font-style: italic">scoring rules</span>
+- binned histogram slider rating task (Kao et al., 2014)
+
+## binned histogram slider ratings
 
 <div align = 'center'>
   <img src="pics/VQ_prior_elicitation_screen.png" alt="manyPriors" style="width: 800px;"/>
 </div>
 
-- discretize domain into bins; let subjects rate each bin
-- take relative measure: normalize slider ratings per participant
-- average (normalized) slider rating to reflect population-level belief
-    - "wisdom of the crowds"
-
-<div style = "position:absolute; top: 620px; right:60px; color:darkblue;">
-  (e.g., Schoeller & Franke 2015)
-</div>
+take average normalized slider ratings to reflect population-level belief
 
 
 ## agenda
 
-<span style = "color:firebrick">issues</span>
+<span style = "color:firebrick">goal: scrutinize BH task</span>
 
-- wanted: reliable & practical way of measuring beliefs
-    - consistency across measures
-- relation subjects' answers, their beliefs and the population-level aggregate?
-    - what of between-subject variance in task data?
+- relate subjects' answers, their beliefs & population-level aggregate
 
 <span style = "color:white"> dummy </span>
 
-<span style = "color:firebrick">approach</span>
+<span style = "color:firebrick">approach: hieararchical Bayesian modeling</span>
 
-- belief elicitation with different tasks (within-subject)
-- Bayesian hierarchical model to infer latent subjective & "population-level beliefs"
+- data from multiple task types (within-subject)
+- infer latent subjective & "population-level beliefs"
     - "population-level belief" => central tendency of subjective beliefs
     - think: "mean of a Gaussian hyperprior"
 
 
 
-# experiments
+# experiment
 
 ## overview
 
-- 20 participants recruited via MTurk
+- 50 participants recruited via MTurk
 - each saw every condition of every task
 - 8 items (from previous research)
 - 3 task types:
-    - slider ratings
-    - number estimates
-    - binary comparison (a.k.a. "lightning round")
+    - <span style = "color:firebrick">BH</span>: binned histogram
+    - <span style = "color:firebrick">GAN</span>: give-a-number
+    - <span style = "color:firebrick">PC</span>: paired comparison
 
 ## items
 
@@ -217,29 +150,29 @@ Joe eats more bugers that we would expect of him.
 </div>
     
 
-## slider ratings
+## BH task
 
 <span style = "color:white"> dummy </span>
 
 
 <div align = 'center'>
-  <img src="pics/priors_sliders.png" alt="priorsslider" style="width: 600px;"/>
+  <img src="pics/priors_sliders.png" alt="priorsslider" style="width: 750px;"/>
 </div>
 
-## number estimates 
+## GAN task
 
 <span style = "color:white"> dummy </span>
 
 <div align = 'center'>
-  <img src="pics/priors_numbers.png" alt="priorsnumbers" style="width: 600px;"/>
+  <img src="pics/priors_numbers.png" alt="priorsnumbers" style="width: 750px;"/>
 </div>
 
-## binary choices 
+## PC task
 
 <span style = "color:white"> dummy </span>
 
 <div align = 'center'>
-  <img src="pics/priors_lightning.png" alt="priorslightning" style="width: 600px;"/>
+  <img src="pics/priors_lightning.png" alt="priorslightning" style="width: 750px;"/>
 </div>
 
 # results
@@ -247,103 +180,147 @@ Joe eats more bugers that we would expect of him.
 ## slider ratings
 
 <div align = 'center'>
-  <img src="//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/plots/data_slider.png" alt="dataslider" style="width: 600px;"/>
+  <img src="//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/plots/data_slider.png" alt="dataslider" style="width: 750px;"/>
 </div>
 
 ## number estimates
 
 <div align = 'center'>
-  <img src="//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/plots/data_number.png" alt="dataslider" style="width: 600px;"/>
+  <img src="//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/plots/data_number.png" alt="dataslider" style="width: 750px;"/>
 </div>
 
 ## lightning round
 
 <div align = 'center'>
-  <img src="//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/plots/data_choice.png" alt="dataslider" style="width: 600px;"/>
+  <img src="//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/plots/data_choice.png" alt="dataslider" style="width: 750px;"/>
 </div>
 
-# model
+# Bayesian inference
 
 ## questions
 
 <span style = "color:firebrick">general</span>
 
-- is there a consistent population-level average that explains participants choices?
-- is the average slider rating a good approximation of a latent population-level average?
-- how much individual variance is there?
+- do average BH ratings approximate latent population-level averages well?
 
-<span style = "color:white"> dummy </span>
+<span style = "color:white"> &nbsp; </span>
 
-<span style = "color:firebrick">specific (technical)</span>
+<span style = "color:firebrick">specific</span>
 
-- hierarchical group-level prior for subjective beliefs?
-- link functions for task types?
+- relation: choice behavior, subjective & population-level beliefs
 
-## slider data
-
-$s_{ijk} \in [0;1]$ - normalized slider ratings of subject $i$ for item $j$ and bin $k$
 
 
 ```{r, echo = FALSE}
-source('//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/process_data.R')
-# bin_dat <- 
-# choice_dat <- read.csv('//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/data/choice_dat.csv')
-# number_dat <- read.csv('//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/data/number_dat.csv')
-# 
-# 
-# ## slider rating data
-# y.slider = array(0, dim = c(20,8,15))
-# for (i in 1:nrow(bin_dat)){
-#   y.slider[bin_dat$workerid[i] + 1, 
-#            as.numeric(bin_dat$tag)[i],
-#            bin_dat$bin_num[i]] = bin_dat$nresponse[i]
-# }
-# # y.slider = logit(add.margin(y.slider))
-# 
-# # number choice data
-# y.number = array(0, dim = c(20,8,1))
-# for (i in 1:nrow(number_dat)){
-#   y.number[number_dat$workerid[i] + 1, 
-#            as.numeric(number_dat$tag)[i],
-#            1] = number_dat$chosen_bin[i]
-# }
-# y.number = y.number[,,1]
-# 
-# ## lightning round choice data
-# choice_dat = choice_dat %>% mutate(condition = factor(ifelse(chosen_bin > unchosen_bin, unchosen_bin, chosen_bin)))
-# choice_dat$condition = as.numeric(choice_dat$condition)
-# y.choice = array(0, dim = c(20,8,5))
-# higher   = array(0, dim = c(20,8,5))
-# lower    = array(0, dim = c(20,8,5))
-# for (i in 1:nrow(choice_dat)){
-#   y.choice[choice_dat$workerid[i] + 1, 
-#            as.numeric(choice_dat$tag)[i],
-#            choice_dat$condition[i]] = ifelse(choice_dat$higher_chosen[i] , 1, 0)
-# }
+load('//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/data/processed_data.RData')
 ```
 
 
-```{r}
-dim(y.slider)
-y.slider[1,1:4,1:5]
-```
 
-## number data
+## model
 
-$n_{ij} \in \{1, \dots, 15\}$ - number of bin for number choice of subject $i$ and item $j$   
+<div style = "position:absolute; top: 100px; left:100px;">
+  <img src="//Users/micha/Desktop/data/svn/priors/text/01_CogSci_abstract/modelGraph/modelGraph.png" alt="modelGraph" style="width: 700px;"/>
+</div>
 
-```{r}
-y.number[1:12,,]
-```
+## set-up
 
-## lightning choice data
+- implemented in JAGS
+- 50,000 samples after a burn in of 100,000
+- convergence checks: visually and $\hat{R}$
 
-$c_{ijl} \in \{ 0, 1\}$ - whether subject $i$ chose the higher bin in lightning round $l \in \{ 1, \dots, 5\}$ for item $j$
+<!--
 
-```{r}
-y.choice[1,,]
-```
+## posterior over parameters
 
+<div align = 'center'>
+  <img src="//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/plots/posterior_parameters.png" alt="postParameters" style="width: 650px;"/>
+</div>
+-->
+
+## population-level beliefs $Q_j$
+
+<div align = 'center'>
+  <img src="//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/plots/pop_priors.png" alt="postPriors" style="width: 750px;"/>
+</div>
+
+<div style = "position:absolute; top: 620px; right:60px; color:darkblue;">
+  red: averaged normal. slider ratings; black: mean posterior $Q_i$ with 95% HDIs
+</div>
+
+## individual vs. population-level beliefs
+
+<div align = 'center'>
+  <img src="//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/plots/pop_priorsSubj.png" alt="postSubjPriors" style="width: 750px;"/>
+</div>
+
+<div style = "position:absolute; top: 620px; right:60px; color:darkblue;">
+  black: mean posterior $Q_j$ with 95% HDIs; dark gray: mean posterior $P_{ij}$
+</div>
+
+## upshot
+
+<span style = "color:white"> &nbsp; </span>
+
+- subjective beliefs differ from population-level mean (good!)
+- avrgd normlzd slider ratings reasonably approximate mean $Q_j$ (excellent!)
+
+# model criticism
+
+## PPC averaged normalized slider
+
+<div align = 'center'>
+  <img src="//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/plots/ppc_slider.png" alt="ppcSlider" style="width: 750px;"/>
+</div>
+
+avrgd normlzd slider ratings we would expect from the model and the posterior distribution over parameters is virtually indistinguishable from the observed
+
+
+## PPC number choice
+
+<div align = 'center'>
+  <img src="//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/plots/ppc_number.png" alt="ppcNumber" style="width: 750px;"/>
+</div>
+
+some frequencies of number choices are suprising for the trained model (but: little data to go with; round or salient numbers may play a role)
+
+## PPC lightning round
+
+<div align = 'center'>
+  <img src="//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/plots/ppc_choice.png" alt="ppcChoice" style="width: 750px;"/>
+</div>
+
+miserable failure to predict why it should be more likely that no marble sank than that one marble sank (alternative explanation: subjects revise beliefs, assume homogeneous "wonkiness" of marbles)
+
+## to do
+
+- posterior predictive checks for individual-level $P_{ij}$
+
+- posterior predictive <span style = "font-style: italic">p</span>-value with test statistics:
+    - entropy of normalized slider ratings per subject
+    - mean of normalized slider ratings per subject
+    
+# conclusions
+
+## conclusions
+
+<span style = "color:white"> dummy </span>
+
+- avrgd normlzd slider ratings appear to be practical and reliable measures 
+
+<span style = "color:white"> dummy </span>
+
+- slider ratings closely track pop-level central tendency of individual beliefs
+
+<span style = "color:white"> dummy </span>
+
+- hierarchical modeling of population-level beliefs is possible
+
+<span style = "color:white"> dummy </span>
+
+- link functions for task choices seem reliable (enough)
+
+# modeling details
 
 ## model
 
@@ -505,106 +482,4 @@ $$p^\text{low}_{ijl} = 2 - p^\text{high}_{ijk}$$
 
 - what's more likely: John scored 10-12, or John scored 26-28 points?
 - subjective belief says: most likely John scored 14-16
-- lower bin is closer, so 
-
-## model
-
-<div style = "position:absolute; top: 100px; left:100px;">
-  <img src="//Users/micha/Desktop/data/svn/priors/text/01_CogSci_abstract/modelGraph/modelGraph.png" alt="modelGraph" style="width: 700px;"/>
-</div>
-
-# Bayesian inference
-
-## set-up
-
-- implemented in JAGS
-- 50,000 samples after a burn in of 100,000
-- convergence checks: visually and $\hat{R}$
-
-## posterior over parameters
-
-<div align = 'center'>
-  <img src="//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/plots/posterior_parameters.png" alt="postParameters" style="width: 650px;"/>
-</div>
-
-## population-level beliefs $Q_j$
-
-<div align = 'center'>
-  <img src="//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/plots/pop_priors.png" alt="postPriors" style="width: 580px;"/>
-</div>
-
-<div style = "position:absolute; top: 620px; right:60px; color:darkblue;">
-  red: averaged normal. slider ratings; black: mean posterior $Q_i$ with 95% HDIs
-</div>
-
-## individual vs. population-level beliefs
-
-<div align = 'center'>
-  <img src="//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/plots/pop_priorsSubj.png" alt="postSubjPriors" style="width: 580px;"/>
-</div>
-
-<div style = "position:absolute; top: 620px; right:60px; color:darkblue;">
-  black: mean posterior $Q_j$ with 95% HDIs; dark gray: mean posterior $P_{ij}$
-</div>
-
-## impressions
-
-<span style = "color:firebrick">from visual inspection</span>
-
-- subjective beliefs differ from population-level mean (good!)
-- avrgd normlzd slider ratings nicely approximate mean $Q_j$ (excellent!)
-
-# model criticism
-
-## PPC averaged normalized slider
-
-<div align = 'center'>
-  <img src="//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/plots/ppc_slider.png" alt="ppcSlider" style="width: 560px;"/>
-</div>
-
-avrgd normlzd slider ratings we would expect from the model and the posterior distribution over parameters is virtually indistinguishable from the observed
-
-
-## PPC number choice
-
-<div align = 'center'>
-  <img src="//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/plots/ppc_number.png" alt="ppcNumber" style="width: 560px;"/>
-</div>
-
-some frequencies of number choices are suprising for the trained model (but: little data to go with; round or salient numbers may play a role)
-
-## PPC lightning round
-
-<div align = 'center'>
-  <img src="//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/plots/ppc_choice.png" alt="ppcChoice" style="width: 560px;"/>
-</div>
-
-miserable failure to predict why it should be more likely that no marble sank than that one marble sank (alternative explanation: subjects revise beliefs, assume homogeneous "wonkiness" of marbles)
-
-## to do
-
-- posterior predictive checks for individual-level $P_{ij}$
-
-- posterior predictive <span style = "font-style: italic">p</span>-value with test statistics:
-    - entropy of normalized slider ratings per subject
-    - mean of normalized slider ratings per subject
-    
-# conclusions
-
-## conclusions
-
-<span style = "color:white"> dummy </span>
-
-- avrgd normlzd slider ratings appear to be practical and reliable measures 
-
-<span style = "color:white"> dummy </span>
-
-- slider ratings closely track pop-level central tendency of individual beliefs
-
-<span style = "color:white"> dummy </span>
-
-- hierarchical modeling of population-level beliefs is possible
-
-<span style = "color:white"> dummy </span>
-
-- link functions for task choices seem reliable (enough)
+- lower bin is closer, so it's more likely to be chosen
