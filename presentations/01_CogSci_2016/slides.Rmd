@@ -292,13 +292,11 @@ some frequencies of number choices are suprising for the trained model (but: lit
 
 miserable failure to predict why it should be more likely that no marble sank than that one marble sank (alternative explanation: subjects revise beliefs, assume homogeneous "wonkiness" of marbles)
 
-## to do
+## posterior predictive p-values
 
-- posterior predictive checks for individual-level $P_{ij}$
-
-- posterior predictive <span style = "font-style: italic">p</span>-value with test statistics:
-    - entropy of normalized slider ratings per subject
-    - mean of normalized slider ratings per subject
+<div align = 'center'>
+  <img src="//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/plots/posteriorPvalues_individualSliders.png" alt="posteriorP" style="width: 750px;"/>
+</div>
     
 # conclusions
 

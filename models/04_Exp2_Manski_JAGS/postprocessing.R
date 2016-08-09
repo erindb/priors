@@ -2,13 +2,15 @@ library('coda')
 library('ggmcmc')
 library('jagsUI') # for parallel computing
 library('xtable')
+library(grid)
+library(gridExtra)
 source('helpers/helpers.R')
 # source('~/Desktop/data/svn/ProComPrag/dev_tmp/typicality_quantifiers/model/helpers.r')
 source('process_data.R')
 
 theme_set(theme_bw() + theme(plot.background=element_blank()) )
 
-readFlag = TRUE
+readFlag = FALSE
 
 if (readFlag){
   load(file = "/Users/micha/Desktop/Dropbox/priors_data/outExp2.Rdat")
@@ -37,9 +39,6 @@ statsSum = data.frame(
 
 show(xtable(t(statsSum)))
   
-
-
-
 
 entropy = function(p){
   - sum(p*log(p))
@@ -78,3 +77,81 @@ sapply(1:50, function(i) sum(1:15*y.emp[i,5,]))
 
 show(pValueMean < 0.05)
 show(pValueEntr < 0.05)
+
+## make data frame with posterior p-value violations
+
+postPs = melt(pValueMean) %>% rename(subject = Var1, item = Var2, pMean = value) %>%
+  mutate(pMeanViol = as.numeric(pMean <= 0.05),
+         item = levels(factor(dimnames(y.emp)[[2]]))[item])
+postPsTMP = melt(pValueEntr) %>% rename(subject = Var1, item = Var2, pEntr = value) %>%
+  mutate(pEntrViol = as.numeric(pEntr <= 0.05))
+postPs$pEntr = postPsTMP$pEntr
+postPs$pEntrViol = postPsTMP$pEntrViol
+postPs$viol = paste0(as.character(postPs$pMeanViol), as.character(postPs$pEntrViol))
+postPs$viol = ifelse(postPs$viol == "00", "none", 
+                     ifelse(postPs$viol == "10", "mean", 
+                            ifelse(postPs$viol == "01", "entropy", "both")))
+postPs$bin = 1
+postPs$rating_scaled = 0.5
+
+
+## plot individual-level slider ratings
+
+rescale = function(x) {
+  if (max(x) == min(x)) {return(rep(0.5, length(x)))}
+  (x-min(x)) / (max(x) - min(x))
+}
+
+y.slider_individual = melt(y.emp) %>% rename(subject = Var1, item = Var2, bin = Var3, rating = value) %>%
+  mutate(itemNr = as.numeric(item)) %>%
+  group_by(subject, item) %>% mutate(rating_scaled = rescale(rating))
+
+bh_rating_individual_1 = ggplot(filter(y.slider_individual, subject <= 25), aes(x = bin, y = rating_scaled)) + 
+  geom_rect(data = filter(postPs, subject <= 25, viol != "none"), 
+            aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf, fill = viol), alpha = 0.4) +
+  geom_line(size = 0.8, color = "gray") + geom_point(size=0.8) +   
+  facet_grid(item ~ subject, scales = "free") +
+  theme(axis.line=element_blank(),
+        axis.text.x=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks=element_blank(),
+        axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        legend.position="none",
+        # panel.background=element_blank(),
+        # panel.border=element_blank(),
+        panel.grid.major=element_blank(),
+        panel.grid.minor=element_blank(),
+        plot.background=element_blank()) +
+  scale_fill_manual(name="posterior p-value violations",
+                    values=c(entropy="firebrick", mean="skyblue"),
+                    guide = guide_legend()) + 
+  theme(legend.position="top")
+
+bh_rating_individual_2 = ggplot(filter(y.slider_individual, subject > 25), aes(x = bin, y = rating_scaled)) + 
+  geom_rect(data = filter(postPs, subject > 25, viol != "none"), 
+            aes(xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf, fill = viol), alpha = 0.4) +
+  geom_line(size = 0.8, color = "gray") + geom_point(size=0.8) + 
+  facet_grid(item ~ subject, scales = "free") +
+  theme(axis.line=element_blank(),
+        axis.text.x=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks=element_blank(),
+        axis.title.x=element_blank(),
+        axis.title.y=element_blank(),
+        legend.position="none",
+        # panel.background=element_blank(),
+        # panel.border=element_blank(),
+        panel.grid.major=element_blank(),
+        panel.grid.minor=element_blank(),
+        plot.background=element_blank()) +
+  scale_fill_manual(name="posterior p-value violations",
+                    values=c(entropy="firebrick", mean="skyblue"),
+                    guide = guide_legend()) + 
+  theme(legend.position="bottom")
+
+bh_rating_individual = grid.arrange(bh_rating_individual_1, bh_rating_individual_2, nrow=2)
+show(bh_rating_individual)
+f = 2
+ggsave("plots/posteriorPvalues_individualSliders.pdf", bh_rating_individual, width = 9*f, height = 6*f)
+ggsave("plots/posteriorPvalues_individualSliders.png", bh_rating_individual, width = 9*f, height = 6*f)

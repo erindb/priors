@@ -1,5 +1,9 @@
 library(ggplot2)
 library(rjson)
+library(tidyr)
+library(dplyr)
+library(lme4)
+library(lmerTest)
 # setwd("/Users/titlis/cogsci/projects/stanford/projects/priors/experiments/exp2_Manski/results")
 source("helpers.R")
 
