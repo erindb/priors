@@ -2,7 +2,7 @@
 title: "What does the crowd believe?"
 subtitle: "A hierarchical approach to estimating subjective beliefs"
 author: "Michael Franke, Fabian Dablander, Anthea Schöller (Tübingen)"
-date : "Erin Bennett, Judith Degen, Michael Henry Tessler, Justine Kao & Noah D. Goodman (Stanford)"
+date : "Erin Bennett, Judith Degen, MH Tessler, Justine Kao & Noah D. Goodman (Stanford)"
 runtime: shiny
 output:
   ioslides_presentation:
@@ -26,41 +26,91 @@ theme_set(theme_bw() + theme(plot.background=element_blank()) )
 
 # motivation
 
-## point of departure
+## outline
+
+<span style = "color:firebrick">Bayesian models of cognition</span>
+
+- may require specifications of subjective beliefs
+
+<span style = "color:white"> &nbsp; </span>
+
+<span style = "color:firebrick">New experimental measure</span>
+
+- binned histogram task
+
+<span style = "color:white"> &nbsp; </span>
+
+<span style = "color:firebrick">Bayesian data analysis</span>
+
+- infer population-level and subjective beliefs from data
+  
+
+## beliefs are latent
 
 <span style = "color:firebrick">relevance</span>
 
 - belief + intention + rationality $\Rightarrow$ action
 
-<span style = "color:white"> &nbsp; </span>
-
 <span style = "color:firebrick">problem</span>
 
-- beliefs are latent, only act is directly observable
+- beliefs are latent, only action is directly observable
 
 <span style = "color:white"> &nbsp; </span>
-<span style = "color:white"> &nbsp; </span>
-<span style = "color:white"> &nbsp; </span>
 
-<span style = "color:firebrick">INSERT A COOL PICTURE??</span>
+<div align = 'center'>
+  <img src="pics/jones_umbrella.jpg" alt="JonesUmbrella" style="width: 600px;"/>
+</div>
 
-## mundane beliefs may matter
 
+## focus: 1d continguous quantities
+
+<div style = "float:left; width:45%;">
 <span style = "color:firebrick">sentence</span>
 
-Joe eats many burgers.
+Joe ate many burgers.  
 
 <span style = "color:white"> &nbsp; </span>
-
+</div>
+<div style = "float:right; width:45%;">
 <span style = "color:firebrick">cardinal surprise reading</span>
 
-Joe eats more burgers that we would expect of him.
+Joe ate more than expected.
 
 <span style = "color:white"> &nbsp; </span>
-<span style = "color:white"> &nbsp; </span>
+</div>  
+
 <span style = "color:white"> &nbsp; </span>
 
-<span style = "color:firebrick">INSERT A COOL PICTURE</span>
+<div style = "float:left; width:45%;">
+```{r, echo = FALSE, fig.align='left', fig.width=3.5, fig.height=2.7}
+bb = function(n,a,b) {
+  sapply(0:n, function(k) choose(n,k) * beta(k+a,n-k+b) / beta(a,b))
+}
+theta = 0.8
+MyDF<-data.frame(x = 0:25,
+                 y = bb(25, 3, 10))
+cutoff = max(which(cumsum(MyDF$y) <= theta)) - 1
+p <-ggplot(MyDF, aes(x = x, y = y)) + geom_bar(stat = "identity", fill = "gray") +
+  # geom_bar(data = filter(MyDF, x <= cutoff), stat = "identity", fill = "firebrick") +
+  xlab("n") + ylab("") + 
+  ggtitle("P(Joe ate n)")
+show(p)
+```  
+</div>
+<div style = "float:right; width:45%;">
+```{r, echo = FALSE, fig.align='left', fig.width=3.5, fig.height=2.7}
+MyDF2 = data.frame(x = 0:25,
+                   y = cumsum(bb(25, 3, 10)))
+cutoff = max(which(MyDF2$y <= theta)) - 1
+p2 <-ggplot(MyDF2, aes(x = x, y = y)) + geom_bar(stat = "identity", fill = "gray") +
+  geom_bar(data = filter(MyDF2, x <= cutoff), stat = "identity", fill = "firebrick") +
+  xlab("n") + ylab("") +
+  geom_hline(aes(yintercept=theta), color = "firebrick") +
+  annotate("text", x = 3, y = 0.85, label = "theta = 0.8") +
+  ggtitle("P(Joe ate n or less)")
+show(p2)
+```  
+</div>  
 
 <div style = "position:absolute; top: 620px; right:60px; color:darkblue;">
   (e.g., Schoeller & Franke 2015)
@@ -70,7 +120,8 @@ Joe eats more burgers that we would expect of him.
 
 <span style = "color:firebrick">real-world frequencies</span>
 
-- may not exist or may not be known
+- may not exist
+- subjects may not be aware
 
 <span style = "color:white"> &nbsp; </span>
 
@@ -78,10 +129,12 @@ Joe eats more burgers that we would expect of him.
 
 - give-number task & inference of parameterized distribution 
     - e.g., Manski (2004); Tauber & Steyvers (2013)
-    - <span style = "font-style: italic">scoring rules</span>
-- binned histogram slider rating task (Kao et al., 2014)
+    - <span style = "font-style: italic">scoring rules</span> (Savage, 1971)
+- iterated learning tasks (Lewandowsky, Griffiths, & Kalish, 2009)
+- <span style = "color:firebrick">binned histogram task</span> (Kao et al., 2014)
 
-## binned histogram slider ratings
+<!--
+## BH task
 
 <div align = 'center'>
   <img src="pics/VQ_prior_elicitation_screen.png" alt="manyPriors" style="width: 800px;"/>
@@ -90,22 +143,7 @@ Joe eats more burgers that we would expect of him.
 take average normalized slider ratings to reflect population-level belief
 
 
-## agenda
-
-<span style = "color:firebrick">goal: scrutinize BH task</span>
-
-- relate subjects' answers, their beliefs & population-level aggregate
-
-<span style = "color:white"> dummy </span>
-
-<span style = "color:firebrick">approach: hieararchical Bayesian modeling</span>
-
-- data from multiple task types (within-subject)
-- infer latent subjective & "population-level beliefs"
-    - "population-level belief" => central tendency of subjective beliefs
-    - think: "mean of a Gaussian hyperprior"
-
-
+-->
 
 # experiment
 
@@ -197,19 +235,27 @@ take average normalized slider ratings to reflect population-level belief
 
 # Bayesian inference
 
-## questions
+## agenda
 
-<span style = "color:firebrick">general</span>
+<span style = "color:firebrick">goal: scrutinize BH task</span>
 
 - do average BH ratings approximate latent population-level averages well?
 
-<span style = "color:white"> &nbsp; </span>
+<span style = "color:white"> dummy </span>
 
-<span style = "color:firebrick">specific</span>
+<span style = "color:firebrick">approach: hieararchical Bayesian modeling</span>
 
-- relation: choice behavior, subjective & population-level beliefs
+- take data from all three tasks
+- infer latent subjective & "population-level beliefs"
 
+<span style = "color:white"> dummy </span>
 
+<span style = "color:firebrick">main technical questions</span>
+
+- how do individual-level beliefs relate to population level beliefs?
+    - "population-level belief" => central tendency of subjective beliefs
+    - think: "mean of a Gaussian hyperprior"
+- how do subjective beliefs give rise to observable choices in the three tasks?
 
 ```{r, echo = FALSE}
 load('//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/data/processed_data.RData')
@@ -229,23 +275,14 @@ load('//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/data/proc
 - 50,000 samples after a burn in of 100,000
 - convergence checks: visually and $\hat{R}$
 
-<!--
-
-## posterior over parameters
-
-<div align = 'center'>
-  <img src="//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/plots/posterior_parameters.png" alt="postParameters" style="width: 650px;"/>
-</div>
--->
-
 ## population-level beliefs $Q_j$
 
 <div align = 'center'>
   <img src="//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/plots/pop_priors.png" alt="postPriors" style="width: 750px;"/>
 </div>
 
-<div style = "position:absolute; top: 620px; right:60px; color:darkblue;">
-  red: averaged normal. slider ratings; black: mean posterior $Q_i$ with 95% HDIs
+<div style = "position:absolute; top: 620px; right:60px;">
+<span style = "color:firebrick">red</span>: BH task averages; <span style = "color:black">black</span>: mean posterior $Q_i$; <span style = "color:grey">grey</span>: 95% HDIs
 </div>
 
 ## individual vs. population-level beliefs
@@ -254,16 +291,21 @@ load('//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/data/proc
   <img src="//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/plots/pop_priorsSubj.png" alt="postSubjPriors" style="width: 750px;"/>
 </div>
 
-<div style = "position:absolute; top: 620px; right:60px; color:darkblue;">
-  black: mean posterior $Q_j$ with 95% HDIs; dark gray: mean posterior $P_{ij}$
+<div style = "position:absolute; top: 620px; right:60px;">
+<span style = "color:black">black</span>: mean posterior $Q_i$; <span style = "color:grey">grey</span>: mean posterior $P_{ij}$
 </div>
 
 ## upshot
 
 <span style = "color:white"> &nbsp; </span>
 
-- subjective beliefs differ from population-level mean (good!)
-- avrgd normlzd slider ratings reasonably approximate mean $Q_j$ (excellent!)
+<span style = "color:white"> &nbsp; </span>
+
+- subjective beliefs $P_{ij}$ may differ from population-level mean (good!)
+
+<span style = "color:white"> &nbsp; </span>
+
+- BH task averages reasonably approximate mean $Q_j$ (excellent!)
 
 # model criticism
 
@@ -273,8 +315,9 @@ load('//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/data/proc
   <img src="//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/plots/ppc_slider.png" alt="ppcSlider" style="width: 750px;"/>
 </div>
 
-avrgd normlzd slider ratings we would expect from the model and the posterior distribution over parameters is virtually indistinguishable from the observed
-
+<div style = "position:absolute; top: 620px; right:60px;">
+<span style = "color:firebrick">red</span>: observed data; <span style = "color:black">black</span>: mean posterior prediction with 95% HDIs
+</div>
 
 ## PPC number choice
 
@@ -282,7 +325,9 @@ avrgd normlzd slider ratings we would expect from the model and the posterior di
   <img src="//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/plots/ppc_number.png" alt="ppcNumber" style="width: 750px;"/>
 </div>
 
-some frequencies of number choices are suprising for the trained model (but: little data to go with; round or salient numbers may play a role)
+<div style = "position:absolute; top: 620px; right:60px;">
+<span style = "color:firebrick">red</span>: observed data; <span style = "color:black">black</span>: mean posterior prediction with 95% HDIs
+</div>
 
 ## PPC lightning round
 
@@ -290,12 +335,8 @@ some frequencies of number choices are suprising for the trained model (but: lit
   <img src="//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/plots/ppc_choice.png" alt="ppcChoice" style="width: 750px;"/>
 </div>
 
-miserable failure to predict why it should be more likely that no marble sank than that one marble sank (alternative explanation: subjects revise beliefs, assume homogeneous "wonkiness" of marbles)
-
-## posterior predictive p-values
-
-<div align = 'center'>
-  <img src="//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/plots/posteriorPvalues_individualSliders.png" alt="posteriorP" style="width: 750px;"/>
+<div style = "position:absolute; top: 620px; right:60px;">
+<span style = "color:firebrick">red</span>: observed data; <span style = "color:black">black</span>: mean posterior prediction with 95% HDIs
 </div>
     
 # conclusions
@@ -304,19 +345,18 @@ miserable failure to predict why it should be more likely that no marble sank th
 
 <span style = "color:white"> dummy </span>
 
-- avrgd normlzd slider ratings appear to be practical and reliable measures 
+<span style = "color:firebrick">general</span>
+
+- BH task averages are practical and reasonable approximations of the popuation-level central tendency of individual beliefs
+- Bayesian data analysis is a great tool to extract information from multiple sources (e.g., data from different task types)
 
 <span style = "color:white"> dummy </span>
 
-- slider ratings closely track pop-level central tendency of individual beliefs
+<span style = "color:firebrick">specific</span>
 
-<span style = "color:white"> dummy </span>
-
-- hierarchical modeling of population-level beliefs is possible
-
-<span style = "color:white"> dummy </span>
-
+- hierarchical modeling of population-level beliefs seems possible
 - link functions for task choices seem reliable (enough)
+
 
 # modeling details
 
@@ -353,7 +393,7 @@ ggplot(melt(rdirichlet(alpha= p*200, n = 10)), aes(x = Var2, y = value, fill = f
 
 
 
-## link function: sliders
+## link function: BH task
 
 - $\kappa \sim \text{Gamma}(5,5)$
 - $\sigma \sim \text{Gamma}(0.0001, 0.0001)$
@@ -437,7 +477,7 @@ show(myPlot2)
 ```  
 </div>  
 
-## link function: numbers
+## link function: GAN task
 
 - $a \sim \text{Gamma}(2,1)$
 - $n_{ij} \sim \text{Categorical}(\text{exp}(a P_{ij}))$
@@ -465,7 +505,7 @@ qplot(sample(x = 5, size = 1000, replace = TRUE,
 ```  
 </div>  
 
-## link function: lightning
+## link function: PC task
 
 - $b \sim \text{Gamma}(2,1)$
 - $c_{ijl} \sim \text{Bern}(\text{exp}(b \ (p^{\text{high}}_{ijl}, p^{\text{low}}_{ijl}))$
@@ -481,3 +521,15 @@ $$p^\text{low}_{ijl} = 2 - p^\text{high}_{ijk}$$
 - what's more likely: John scored 10-12, or John scored 26-28 points?
 - subjective belief says: most likely John scored 14-16
 - lower bin is closer, so it's more likely to be chosen
+
+## posterior over parameters
+
+<div align = 'center'>
+  <img src="//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/plots/posterior_parameters.png" alt="postParameters" style="width: 650px;"/>
+</div>
+
+## posterior predictive p-values
+
+<div align = 'center'>
+  <img src="//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/plots/posteriorPvalues_individualSliders.png" alt="posteriorP" style="width: 750px;"/>
+</div>

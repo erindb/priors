@@ -264,3 +264,4 @@ if (savePlots){
   ggsave('plots/paper/data_number.pdf', plotNumbersDataPaper,  width=10*factor, height = 8*factor)
   ggsave('plots/paper/data_choice.pdf', plotChoicesDataPaper, width=10*factor, height = 8*factor)
 }
+
