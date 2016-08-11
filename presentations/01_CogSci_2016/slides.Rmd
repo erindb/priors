@@ -24,8 +24,6 @@ require('rstan')
 theme_set(theme_bw() + theme(plot.background=element_blank()) )
 ```
 
-# motivation
-
 ## outline
 
 <span style = "color:firebrick">Bayesian models of cognition</span>
@@ -34,22 +32,22 @@ theme_set(theme_bw() + theme(plot.background=element_blank()) )
 
 <span style = "color:white"> &nbsp; </span>
 
-<span style = "color:firebrick">New experimental measure</span>
+<span style = "color:firebrick">new experimental measure</span>
 
-- binned histogram task
+- binned histogram task (Kao et al., 2014)
 
 <span style = "color:white"> &nbsp; </span>
 
 <span style = "color:firebrick">Bayesian data analysis</span>
 
-- infer population-level and subjective beliefs from data
+- great tool to specify and test ideas about how unobservables (like beliefs) relate to each other and how they generate observable data
   
 
 ## beliefs are latent
 
 <span style = "color:firebrick">relevance</span>
 
-- belief + intention + rationality $\Rightarrow$ action
+- belief + desire + rationality $\Rightarrow$ action
 
 <span style = "color:firebrick">problem</span>
 
@@ -63,6 +61,10 @@ theme_set(theme_bw() + theme(plot.background=element_blank()) )
 
 
 ## focus: 1d continguous quantities
+
+<span style = "color:firebrick">context</span>
+
+Joe is an adult male from Texas. He went to a BBQ party yesterday.
 
 <div style = "float:left; width:45%;">
 <span style = "color:firebrick">sentence</span>
@@ -112,10 +114,13 @@ show(p2)
 ```  
 </div>  
 
+<!--
+
 <div style = "position:absolute; top: 620px; right:60px; color:darkblue;">
   (e.g., Schoeller & Franke 2015)
 </div>
 
+-->
 ## how to determine beliefs?
 
 <span style = "color:firebrick">real-world frequencies</span>
@@ -190,12 +195,15 @@ take average normalized slider ratings to reflect population-level belief
 
 ## BH task
 
-<span style = "color:white"> dummy </span>
-
 
 <div align = 'center'>
   <img src="pics/priors_sliders.png" alt="priorsslider" style="width: 750px;"/>
 </div>
+
+<span style = "color:white"> dummy </span>
+
+
+normalize slider rating by subject $\Rightarrow$ average over subjects $\Rightarrow$ <span style = "color:firebrick">BH task averages</span>
 
 ## GAN task
 
@@ -215,19 +223,19 @@ take average normalized slider ratings to reflect population-level belief
 
 # results
 
-## slider ratings
+## BH task averages
 
 <div align = 'center'>
   <img src="//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/plots/data_slider.png" alt="dataslider" style="width: 750px;"/>
 </div>
 
-## number estimates
+## GAN frequencies
 
 <div align = 'center'>
   <img src="//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/plots/data_number.png" alt="dataslider" style="width: 750px;"/>
 </div>
 
-## lightning round
+## PC choice proportions
 
 <div align = 'center'>
   <img src="//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/plots/data_choice.png" alt="dataslider" style="width: 750px;"/>
@@ -239,7 +247,7 @@ take average normalized slider ratings to reflect population-level belief
 
 <span style = "color:firebrick">goal: scrutinize BH task</span>
 
-- do average BH ratings approximate latent population-level averages well?
+- do BH task averages approximate the central tendency of beliefs in the population?
 
 <span style = "color:white"> dummy </span>
 
@@ -247,8 +255,12 @@ take average normalized slider ratings to reflect population-level belief
 
 - take data from all three tasks
 - infer latent subjective & "population-level beliefs"
+- specify "link functions"
+    - how do subjective beliefs generate observable data
 
 <span style = "color:white"> dummy </span>
+
+<!--
 
 <span style = "color:firebrick">main technical questions</span>
 
@@ -256,6 +268,8 @@ take average normalized slider ratings to reflect population-level belief
     - "population-level belief" => central tendency of subjective beliefs
     - think: "mean of a Gaussian hyperprior"
 - how do subjective beliefs give rise to observable choices in the three tasks?
+
+-->
 
 ```{r, echo = FALSE}
 load('//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/data/processed_data.RData')
@@ -345,17 +359,14 @@ load('//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/data/proc
 
 <span style = "color:white"> dummy </span>
 
-<span style = "color:firebrick">general</span>
 
-- BH task averages are practical and reasonable approximations of the popuation-level central tendency of individual beliefs
-- Bayesian data analysis is a great tool to extract information from multiple sources (e.g., data from different task types)
+- BH task averages are practical and reasonable approximations of the population-level central tendency of individual beliefs
 
 <span style = "color:white"> dummy </span>
 
-<span style = "color:firebrick">specific</span>
 
-- hierarchical modeling of population-level beliefs seems possible
-- link functions for task choices seem reliable (enough)
+- Bayesian data analysis is a great tool to specify and test ideas about how unobservables (like beliefs) relate to each other and how they generate observable data
+    - inferences based on diverse data from different tasks
 
 
 # modeling details
