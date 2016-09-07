@@ -2,7 +2,7 @@ library('coda')
 library('ggmcmc')
 library('jagsUI') # for parallel computing
 source('helpers/helpers.R')
-source('~/Desktop/data/svn/ProComPrag/dev_tmp/typicality_quantifiers/model/helpers.r')
+source('helpers/helpers2.R')
 source('process_data.R')
 
 theme_set(theme_bw() + theme(plot.background=element_blank()) )

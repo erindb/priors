@@ -2,7 +2,7 @@ require(dplyr)
 require('bootstrap')
 library('rjson')
 library('stringr')
-source('//Users/micha/Desktop/data/svn/priors/models/04_Exp2_Manski_JAGS/helpers/helpers.R')
+source('helpers/helpers.R')
 
 ## for bootstrapping 95% confidence intervals
 theta <- function(x,xdata,na.rm=T) {mean(xdata[x],na.rm=na.rm)}
